@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
-import DropdownList from 'react-widgets/lib/DropdownList'
-import { Button, ButtonGroup } from 'react-bootstrap'
+import { Button, ButtonGroup } from 'react-bootstrap';
 
 class Toolbar extends Component {
+    constructor(props) {
+        super();
+        this.state = {
+            feeds: props.feeds
+        }
+    }
+
+    onChange = e => {
+        this.props.onChange({ [e.target.name]: e.target.value });
+    };
 
     render() {
-        let feeds = ["donedeal", "pistonheads"];
         return (
             <div>
+                <form>
+                    <input name="feedName"
+                        placeholder="Feed Name"
+                        value={this.state.feedName}
+                        onChange={fields => this.onChange(fields)}/>
+                </form>
                 <ButtonGroup aria-label="Basic example">
                     <Button variant="secondary">Start</Button>
                     <Button variant="secondary">Stop</Button>
                     <Button variant="secondary">Change</Button>
                 </ButtonGroup>
-                <DropdownList
-                  data={feeds}
-                  defaultValue={"donedeal"}
-                />
             </div>
         );
     }
