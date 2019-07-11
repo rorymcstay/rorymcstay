@@ -3,6 +3,9 @@ import ParameterManager from "./parameters/ParameterManager";
 import ReactLoading from 'react-loading';
 import {connect} from "react-refetch";
 import Toolbar from "./Toolbar";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import DataViewer from "./DataViewer";
 
 class Manager extends Component {
 
@@ -12,12 +15,22 @@ class Manager extends Component {
         this.state = {
             feeds: [],
             feedName: "donedeal",
+            searchField: "",
+            searchString: ""
         }
 
     }
 
     onFeedChange = name => {
-        this.setState({feedName: name})
+        this.setState({feedName: name.target.value})
+    };
+
+    onSearchStringChange = name => {
+        this.setState({searchString: name.target.value})
+    };
+
+    onSearchFieldChange = name => {
+        this.setState({searchField: name.target.value})
     };
 
 
@@ -29,10 +42,35 @@ class Manager extends Component {
             return <div>Error</div>
         } else if (fetchFeeds.fulfilled) {
             return (
-            <div>
-                <Toolbar onChange={name => this.onFeedChange(name)} feeds={this.props.fetchFeeds.value}/>
-                <ParameterManager feedName={this.state.feedName}/>
-            </div>
+            <Tabs
+                id="controlled-tab-example"
+                activeKey={this.state.key}
+                onSelect={key => this.setState({ key })}
+            >
+                <Tab eventKey="toolbar" title="Toolbar">
+                    <Toolbar onChange={name => this.onFeedChange(name)} feeds={this.props.fetchFeeds.value}/>
+                </Tab>
+                <Tab eventKey="parametermanager" title="Parameter Manager">
+                    <ParameterManager feedName={this.state.feedName}/>
+                </Tab>
+                <Tab eventKey="dataViewer">
+                    <form>
+                        <input name="searchField"
+                            placeholder="Field to Search"
+                            value={this.state.searchField}
+                            onChange={searchField => this.onSearchFieldChange(searchField)}/>
+                        <input name="searchString"
+                            placeholder="Search String"
+                            value={this.state.searchString}
+                            onChange={searchString => this.onSearchStringChange(searchString)}/>
+                    </form>
+                    <DataViewer
+                        searchField={this.state.searchField}
+                        searchString={this.state.searchString}
+                        feedName={this.state.feedName}
+                    />
+                </Tab>
+            </Tabs>
         )
         }
 

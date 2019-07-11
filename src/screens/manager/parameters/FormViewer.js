@@ -14,8 +14,6 @@ class FormViewer extends Component {
         }
     }
 
-
-
     render() {
         const onSubmit = ({formData}, e) => this.props.uploadParam(formData, this.state.parameterType, this.state.feedName);
         const { parameterSchema } = this.props;
@@ -26,7 +24,7 @@ class FormViewer extends Component {
         if (parameterSchema.pending) {
                 return <ReactLoading/>
         } else if (parameterSchema.rejected) {
-            return <Error error={parameterSchema.reason}/>
+            return <div>Error</div>
         } else if (parameterSchema.fulfilled ) {
             if (parameterValue.fulfilled) {
                 const formData= parameterValue.value
