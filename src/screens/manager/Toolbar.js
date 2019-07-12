@@ -16,12 +16,7 @@ class Toolbar extends Component {
     render() {
         return (
             <div>
-                <form>
-                    <input name="feedName"
-                        placeholder="Feed Name"
-                        value={this.state.feedName}
-                        onChange={fields => this.onChange(fields)}/>
-                </form>
+
                 <ButtonGroup aria-label="Basic example">
                     <Button variant="secondary">Start</Button>
                     <Button variant="secondary">Stop</Button>

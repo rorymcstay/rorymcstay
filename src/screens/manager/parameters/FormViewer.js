@@ -27,20 +27,27 @@ class FormViewer extends Component {
             return <div>Error</div>
         } else if (parameterSchema.fulfilled ) {
             if (parameterValue.fulfilled) {
-                const formData= parameterValue.value
-            } else if (parameterValue.pending) {
-                return <ReactLoading/>
-            } else if (parameterValue.rejected) {
-                const formData = undefined
-            }
-            return (
+                const formData= parameterValue.value;
+                return (
                 <div>
                     <Form schema={parameterSchema.value}
                           onSubmit={onSubmit}
-                          formData={this.props.parameterValue}
+                          formData={formData}
                     />
                 </div>
             );
+            } else if (parameterValue.pending) {
+                return <ReactLoading/>
+            } else if (parameterValue.rejected) {
+                return (
+                <div>
+                    <Form schema={parameterSchema.value}
+                          onSubmit={onSubmit}
+                    />
+                </div>
+                );
+            }
+
         }
     }
 }

@@ -42,35 +42,43 @@ class Manager extends Component {
             return <div>Error</div>
         } else if (fetchFeeds.fulfilled) {
             return (
-            <Tabs
-                id="controlled-tab-example"
-                activeKey={this.state.key}
-                onSelect={key => this.setState({ key })}
-            >
-                <Tab eventKey="toolbar" title="Toolbar">
-                    <Toolbar onChange={name => this.onFeedChange(name)} feeds={this.props.fetchFeeds.value}/>
-                </Tab>
-                <Tab eventKey="parametermanager" title="Parameter Manager">
-                    <ParameterManager feedName={this.state.feedName}/>
-                </Tab>
-                <Tab eventKey="dataViewer">
+                <div>
                     <form>
-                        <input name="searchField"
-                            placeholder="Field to Search"
-                            value={this.state.searchField}
-                            onChange={searchField => this.onSearchFieldChange(searchField)}/>
-                        <input name="searchString"
-                            placeholder="Search String"
-                            value={this.state.searchString}
-                            onChange={searchString => this.onSearchStringChange(searchString)}/>
+                        <input name="feedName"
+                            placeholder="Feed Name"
+                            value={this.state.feedName}
+                            onChange={fields => this.onFeedChange(fields)}/>
                     </form>
-                    <DataViewer
-                        searchField={this.state.searchField}
-                        searchString={this.state.searchString}
-                        feedName={this.state.feedName}
-                    />
-                </Tab>
-            </Tabs>
+                    <Tabs
+                        id="controlled-tab-example"
+                        activeKey={this.state.key}
+                        onSelect={key => this.setState({ key })}
+                    >
+                        <Tab eventKey="toolbar" title="Toolbar">
+                            <Toolbar onChange={name => this.onFeedChange(name)} feeds={this.props.fetchFeeds.value}/>
+                        </Tab>
+                        <Tab eventKey="parametermanager" title="Parameter Manager">
+                            <ParameterManager feedName={this.state.feedName}/>
+                        </Tab>
+                        <Tab eventKey="dataViewer" title="Data Viewer">
+                            <form>
+                                <input name="searchField"
+                                    placeholder="Field to Search"
+                                    value={this.state.searchField}
+                                    onChange={searchField => this.onSearchFieldChange(searchField)}/>
+                                <input name="searchString"
+                                    placeholder="Search String"
+                                    value={this.state.searchString}
+                                    onChange={searchString => this.onSearchStringChange(searchString)}/>
+                            </form>
+                            <DataViewer
+                                searchField={this.state.searchField}
+                                searchString={this.state.searchString}
+                                feedName={this.state.feedName}
+                            />
+                        </Tab>
+                    </Tabs>
+                    </div>
         )
         }
 
