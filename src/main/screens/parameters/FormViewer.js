@@ -15,7 +15,7 @@ class FormViewer extends Component {
     }
 
     render() {
-        const onSubmit = ({formData}, e) => this.props.uploadParam(formData, this.state.parameterType, this.state.feedName);
+        const onSubmit = ({formData}, e) => this.props.uploadParam(formData);
         const { parameterSchema } = this.props;
         const { parameterValue } = this.props;
         if (this.props.parameterType === undefined) {
@@ -54,14 +54,14 @@ class FormViewer extends Component {
 
 export default connect(props => ({
     parameterSchema: {
-        url: `feedmanager/getParameterSchema/${props.parameterType}`
+        url: `http://localhost:5004/feedmanager/getParameterSchema/${props.parameterType}`
     },
     parameterValue: {
-        url: `parametercontroller/getParameter/${props.parameterType}/${props.feedName}`
+        url: `http://localhost:5003/parametercontroller/getParameter/${props.parameterType}/${props.feedName}`
     },
-    uploadParam: (formData, parameterName, feedName) => ({
+    uploadParam: (formData) => ({
         uploadParamResponse: {
-            url: `parametercontroller/setParameter/${parameterName}/${feedName}`,
+            url: `http://localhost:5003/parametercontroller/setParameter/${props.parameterType}/${props.feedName}`,
             body: JSON.stringify(formData),
             method: 'PUT'
         }

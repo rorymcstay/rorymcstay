@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5003",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +12,8 @@
     "react-widgets": "^4.4.11",
     "react-jsonschema-form": "latest",
     "react-loading": "latest",
-    "react-refetch": "latest"
+    "react-refetch": "latest",
+    "semantic-ui-react": "latest"
   },
   "devDependencies": {},
   "scripts": {

@@ -66,5 +66,5 @@ class ParameterManager extends Component {
 }
 
 export default connect(props => ({
-    parameterTypes: `/feedmanager/getParameterTypes`
+    parameterTypes: `http://localhost:5004/feedmanager/getParameterTypes`
 }))(ParameterManager)
