@@ -9,10 +9,17 @@ class Viewer extends Component {
         super();
         this.state = {
             searchField: "",
-            searchString: ""
+            searchString: "",
+            triggerSearch: false
         }
 
     }
+
+    onClick = () => {
+        this.setState(
+            {triggerSearch: true}
+        )
+    };
 
     onSearchStringChange = name => {
         this.setState({searchString: name.target.value})
@@ -22,21 +29,37 @@ class Viewer extends Component {
         this.setState({searchField: name.target.value})
     };
 
-
     render() {
-        return (
-            <div>
-                <QueryConstructor
-                    onSearchStringChange={this.onSearchStringChange}
-                    onSearchFieldChange={this.onSearchFieldChange}
-                />
-                <DataViewer
-                    searchField={this.state.searchField}
-                    searchString={this.state.searchString}
-                    feedName={this.props.feedName}
-                />
-            </div>)
+        if (this.state.triggerSearch) {
+            return (
+                <div>
+                    <QueryConstructor
+                        onSearchStringChange={this.onSearchStringChange}
+                        onSearchFieldChange={this.onSearchFieldChange}
+                        onClick={this.onClick}
+                    />
+                    <DataViewer
+                        searchField={this.state.searchField}
+                        searchString={this.state.searchString}
+                        feedName={this.props.feedName}
+                    />
+                </div>
+            )
+        }
+        else {
+            return (
+                <div>
+                    <QueryConstructor
+                        onSearchStringChange={this.onSearchStringChange}
+                        onSearchFieldChange={this.onSearchFieldChange}
+                        onClick={this.onClick}
+                    />
+                </div>
+            )
+        }
+
 
     }
 }
+
 export default Viewer

@@ -7,19 +7,9 @@ class Selector extends Component {
 
     constructor(props) {
         super(props);
-        const data = JSON.parse(props.fetchFeeds.value);
 
-        const menuOptions = [];
-        for(let i = 0; i < props.fetchFeeds.value; i++) {
-            menuOptions.push({
-                key: data[i],
-                value: data[i],
-                text: data[i]
-            })
-        }
         this.state = {
             feedName: "",
-            feedOptions: menuOptions,
             searchField: "",
             searchString: ""
         }
@@ -40,7 +30,14 @@ class Selector extends Component {
         } else if (fetchFeeds.rejected) {
             return <div>Error</div>
         } else if (fetchFeeds.fulfilled) {
-
+            const menuOptions = [];
+            for(let i = 0; i < fetchFeeds.value.length; i++) {
+                menuOptions.push({
+                    key: fetchFeeds.value[i],
+                    value: fetchFeeds.value[i],
+                    text: fetchFeeds.value[i]
+                })
+            }
             return (
                 <div>
                     <Dropdown
@@ -49,8 +46,7 @@ class Selector extends Component {
                         search
                         selection
                         onChange={this.handleChange}
-                        value={this.state.feedName}
-                        options={this.state.feedOptions}
+                        options={menuOptions}
                     />
 
                 </div>
@@ -62,6 +58,6 @@ class Selector extends Component {
 
 export default connect(props => ({
     fetchFeeds: {
-        url: `http://localhost:5004/feedmanager/getFeeds`
+        url: `http://localhost:5004/feedmanager/getFeeds/`
     }
 }))(Selector)

@@ -1,16 +1,13 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import ReactLoading from 'react-loading';
-import { connect } from 'react-refetch'
+import {connect} from 'react-refetch'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
 
 class DataViewer extends Component {
 
-
     render() {
-
-
 
         const columns = [
             {
@@ -38,7 +35,7 @@ class DataViewer extends Component {
             }
         ];
 
-        const { data } = this.props;
+        const {data} = this.props;
         if (data.pending) {
             return <ReactLoading/>
         } else if (data.rejected) {
@@ -56,6 +53,6 @@ class DataViewer extends Component {
 
 export default connect(props => ({
     data: {
-        url: `http://localhost:5004/search/getResultSummaries/${props.feedName}/${props.searchField}/${props.searchString}`
+        url: `/search/getResultSummaries/${props.feedName}/${props.searchField}/${props.searchString}`
     }
 }))(DataViewer)

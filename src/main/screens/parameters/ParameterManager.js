@@ -36,7 +36,7 @@ class ParameterManager extends Component {
         } else if (parameterTypes.rejected) {
             return <Button onClick={this.createNew}>Create</Button>
         } else if (parameterTypes.fulfilled) {
-            let menuItems = JSON.parse(parameterTypes.value).map((parameterType) =>
+            let menuItems = parameterTypes.value.map((parameterType) =>
                 <option
                     value={parameterType}
                     key={parameterType}
@@ -66,5 +66,5 @@ class ParameterManager extends Component {
 }
 
 export default connect(props => ({
-    parameterTypes: `http://localhost:5004/feedmanager/getParameterTypes`
+    parameterTypes: `/feedmanager/getParameterTypes/`
 }))(ParameterManager)

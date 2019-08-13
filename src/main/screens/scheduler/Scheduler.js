@@ -96,7 +96,7 @@ class Scheduler extends Component {
         ];
         return (
             <div>
-                <JobStatus/>
+                {/*<JobStatus/>*/}
                 <Grid columns={3}>
                     <Grid.Column>
                         <Dropdown
@@ -139,7 +139,7 @@ class Scheduler extends Component {
 export default connect(props => ({
     addJob: (scheduledJob) => ({
         uploadParamResponse: {
-            url: `http://localhost:5003/schedulemanager/addJob/${props.feedName}`,
+            url: `http://localhost:5004/schedulemanager/addJob/${props.feedName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }

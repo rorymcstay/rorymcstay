@@ -6,11 +6,11 @@ import { connect } from 'react-refetch'
 
 class FormViewer extends Component {
     constructor(props) {
-        super();
+        super(props);
         this.state = {
             parameterSchema: props.parameterSchema,
             parameterName: props.parameterName,
-            feedName: props.feedName
+            feedName: props.feedName,
         }
     }
 
@@ -57,11 +57,11 @@ export default connect(props => ({
         url: `http://localhost:5004/feedmanager/getParameterSchema/${props.parameterType}`
     },
     parameterValue: {
-        url: `http://localhost:5003/parametercontroller/getParameter/${props.parameterType}/${props.feedName}`
+        url: `http://localhost:5004/feedmanager/getParameter/${props.parameterType}/${props.feedName}`
     },
     uploadParam: (formData) => ({
         uploadParamResponse: {
-            url: `http://localhost:5003/parametercontroller/setParameter/${props.parameterType}/${props.feedName}`,
+            url: `http://localhost:5004/feedmanager/setParameter/${props.parameterType}/${props.feedName}`,
             body: JSON.stringify(formData),
             method: 'PUT'
         }
