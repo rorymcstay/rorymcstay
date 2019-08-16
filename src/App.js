@@ -7,6 +7,7 @@ import ParameterManager from "./main/screens/parameters/ParameterManager";
 import Viewer from "./main/screens/viewer/Viewer";
 import 'semantic-ui-css/semantic.min.css'
 import Scheduler from "./main/screens/scheduler/Scheduler"
+import { useAlert } from 'react-alert'
 
 class App extends Component {
 
@@ -22,10 +23,13 @@ class App extends Component {
     };
 
     render() {
+        const alert = useAlert;
+
         return (
             <div className="App">
                 <Selector
                     onFeedChange={this.onFeedChange}
+                    alert={alert}
                 />
                 <Tabs
                     id="controlled-tab-example"

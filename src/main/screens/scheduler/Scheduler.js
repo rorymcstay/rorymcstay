@@ -104,7 +104,6 @@ class Scheduler extends Component {
                             options={triggerOptions}
                             placeholder='trigger'
                             selection
-                            value={this.state.trigger}
                         />
                     </Grid.Column>
                     <Grid.Column>
@@ -119,7 +118,6 @@ class Scheduler extends Component {
                             options={incrementOptions}
                             placeholder='when'
                             selection
-                            value={this.state.increment}
                         />
                     </Grid.Column>
                 </Grid>
