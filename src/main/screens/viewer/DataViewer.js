@@ -3,9 +3,17 @@ import ReactLoading from 'react-loading';
 import {connect} from 'react-refetch'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+import {Button} from "react-bootstrap";
 
 
 class DataViewer extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            feedName: props.feedName
+        }
+    }
 
     render() {
 
@@ -35,24 +43,17 @@ class DataViewer extends Component {
             }
         ];
 
-        const {data} = this.props;
-        if (data.pending) {
-            return <ReactLoading/>
-        } else if (data.rejected) {
-            return <div>Error</div>
-        } else if (data.fulfilled) {
+        if (this.props.triggered) {
             return (
-                <ReactTable
-                    data={data.value}
-                    columns={columns}
-                />
+                this.props.renderDataViewer(columns)
             );
+        } else {
+            return <div>Enter query and go</div>
         }
+
+
+
     }
 }
 
-export default connect(props => ({
-    data: {
-        url: `/search/getResultSummaries/${props.feedName}/${props.searchField}/${props.searchString}`
-    }
-}))(DataViewer)
+export default DataViewer

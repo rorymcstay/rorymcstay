@@ -1,65 +1,102 @@
 import React, {Component} from "react";
 import DataViewer from "./DataViewer";
 import QueryConstructor from "./QueryConstructor";
+import {Dropdown, Grid} from "semantic-ui-react";
+import {connect} from "react-refetch";
+import ReactLoading from "react-loading";
+import ReactTable from "react-table";
 
 
 class Viewer extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            searchField: "",
-            searchString: "",
-            triggerSearch: false
+            querySchemaName: "sql_predicate",
+            query: undefined,
+            triggered: false,
+            kind: undefined
         }
-
     }
 
-    onClick = () => {
-        this.setState(
-            {triggerSearch: true}
-        )
+    renderDataViewer = (columns) => {
+        const {results} = this.props;
+        if (results.fulfilled) {
+            return (
+                <ReactTable
+                    data={results.value}
+                    columns={columns}
+                />)
+        } else if (results.pending) {
+            return <ReactLoading/>
+        } else if (results.rejected) {
+            return <div>Error</div>
+        } else {
+            return <div>Search...</div>
+        }
     };
 
-    onSearchStringChange = name => {
-        this.setState({searchString: name.target.value})
+    onSearch = () => {
+        const query ={
+                kind: this.state.kind,
+                value: this.state.query
+            };
+        this.setState({
+            triggered: true
+        }, this.props.getResults(query))
     };
 
-    onSearchFieldChange = name => {
-        this.setState({searchField: name.target.value})
+    onKindChange = value =>{
+        this.setState({
+            kind: value
+        })
+    };
+
+    onQueryChange = (value) => {
+        this.setState({query: value})
     };
 
     render() {
-        if (this.state.triggerSearch) {
+
+        const {schemaOptions} = this.props;
+        if (schemaOptions.pending) {
+            return <ReactLoading/>
+
+        } else if (schemaOptions.rejected) {
+            return <div>Error</div>
+
+        } else if (schemaOptions.fulfilled) {
             return (
-                <div>
-                    <QueryConstructor
-                        onSearchStringChange={this.onSearchStringChange}
-                        onSearchFieldChange={this.onSearchFieldChange}
-                        onClick={this.onClick}
-                    />
+                <Grid columns={2}>
+                    <Grid.Row>
+                        <QueryConstructor
+                            querySchemaName={this.state.querySchemaName}
+                            onSearch={this.onSearch}
+                            onKindChange={this.onKindChange}
+                            onQueryChange={this.onQueryChange}
+                        />
+                    </Grid.Row>
+                    <Grid.Row>
                     <DataViewer
-                        searchField={this.state.searchField}
-                        searchString={this.state.searchString}
-                        feedName={this.props.feedName}
+                        renderDataViewer={this.renderDataViewer}
+                        triggered={this.state.triggered}
                     />
-                </div>
+                    </Grid.Row>
+                </Grid>
             )
         }
-        else {
-            return (
-                <div>
-                    <QueryConstructor
-                        onSearchStringChange={this.onSearchStringChange}
-                        onSearchFieldChange={this.onSearchFieldChange}
-                        onClick={this.onClick}
-                    />
-                </div>
-            )
-        }
-
-
     }
 }
 
-export default Viewer
+export default connect(props => ({
+    schemaOptions: {
+        url: `/search/getSchemaList/`
+    },
+    getResults: (query) => ({
+        results: {
+            url: `/search/getResults/${props.feedName}`,
+            body: JSON.stringify(query),
+            method: 'PUT'
+        }
+    })
+}))(Viewer)

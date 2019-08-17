@@ -12,8 +12,6 @@ class Selector extends Component {
 
         this.state = {
             feedName: props.feedName,
-            searchField: "",
-            searchString: "",
             started: false
         }
     }
@@ -22,8 +20,12 @@ class Selector extends Component {
         this.setState({feedName: value}, this.props.onFeedChange(value))
     };
 
+    onNewFeed = (value) => {
+        this.setState({feedName: value}, this.props.newFeed(value))
+    };
+
     render() {
-        const {fetchFeeds, startFeedResponse} = this.props;
+        const {fetchFeeds} = this.props;
         if (fetchFeeds.pending) {
             return <ReactLoading/>
         } else if (fetchFeeds.rejected) {
@@ -52,15 +54,12 @@ class Selector extends Component {
                     </Grid.Column>
                     <Grid.Column width={3}>
                         <Input focus
-                               placeholder='Search...'
-                               onChange={(e, {value}) => this.setState({"feedName": value})}
+                               placeholder='Create...'
+                               onChange={(e, {value}) => this.setState({newFeedName: value})}
                         />
                     </Grid.Column>
                     <Grid.Column width={2}>
-                        <Button onClick={this.onNewFeed} active>New</Button>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <ToolBar feedName={this.state.feedName}/>
+                        <Button onClick={() => this.onNewFeed(this.state.newFeedName)} active>New</Button>
                     </Grid.Column>
                 </Grid>
             )
@@ -70,6 +69,9 @@ class Selector extends Component {
 
 export default connect(props => ({
     fetchFeeds: {
-        url: `/feedmanager/getFeeds/`
-    }
+        url: `/feedmanager/getFeeds`
+    },
+    newFeed: (value) => ({
+        newFeedResponse: {url: `/feedmanager/newFeed/${value}`}
+    }),
 }))(Selector)

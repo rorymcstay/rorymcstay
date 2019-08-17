@@ -21,10 +21,6 @@ class ToolBar extends Component {
         this.props.stopFeed()
     };
 
-    onNewFeed = (e, {value}) => {
-        this.setState({feedName: value}, this.props.newFeed(value))
-    };
-
     render() {
         const {feedStatus} = this.props;
         if (feedStatus.pending) {
@@ -59,9 +55,7 @@ class ToolBar extends Component {
 }
 
 export default connect(props => ({
-    newFeed: (value) => ({
-        newFeedResponse: {url: `/feedmanager/newFeed/${value}`}
-    }),
+
     startFeed: () => ({
         startFeedResponse: {url: `/feedmanager/startFeed/${props.feedName}`}
     }),

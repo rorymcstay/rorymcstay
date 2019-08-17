@@ -8,7 +8,6 @@ class FormViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            parameterSchema: props.parameterSchema,
             parameterName: props.parameterName,
             feedName: props.feedName,
         }
@@ -40,11 +39,9 @@ class FormViewer extends Component {
                 return <ReactLoading/>
             } else if (parameterValue.rejected) {
                 return (
-                <div>
                     <Form schema={parameterSchema.value}
                           onSubmit={onSubmit}
                     />
-                </div>
                 );
             }
 
