@@ -67,7 +67,7 @@ class Viewer extends Component {
 
         } else if (schemaOptions.fulfilled) {
             return (
-                <Grid columns={2}>
+                <Grid columns={1}>
                     <Grid.Row>
                         <QueryConstructor
                             querySchemaName={this.state.querySchemaName}

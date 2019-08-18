@@ -50,10 +50,8 @@ class DataViewer extends Component {
         } else {
             return <div>Enter query and go</div>
         }
-
-
-
     }
 }
+
 
 export default DataViewer

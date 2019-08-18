@@ -41,7 +41,7 @@ class JobStatus extends Component {
         } else if (data.fulfilled) {
             return (
                 <ReactTable
-                    data={data.value}
+                    data={data.value.jobs}
                     columns={columns}
                 />
             );

@@ -8,7 +8,7 @@ class FormViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            parameterName: props.parameterName,
+            parameterType: props.parameterType,
             feedName: props.feedName,
         }
     }

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from 'react-refetch'
 import JobStatus from "./JobStatus";
-import {Dropdown} from "semantic-ui-react";
+import {Dropdown, Input} from "semantic-ui-react";
 import {Grid} from "semantic-ui-react";
 import Button from "react-bootstrap/Button";
 import ReactLoading from "react-loading";
@@ -11,7 +11,7 @@ class Scheduler extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            feedName: this.props.feedName,
+            feedName: props.feedName,
             url: "",
             trigger: "",
             increment: "",
@@ -40,7 +40,7 @@ class Scheduler extends Component {
 
     onIncrementChange = (value) => {
         this.setState({
-            url: value
+            increment: value
         })
     };
 
@@ -95,41 +95,47 @@ class Scheduler extends Component {
             }
         ];
         return (
-            <div>
-                {/*<JobStatus/>*/}
-                <Grid columns={3}>
-                    <Grid.Column>
+            <Grid columns={2} relaxed>
+                <Grid.Column>
+                    <Grid.Row>
                         <Dropdown
                             onChange={this.onTriggerChange}
                             options={triggerOptions}
                             placeholder='trigger'
                             selection
                         />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <input name="searchField"
-                               placeholder="Field to Search"
-                               value={this.state.searchField}
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Input name="searchField"
+                               placeholder="number"
+                               value={this.state.increment_size}
                                onChange={value => this.onIncrementSizeChange(value)}/>
-                    </Grid.Column>
-                    <Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
                         <Dropdown
                             onChange={this.onIncrementChange}
                             options={incrementOptions}
                             placeholder='when'
                             selection
                         />
-                    </Grid.Column>
-                </Grid>
-                <input name="urlField"
-                       placeholder="Url to capture"
-                       value={this.state.searchField}
-                       onChange={value => this.onUrlChange(value)}/>
-                <Button
-                    variant="primary"
-                    onClick={this.onClick}
-                >Schedule Job</Button>
-            </div>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Input name="urlField"
+                               placeholder="Url to capture"
+                               value={this.state.url}
+                               onChange={value => this.onUrlChange(value)}/>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Button
+                            variant="primary"
+                            onClick={this.onClick}
+                        >Schedule Job</Button>
+                    </Grid.Row>
+                </Grid.Column>
+                <Grid.Column>
+                    <JobStatus/>
+                </Grid.Column>
+            </Grid>
         )
     }
 }

@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 import Button from "react-bootstrap/Button";
 import {Dropdown, Grid, Input} from "semantic-ui-react";
-import ToolBar from "../../toolbar/ToolBar";
-import Form from "react-jsonschema-form";
 import ReactLoading from "react-loading";
 import {connect} from "react-refetch";
 
@@ -57,7 +55,7 @@ class QueryConstructor extends Component {
 
             return (
                 <Grid columns={3}>
-                    <Grid.Column width={4}>
+                    <Grid.Column >
                         <Dropdown
                             placeholder='Select kind'
                             fluid
@@ -67,13 +65,13 @@ class QueryConstructor extends Component {
                             options={kindOptions}
                         />
                     </Grid.Column>
-                    <Grid.Column width={5}>
+                    <Grid.Column >
                         <Input focus
                                placeholder='SQL Predicate...'
                                onChange={this.onQueryChange}
                         />
                     </Grid.Column>
-                <Grid.Column width={2}>
+                <Grid.Column>
                     <Button onClick={this.onSearch}>Search</Button>
                 </Grid.Column>
                 </Grid>

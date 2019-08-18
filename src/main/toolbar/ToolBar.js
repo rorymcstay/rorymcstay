@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import ReactLoading from 'react-loading';
 import {connect} from "react-refetch";
 import {Grid} from "semantic-ui-react";
 import Button from "react-bootstrap/Button";
+import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 
 class ToolBar extends Component {
 
@@ -25,29 +25,31 @@ class ToolBar extends Component {
         const {feedStatus} = this.props;
         if (feedStatus.pending) {
             return (
-                <Grid>
-                    <div>
-                        <Button onClick={this.onFeedStart} disabled>Start</Button>
-                        <Button onClick={this.onFeedStop} disabled>Stop</Button>
-                    </div>
-                </Grid>
+                <div>
+                    <Button onClick={this.onFeedStart} disabled>Start</Button>
+                    <Button onClick={this.onFeedStop} disabled>Stop</Button>
+                </div>
             )
         } else if (feedStatus.rejected) {
             return <div>Error</div>
         } else if (feedStatus.fulfilled) {
             if (feedStatus.value.status) {
                 return (
-                    <Grid.Column>
-                        <Button onClick={this.onFeedStart} disabled>Start</Button>
-                        <Button onClick={this.onFeedStop} active>Stop</Button>
-                    </Grid.Column>
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            <Button onClick={this.onFeedStart} disabled variant="success">Running...</Button>
+                            <Button onClick={this.onFeedStop} active variant="warning">Stop</Button>
+                        </ButtonGroup>
+                    </ButtonToolbar>
                 )
             } else {
                 return (
-                    <Grid.Column>
-                        <Button onClick={this.onFeedStart} active>Start</Button>
-                        <Button onClick={this.onFeedStop} disabled>Stop</Button>
-                    </Grid.Column>
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            <Button onClick={this.onFeedStart} active>Start</Button>
+                            <Button onClick={this.onFeedStop} disabled variant="secondary">Stop</Button>
+                        </ButtonGroup>
+                    </ButtonToolbar>
                 )
             }
         }

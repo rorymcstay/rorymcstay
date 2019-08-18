@@ -1,25 +1,26 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import FormViewer from "./FormViewer";
 import Button from "react-bootstrap/Button";
 import ReactLoading from 'react-loading';
-import { connect } from 'react-refetch'
+import {connect} from 'react-refetch'
+import ParameterStatus from "./ParameterStatus";
+import {Dropdown, Grid} from "semantic-ui-react";
 
 
 class ParameterManager extends Component {
     constructor(props) {
-        super();
+        super(props);
         this.state = {
-            parameterType: "feed",
+            parameterType: props.parameterType,
             feedName: props.feedName,
             isLoaded: false
         }
     }
 
-    handleMenuChange = event => {
+    handleMenuChange = (e, {value}) => {
         this.setState({
-            parameterType: event.target.value,
-
-        })
+            parameterType: value
+        }, this.props.onParameterChange(value))
     };
 
     createNew = e => {
@@ -28,37 +29,51 @@ class ParameterManager extends Component {
         })
     };
 
+
     render() {
-        const { parameterTypes } = this.props;
+        const {parameterTypes} = this.props;
 
         if (parameterTypes.pending) {
             return <ReactLoading/>
         } else if (parameterTypes.rejected) {
             return <Button onClick={this.createNew}>Create</Button>
         } else if (parameterTypes.fulfilled) {
-            let menuItems = parameterTypes.value.map((parameterType) =>
-                <option
-                    value={parameterType}
-                    key={parameterType}
-                >
-                    {parameterType}
-                </option>
-            );
+            const menuOptions = [];
+            for (let i = 0; i < parameterTypes.value.length; i++) {
+                menuOptions.push({
+                    key: parameterTypes.value[i],
+                    value: parameterTypes.value[i],
+                    text: parameterTypes.value[i]
+                });
+            }
+
             return (
                 <div>
-                    <form>
-                        <select
-                            value={this.state.parameterType}
-                            onChange={this.handleMenuChange}
-                        >
-                            {menuItems}
-                        </select>
-                    </form>
-                    <button onClick={e => this.createNew(e)}>Submit</button>
-                    <FormViewer
-                        parameterType={this.state.parameterType}
-                        feedName={this.props.feedName}
-                    />
+                    <Grid rows={2}>
+                        <Grid.Row>
+                            <Dropdown
+                                placeholder='Select parameter type'
+                                fluid
+                                search
+                                selection
+                                onChange={this.handleMenuChange}
+                                options={menuOptions}
+                            /></Grid.Row>
+                        <Grid.Row columns={2}>
+                            <Grid.Column>
+                                <FormViewer
+                                    parameterType={this.state.parameterType}
+                                    feedName={this.props.feedName}
+                                />
+                            </Grid.Column>
+                            <Grid.Column>
+                                <ParameterStatus
+                                    feedName={this.state.feedName}
+                                    parameterName={this.state.parameterType}
+                                />
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </div>
             );
         }

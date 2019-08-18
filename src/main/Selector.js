@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import ReactLoading from 'react-loading';
 import {connect} from "react-refetch";
-import {Dropdown, Grid, Input} from "semantic-ui-react";
-import Button from "react-bootstrap/Button";
+import {Dropdown, Grid} from "semantic-ui-react";
+
 import ToolBar from "./toolbar/ToolBar";
+import {ButtonToolbar, Button, InputGroup, FormControl, ButtonGroup} from "react-bootstrap";
 
 class Selector extends Component {
 
@@ -41,8 +42,8 @@ class Selector extends Component {
             }
 
             return (
-                <Grid columns={3}>
-                    <Grid.Column width={8}>
+                <Grid columns='equal' relaxed>
+                    <Grid.Column>
                         <Dropdown
                             placeholder='Select Feed'
                             fluid
@@ -52,14 +53,18 @@ class Selector extends Component {
                             options={menuOptions}
                         />
                     </Grid.Column>
-                    <Grid.Column width={3}>
-                        <Input focus
-                               placeholder='Create...'
-                               onChange={(e, {value}) => this.setState({newFeedName: value})}
-                        />
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <Button onClick={() => this.onNewFeed(this.state.newFeedName)} active>New</Button>
+                    <Grid.Column>
+                        <ButtonToolbar>
+                            <InputGroup>
+                            <FormControl
+                                   type='text'
+                                   placeholder='Create...'
+                                   onChange={(e, {value}) => this.setState({newFeedName: value})}
+                            /></InputGroup>
+                            <ButtonGroup>
+                            <Button onClick={() => this.onNewFeed(this.state.newFeedName)} active>New</Button>
+                            </ButtonGroup>
+                        </ButtonToolbar>
                     </Grid.Column>
                 </Grid>
             )

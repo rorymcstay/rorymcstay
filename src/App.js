@@ -8,14 +8,16 @@ import Viewer from "./main/screens/viewer/Viewer";
 import 'semantic-ui-css/semantic.min.css'
 import Scheduler from "./main/screens/scheduler/Scheduler"
 import ToolBar from "./main/toolbar/ToolBar";
-import {Grid} from "semantic-ui-react";
+import {Grid, Container} from "semantic-ui-react";
+
 
 class App extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            feedName: undefined
+            feedName: undefined,
+            parameterType: "feed"
         }
     }
 
@@ -23,28 +25,33 @@ class App extends Component {
         this.setState({feedName: value})
     };
 
+
     onNewFeed = (value) => {
         this.setState({feedName: value})
     };
 
-    render() {
+    onParameterChange = (value) => {
+        this.setState({parameterType: value})
+    };
 
+    render() {
         return (
-            <div className="App">
-                <Grid>
-                    <Grid.Row columns={2}>
-                        <Grid.Column width={8}>
+            <Container className="App">
+                <Grid columns='equal'>
+                    <Grid.Row centered={false}>
+                        <Grid.Column>
                             <Selector
                                 onFeedChange={this.onFeedChange}
                                 onNewFeed={this.onNewFeed}
                                 feedName={this.state.feedName}
                             />
                         </Grid.Column>
-                        <Grid.Column width={4}>
+                        <Grid.Column>
+
                             <ToolBar feedName={this.state.feedName}/>
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row columns={1}>
+                    <Grid.Row>
                         <Grid.Column>
                             <Tabs
                                 id="controlled-tab-example"
@@ -55,8 +62,9 @@ class App extends Component {
                                     <Viewer feedName={this.state.feedName}/>
                                 </Tab>
                                 <Tab eventKey="parametermanager" title="Parameter Manager">
-                                    <ParameterManager feedName={this.state.feedName}/>
+                                    <ParameterManager feedName={this.state.feedName} parameterType={this.state.parameterType} onParameterChange={this.onParameterChange}/>
                                 </Tab>
+
                                 <Tab eventKey="scheduler" title="Scheduler">
                                     <Scheduler feedName={this.state.feedName}/>
                                 </Tab>
@@ -64,7 +72,7 @@ class App extends Component {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-            </div>
+            </Container>
         );
     }
 }
