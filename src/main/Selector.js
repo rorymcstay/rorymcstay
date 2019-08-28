@@ -21,8 +21,8 @@ class Selector extends Component {
         this.setState({feedName: value}, this.props.onFeedChange(value))
     };
 
-    onNewFeed = (value) => {
-        this.setState({feedName: value}, this.props.newFeed(value))
+    onNewFeedWrite = (event) => {
+        this.setState({feedName: event.target.value}, this.props.onFeedChange(event.target.value))
     };
 
     render() {
@@ -59,10 +59,10 @@ class Selector extends Component {
                             <FormControl
                                    type='text'
                                    placeholder='Create...'
-                                   onChange={(e, {value}) => this.setState({newFeedName: value})}
+                                   onChange={this.onNewFeedWrite}
                             /></InputGroup>
                             <ButtonGroup>
-                            <Button onClick={() => this.onNewFeed(this.state.newFeedName)} active>New</Button>
+                            <Button onClick={() => this.props.newFeed(this.state.feedName)} active>New</Button>
                             </ButtonGroup>
                         </ButtonToolbar>
                     </Grid.Column>

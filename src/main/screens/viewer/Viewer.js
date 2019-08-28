@@ -4,7 +4,7 @@ import QueryConstructor from "./QueryConstructor";
 import {Dropdown, Grid} from "semantic-ui-react";
 import {connect} from "react-refetch";
 import ReactLoading from "react-loading";
-import ReactTable from "react-table";
+import divWithClassName from "react-bootstrap/utils/divWithClassName";
 
 
 class Viewer extends Component {
@@ -12,75 +12,113 @@ class Viewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            querySchemaName: "sql_predicate",
-            query: undefined,
+            tableName: undefined,
+            pageNumber: 0,
+            predicates: "",
+            pageSize: 30,
             triggered: false,
-            kind: undefined
+            kind: undefined,
+            columns: '*'
         }
     }
 
-    renderDataViewer = (columns) => {
-        const {results} = this.props;
-        if (results.fulfilled) {
-            return (
-                <ReactTable
-                    data={results.value}
-                    columns={columns}
-                />)
-        } else if (results.pending) {
-            return <ReactLoading/>
-        } else if (results.rejected) {
-            return <div>Error</div>
-        } else {
-            return <div>Search...</div>
-        }
-    };
-
-    onSearch = () => {
-        const query ={
-                kind: this.state.kind,
-                value: this.state.query
-            };
+    onNextPage = () => {
         this.setState({
-            triggered: true
-        }, this.props.getResults(query))
-    };
-
-    onKindChange = value =>{
-        this.setState({
-            kind: value
+            pageNumber: this.state.pageNumber + 1
         })
     };
 
+    onSearch = () => {
+        this.setState({
+            triggered: true,
+            queryObject: {
+                tableName: this.state.tableName,
+                predicates: this.state.predicates,
+                columns: this.state.columns
+            }
+        })
+    };
+
+    onTableChange = (e, {value}) => {
+        this.setState({
+            tableName: value
+        });
+    };
+
     onQueryChange = (value) => {
-        this.setState({query: value})
+        this.setState({predicates: value})
     };
 
     render() {
 
-        const {schemaOptions} = this.props;
-        if (schemaOptions.pending) {
+        const {tableOptions} = this.props;
+        if (tableOptions.pending) {
             return <ReactLoading/>
 
-        } else if (schemaOptions.rejected) {
+        } else if (tableOptions.rejected) {
             return <div>Error</div>
-
-        } else if (schemaOptions.fulfilled) {
+        } else if (!this.state.triggered && tableOptions.fulfilled) {
+            const menuOptions = [];
+            for (let i = 0; i < tableOptions.value.length; i++) {
+                menuOptions.push({
+                    key: tableOptions.value[i],
+                    value: tableOptions.value[i],
+                    text: tableOptions.value[i]
+                });
+            }
+            return (
+                <div>
+                    <Dropdown
+                        placeholder='Table name'
+                        fluid
+                        search
+                        selection
+                        onChange={this.onTableChange}
+                        options={menuOptions}
+                    />
+                    <QueryConstructor
+                        tableName={this.state.tableName}
+                        onSearch={this.onSearch}
+                        onQueryChange={this.onQueryChange}
+                    />
+                </div>)
+        } else if (tableOptions.fulfilled) {
+            const menuOptions = [];
+            for (let i = 0; i < tableOptions.value.length; i++) {
+                menuOptions.push({
+                    key: tableOptions.value[i],
+                    value: tableOptions.value[i],
+                    text: tableOptions.value[i]
+                });
+            }
             return (
                 <Grid columns={1}>
                     <Grid.Row>
+                        <Dropdown
+                            placeholder='Table name'
+                            fluid
+                            search
+                            selection
+                            onChange={this.onTableChange}
+                            options={menuOptions}
+                        />
                         <QueryConstructor
-                            querySchemaName={this.state.querySchemaName}
+                            tableName={this.state.tableName}
                             onSearch={this.onSearch}
-                            onKindChange={this.onKindChange}
                             onQueryChange={this.onQueryChange}
                         />
                     </Grid.Row>
+                    {/*this should be a render function for triggered*/}
                     <Grid.Row>
-                    <DataViewer
-                        renderDataViewer={this.renderDataViewer}
-                        triggered={this.state.triggered}
-                    />
+                        <DataViewer
+                            feedName={this.props.feedName}
+                            pageNumber={this.state.pageNumber}
+                            tableName={this.state.tableName}
+                            pageSize={this.state.pageSize}
+                            onNextPage={this.onNextPage}
+                            triggered={this.state.triggered}
+                            queryObject={this.state.queryObject}
+                        />
                     </Grid.Row>
                 </Grid>
             )
@@ -89,14 +127,7 @@ class Viewer extends Component {
 }
 
 export default connect(props => ({
-    schemaOptions: {
-        url: `/search/getSchemaList/`
-    },
-    getResults: (query) => ({
-        results: {
-            url: `/search/getResults/${props.feedName}`,
-            body: JSON.stringify(query),
-            method: 'PUT'
-        }
-    })
+    tableOptions: {
+        url: `/tablemanager/getTableNames/${props.feedName}`
+    }
 }))(Viewer)
