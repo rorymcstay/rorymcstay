@@ -4,7 +4,6 @@ import QueryConstructor from "./QueryConstructor";
 import {Dropdown, Grid} from "semantic-ui-react";
 import {connect} from "react-refetch";
 import ReactLoading from "react-loading";
-import divWithClassName from "react-bootstrap/utils/divWithClassName";
 
 
 class Viewer extends Component {

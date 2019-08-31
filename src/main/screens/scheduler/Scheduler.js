@@ -19,6 +19,11 @@ class Scheduler extends Component {
             time_out: 0
         }
     }
+    onServiceChange = (value) => {
+        this.setState({
+            service: value
+        })
+    };
 
     onIncrementSizeChange = (e) => {
         this.setState({
@@ -63,6 +68,18 @@ class Scheduler extends Component {
                 })
         }
     };
+    serviceOptions = [
+        {
+            text: "persistence",
+            key: 1,
+            value: "persistence"
+        },
+        {
+            text: "summarizer",
+            key: 2,
+            value: "summarizer"
+        }
+    ];
 
     render() {
         const triggerOptions = [
@@ -133,6 +150,18 @@ class Scheduler extends Component {
                     </Grid.Row>
                 </Grid.Column>
                 <Grid.Column>
+                    <Dropdown
+                        onChange={this.onServiceChange}
+                        options={this.serviceOptions}
+                        placeholder='when'
+                        selection
+                    />
+                    <Button
+                            variant="primary"
+                            onClick={() => this.props.scheduleService(this.state.service, this.state)}
+                        >Schedule Service</Button>
+                </Grid.Column>
+                <Grid.Column>
                     <JobStatus/>
                 </Grid.Column>
             </Grid>
@@ -141,6 +170,13 @@ class Scheduler extends Component {
 }
 
 export default connect(props => ({
+    scheduleService: (serviceName, scheduledJob) => ({
+        uploadParamResponse: {
+            url: `http://localhost:5004/schedulemanager/addJob/${serviceName}`,
+            body: JSON.stringify(scheduledJob),
+            method: 'PUT'
+        }
+    }),
     addJob: (scheduledJob) => ({
         uploadParamResponse: {
             url: `http://localhost:5004/schedulemanager/addJob/${props.feedName}`,
