@@ -6,6 +6,18 @@ import {Grid} from "semantic-ui-react";
 import Button from "react-bootstrap/Button";
 import ReactLoading from "react-loading";
 
+const getCircularReplacer = () => {
+        const seen = new WeakSet();
+        return (key, value) => {
+            if (typeof value === "object" && value !== null) {
+                if (seen.has(value)) {
+                    return;
+                }
+                seen.add(value);
+            }
+            return value;
+        };
+    };
 
 class Scheduler extends Component {
     constructor(props) {
@@ -19,7 +31,8 @@ class Scheduler extends Component {
             time_out: 0
         }
     }
-    onServiceChange = (value) => {
+
+    onServiceChange = (e, {value}) => {
         this.setState({
             service: value
         })
@@ -31,9 +44,9 @@ class Scheduler extends Component {
         })
     };
 
-    onTriggerChange = (trigger) => {
+    onTriggerChange = (e, {value}) => {
         this.setState({
-            trigger: trigger
+            trigger: value
         })
     };
 
@@ -43,14 +56,22 @@ class Scheduler extends Component {
         })
     };
 
-    onIncrementChange = (value) => {
+    onIncrementChange = (e, {value}) => {
         this.setState({
             increment: value
         })
     };
 
     onClick = () => {
-        this.props.addJob(this.state);
+        const job = {
+            feedName: this.state.feedName,
+            url: this.state.url,
+            trigger: this.state.trigger,
+            increment: this.state.increment,
+            increment_size: this.state.increment_size,
+            time_out: this.state.time_out
+        };
+        this.props.addJob(job);
         const {data} = this.props;
         if (data.pending) {
             return <ReactLoading/>
@@ -157,9 +178,9 @@ class Scheduler extends Component {
                         selection
                     />
                     <Button
-                            variant="primary"
-                            onClick={() => this.props.scheduleService(this.state.service, this.state)}
-                        >Schedule Service</Button>
+                        variant="primary"
+                        onClick={() => this.props.scheduleService(this.state.service, this.state)}
+                    >Schedule Service</Button>
                 </Grid.Column>
                 <Grid.Column>
                     <JobStatus/>
@@ -172,14 +193,14 @@ class Scheduler extends Component {
 export default connect(props => ({
     scheduleService: (serviceName, scheduledJob) => ({
         uploadParamResponse: {
-            url: `http://localhost:5004/schedulemanager/addJob/${serviceName}`,
+            url: `/schedulemanager/scheduleContainer/${serviceName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }
     }),
     addJob: (scheduledJob) => ({
         uploadParamResponse: {
-            url: `http://localhost:5004/schedulemanager/addJob/${props.feedName}`,
+            url: `/schedulemanager/addJob/${props.feedName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }

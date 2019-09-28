@@ -9,6 +9,7 @@ import 'semantic-ui-css/semantic.min.css'
 import Scheduler from "./main/screens/scheduler/Scheduler"
 import ToolBar from "./main/toolbar/ToolBar";
 import {Grid, Container} from "semantic-ui-react";
+import Mapping from "./main/screens/mapping/Mapping";
 
 
 class App extends Component {
@@ -68,7 +69,10 @@ class App extends Component {
                                 <Tab eventKey="scheduler" title="Scheduler">
                                     <Scheduler feedName={this.state.feedName}/>
                                 </Tab>
-                            </Tabs>
+                                <Tab eventKey="mapping" title="Mapping">
+                                    <Mapping feedName={this.state.feedName}/>
+                                </Tab>
+                                </Tabs>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

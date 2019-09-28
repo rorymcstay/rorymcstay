@@ -1,6 +1,5 @@
 {
   "name": "my-app",
-  "proxy": "http://localhost:5004",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -17,7 +16,9 @@
     "react-widgets": "^4.4.11",
     "semantic-ui-react": "latest"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack": "^2.1.0-beta.8"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

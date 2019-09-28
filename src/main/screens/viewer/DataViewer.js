@@ -18,13 +18,13 @@ class DataViewer extends Component {
             return <div>Error</div>
         } else if (data.fulfilled) {
             if (this.props.triggered) {
-            return (
-                <ReactTable
-                    data={data.value.data}
-                    columns={data.value.columns}
-                    defaultPageSize={this.props.pageSize}
-                />
-            );
+                return (
+                    <ReactTable
+                        data={data.value.data}
+                        columns={data.value.columns}
+                        defaultPageSize={this.props.pageSize}
+                    />
+                );
             }
         }
     }
