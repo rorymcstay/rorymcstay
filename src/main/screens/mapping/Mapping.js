@@ -66,14 +66,14 @@ class Mapping extends Component {
 
 export default connect(props => ({
     mappingValue: {
-        url: `/tablemanager/getMappingValue/${props.feedName}`
+        url: `/api/tablemanager/getMappingValue/${props.feedName}`
     },
     columnValues: {
-        url: `/tablemanager/getAllColumns/t_stg_${props.feedName}_results`
+        url: `/api/tablemanager/getAllColumns/t_stg_${props.feedName}_results`
     },
     uploadMapping: (formData) => ({
         uploadParamResponse: {
-            url: `/tablemanager/uploadMapping/${props.feedName}`,
+            url: `/api/tablemanager/uploadMapping/${props.feedName}`,
             body: JSON.stringify(formData),
             method: 'PUT'
         }

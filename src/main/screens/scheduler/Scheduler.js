@@ -193,14 +193,14 @@ class Scheduler extends Component {
 export default connect(props => ({
     scheduleService: (serviceName, scheduledJob) => ({
         uploadParamResponse: {
-            url: `/schedulemanager/scheduleContainer/${serviceName}`,
+            url: `/api/schedulemanager/scheduleContainer/${serviceName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }
     }),
     addJob: (scheduledJob) => ({
         uploadParamResponse: {
-            url: `/schedulemanager/addJob/${props.feedName}`,
+            url: `/api/schedulemanager/addJob/${props.feedName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }

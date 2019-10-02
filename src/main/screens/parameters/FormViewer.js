@@ -51,14 +51,14 @@ class FormViewer extends Component {
 
 export default connect(props => ({
     parameterSchema: {
-        url: `/feedmanager/getParameterSchema/${props.parameterType}`
+        url: `/api/feedmanager/getParameterSchema/${props.parameterType}`
     },
     parameterValue: {
-        url: `/feedmanager/getParameter/${props.parameterType}/${props.feedName}`
+        url: `/api/feedmanager/getParameter/${props.parameterType}/${props.feedName}`
     },
     uploadParam: (formData) => ({
         uploadParamResponse: {
-            url: `/feedmanager/setParameter/${props.parameterType}/${props.feedName}`,
+            url: `/api/feedmanager/setParameter/${props.parameterType}/${props.feedName}`,
             body: JSON.stringify(formData),
             method: 'PUT'
         }

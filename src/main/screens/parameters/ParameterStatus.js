@@ -52,6 +52,6 @@ class ParameterStatus extends Component {
 
 export default connect(props => ({
     parameterStatus: {
-        url: `/feedmanager/getParameterStatus/${props.feedName}`
+        url: `/api/feedmanager/getParameterStatus/${props.feedName}`
     }
 }))(ParameterStatus)
