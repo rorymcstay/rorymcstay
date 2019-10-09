@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:10 AS builder
+FROM mhart/alpine-node:11 AS builder
 WORKDIR /usr/src/app
 
 COPY package.json ./
@@ -11,6 +11,10 @@ COPY public public
 
 RUN yarn run build
 
+FROM mhart/alpine-node
+
 RUN yarn global add serve
+
+COPY --from=builder /usr/src/app/build .
 
 CMD ["serve", "-p", "80", "-s", "."]
