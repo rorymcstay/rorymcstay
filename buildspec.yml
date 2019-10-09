@@ -8,7 +8,7 @@ phases:
     commands:
       - IMAGE_TAG=$PROJECT_NAME/$COMPONENT:0.0.0
       - echo Logging in to Amazon ECR...
-      - $(aws ecr get-login --no-include-email --region us-west-2)
+
   build:
     commands:
       - echo Building image tag $IMAGE_TAG
@@ -16,5 +16,6 @@ phases:
       - docker tag $IMAGE_TAG $IMAGE_REPOSITORY/$IMAGE_TAG
   post_build:
     commands:
+      - $(aws ecr get-login --no-include-email --region us-west-2)
       - echo Pushing to $IMAGE_REPOSITORY
       - docker push $IMAGE_REPOSITORY/$IMAGE_TAG
