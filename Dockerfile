@@ -11,6 +11,6 @@ COPY public public
 
 RUN yarn run build
 
-RUN yarn global add server
+RUN yarn global add serve
 
 CMD ["serve", "-p", "80", "-s", "."]
