@@ -51,6 +51,6 @@ class JobStatus extends Component {
 
 export default connect(props => ({
     data: {
-        url: `/schedulemanager/getStatus`
+        url: `/api/schedulemanager/getStatus`
     }
 }))(JobStatus)
