@@ -1,4 +1,4 @@
-FROM alpine-node:10 AS builder
+FROM mhart/alpine-node:10 AS builder
 WORKDIR /usr/src/app
 
 COPY package.json ./
