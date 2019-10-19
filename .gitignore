@@ -2,13 +2,12 @@
 
 # dependencies
 /node_modules
-
+/venv
 # testing
 /coverage
 
 # production
 /build
-
 # misc
 .DS_Store
 npm-debug.log*
