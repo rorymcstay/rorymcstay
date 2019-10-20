@@ -81,5 +81,5 @@ class ParameterManager extends Component {
 }
 
 export default connect(props => ({
-    parameterTypes: `/api/feedmanager/getParameterTypes/`
+    parameterTypes: `/feedmanager/getParameterTypes/`
 }))(ParameterManager)

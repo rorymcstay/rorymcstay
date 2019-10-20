@@ -127,6 +127,6 @@ class Viewer extends Component {
 
 export default connect(props => ({
     tableOptions: {
-        url: `/api/tablemanager/getTableNames/${props.feedName}`
+        url: `/tablemanager/getTableNames/${props.feedName}`
     }
 }))(Viewer)

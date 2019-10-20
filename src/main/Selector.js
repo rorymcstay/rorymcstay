@@ -74,11 +74,11 @@ class Selector extends Component {
 
 export default connect(props => ({
     fetchFeeds: {
-        url: `/api/feedmanager/getFeeds`
+        url: `/feedmanager/getFeeds/`
     },
     newFeed: (value) => ({
         newFeedResponse: {
-            url: `/api/feedmanager/newFeed/${value}`
+            url: `/feedmanager/newFeed/${value}`
         }
     }),
 }))(Selector)

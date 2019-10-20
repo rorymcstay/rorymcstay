@@ -33,7 +33,7 @@ class DataViewer extends Component {
 
 export default connect(props => ({
     data: {
-        url: `/api/tablemanager/getResults/${props.pageSize}/${props.pageNumber}`,
+        url: `/tablemanager/getResults/${props.pageSize}/${props.pageNumber}`,
         body: JSON.stringify(props.queryObject),
         method: 'PUT'
     }

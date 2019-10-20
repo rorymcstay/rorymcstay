@@ -1,20 +1,32 @@
+##################
+## node_modules
 FROM mhart/alpine-node:11 AS builder
+
 WORKDIR /usr/src/app
-
 COPY package.json ./
-# this uses docker caching
 RUN yarn install
-
 COPY src src
 COPY .env .env
 COPY public public
 
 RUN yarn run build
 
-FROM mhart/alpine-node
+##################
+## Server Build
+FROM nginx
 
-RUN yarn global add serve
+WORKDIR /etc/nginx
 
-COPY --from=builder /usr/src/app/build .
+COPY --from=builder /usr/src/app/build /var/www
+COPY nginx.template.conf /etc/nginx/
+COPY run_nginx.sh /etc/nginx/run_nginx.sh
 
-CMD ["serve", "-p", "80", "-s", "."]
+ENV UISERVER=http://ui-server:5000
+ENV SERVERNAME=feed-admin
+ENV MYVARS="$UISERVER:$SERVERNAME"
+
+EXPOSE 80
+
+ENTRYPOINT ["/etc/nginx/run_nginx.sh", "/etc/nginx/nginx.template.conf"]
+CMD ["nginx", "-g", "daemon off;"]
+
