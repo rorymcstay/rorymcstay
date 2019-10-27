@@ -93,12 +93,12 @@ class Scheduler extends Component {
         {
             text: "persistence",
             key: 1,
-            value: "persistence"
+            value: "feed_persistence"
         },
         {
             text: "summarizer",
             key: 2,
-            value: "summarizer"
+            value: "feed_summarizer"
         }
     ];
 
@@ -193,14 +193,14 @@ class Scheduler extends Component {
 export default connect(props => ({
     scheduleService: (serviceName, scheduledJob) => ({
         uploadParamResponse: {
-            url: `/api/schedulemanager/scheduleContainer/${serviceName}`,
+            url: `/schedulemanager/scheduleContainer/${serviceName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }
     }),
     addJob: (scheduledJob) => ({
         uploadParamResponse: {
-            url: `/api/schedulemanager/addJob/${props.feedName}`,
+            url: `/schedulemanager/addJob/${props.feedName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }
