@@ -18,7 +18,8 @@ class App extends Component {
         super(props);
         this.state = {
             feedName: undefined,
-            parameterType: "feed"
+            parameterType: "feed",
+            tableName: undefined
         }
     }
 
@@ -33,6 +34,10 @@ class App extends Component {
 
     onParameterChange = (value) => {
         this.setState({parameterType: value})
+    };
+
+    onTableChange = (value) => {
+        this.setState( { tableName: value})
     };
 
     render() {
@@ -60,17 +65,16 @@ class App extends Component {
                                 onSelect={key => this.setState({key})}
                             >
                                 <Tab eventKey="viewer" title="Viewer">
-                                    <Viewer feedName={this.state.feedName}/>
+                                    <Viewer feedName={this.state.feedName} updateTableName={this.onTableChange}/>
                                 </Tab>
                                 <Tab eventKey="parametermanager" title="Parameter Manager">
                                     <ParameterManager feedName={this.state.feedName} parameterType={this.state.parameterType} onParameterChange={this.onParameterChange}/>
                                 </Tab>
-
                                 <Tab eventKey="scheduler" title="Scheduler">
                                     <Scheduler feedName={this.state.feedName}/>
                                 </Tab>
                                 <Tab eventKey="mapping" title="Mapping">
-                                    <Mapping feedName={this.state.feedName}/>
+                                    <Mapping feedName={this.state.feedName} tableName={this.state.tableName}/>
                                 </Tab>
                                 </Tabs>
                         </Grid.Column>

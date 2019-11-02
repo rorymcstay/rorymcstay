@@ -8,13 +8,22 @@ class Mapping extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            feedName: props.feedName,
+            tableName: props.tableName,
+            feedName: props.feedName
         }
     }
 
+    onSubmit = ({formData}, e) => {
+        const payload = {
+            tableName: this.state.tableName,
+            mapping: formData
+        };
+        this.props.uploadMapping(payload);
+    };
 
     render() {
-        const onSubmit = ({formData}, e) => this.props.uploadMapping(formData);
+
+
         const {columnValues} = this.props;
         const {mappingValue} = this.props;
 
@@ -46,7 +55,7 @@ class Mapping extends Component {
                 return (
                     <div>
                         <Form schema={mappingSchema}
-                              onSubmit={onSubmit}
+                              onSubmit={this.onSubmit}
                               formData={formData}
                         />
                     </div>
@@ -56,7 +65,7 @@ class Mapping extends Component {
             } else if (mappingValue.rejected) {
                 return (
                     <Form schema={mappingSchema}
-                          onSubmit={onSubmit}
+                          onSubmit={this.onSubmit}
                     />
                 );
             }
@@ -71,10 +80,10 @@ export default connect(props => ({
     columnValues: {
         url: `/tablemanager/getAllColumns/t_stg_${props.feedName}_results`
     },
-    uploadMapping: (formData) => ({
+    uploadMapping: (payload) => ({
         uploadParamResponse: {
             url: `/tablemanager/uploadMapping/${props.feedName}`,
-            body: JSON.stringify(formData),
+            body: JSON.stringify(payload),
             method: 'PUT'
         }
     })
