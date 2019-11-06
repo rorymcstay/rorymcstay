@@ -17,13 +17,16 @@ class Viewer extends Component {
             pageSize: 30,
             triggered: false,
             kind: undefined,
-            columns: '*'
+            columns: '*',
+            pages: undefined
         }
     }
 
-    onNextPage = () => {
+    onNextPage = (state) => {
         this.setState({
-            pageNumber: this.state.pageNumber + 1
+            pages: state.pages,
+            pageNumber: state.page,
+            pageSize: state.pageSize
         })
     };
 
@@ -110,6 +113,7 @@ class Viewer extends Component {
                     {/*this should be a render function for triggered*/}
                     <Grid.Row>
                         <DataViewer
+                            pages={this.state.pages}
                             feedName={this.props.feedName}
                             pageNumber={this.state.pageNumber}
                             tableName={this.state.tableName}
