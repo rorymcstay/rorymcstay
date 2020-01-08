@@ -5,9 +5,9 @@ if [[ -z $1 ]]; then
     exit 1
 fi
 
+# substitute environment variables in template file
 envsubst "\$UISERVER:\$SERVERNAME" < $1 > /etc/nginx/nginx.conf
 
 cat /etc/nginx/nginx.conf
 
 exec "${@:2}"
-

@@ -21,7 +21,7 @@ COPY --from=builder /usr/src/app/build /var/www
 COPY nginx.template.conf /etc/nginx/
 COPY run_nginx.sh /etc/nginx/run_nginx.sh
 
-ENV UISERVER=http://ui-server:5000
+ENV UISERVER=http://feed_ui-server:5000
 ENV SERVERNAME=feed-admin
 ENV MYVARS="$UISERVER:$SERVERNAME"
 
