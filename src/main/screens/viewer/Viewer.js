@@ -12,9 +12,8 @@ class Viewer extends Component {
         super(props);
         this.state = {
             tableName: undefined,
-            pageNumber: 0,
             predicates: "",
-            pageSize: 30,
+            pageSize: 5,
             triggered: false,
             kind: undefined,
             columns: '*',
@@ -113,12 +112,8 @@ class Viewer extends Component {
                     {/*this should be a render function for triggered*/}
                     <Grid.Row>
                         <DataViewer
-                            pages={this.state.pages}
                             feedName={this.props.feedName}
-                            pageNumber={this.state.pageNumber}
                             tableName={this.state.tableName}
-                            pageSize={this.state.pageSize}
-                            onNextPage={this.onNextPage}
                             triggered={this.state.triggered}
                             queryObject={this.state.queryObject}
                         />
