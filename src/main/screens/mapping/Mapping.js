@@ -15,7 +15,7 @@ class Mapping extends Component {
 
     onSubmit = ({formData}, e) => {
         const payload = {
-            tableName: this.state.tableName,
+            tableName: this.props.tableName,
             mapping: formData
         };
         this.props.uploadMapping(payload);

@@ -9,27 +9,16 @@ class JobStatus extends Component {
 
         const columns = [
             {
-                Header: "Feed",
-                accessor: "description"
+                Header: "Job Name",
+                accessor: "job_name"
             },
             {
-                Header: "url",
-                accessor: "url"
+                Header: "Next Run",
+                accessor: "next_run"
             },
             {
-                Header: "price",
-                accessor: "price"
-            },
-            {
-                Header: "attributes",
-                accessor: "attrs"
-            },
-            {
-                Header: "image",
-                accessor: "img",
-                Cell: (row) => {
-                    return <div><img height={100} src={row.original.imgs[0]} alt='boohoo'/></div>
-                },
+                Header: "Trigger Type",
+                accessor: "trigger"
             }
         ];
 
