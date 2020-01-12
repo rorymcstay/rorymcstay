@@ -18,7 +18,7 @@ class App extends Component {
         super(props);
         this.state = {
             feedName: undefined,
-            parameterType: "feed",
+            parameterType: "leader",
             tableName: undefined
         }
     }
