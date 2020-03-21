@@ -2,7 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5004",
   "dependencies": {
     "axios": "^0.19.1",
     "bootstrap": "^4.3.1",

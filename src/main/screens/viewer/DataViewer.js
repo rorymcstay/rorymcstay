@@ -30,6 +30,13 @@ class DataViewer extends Component {
         } else if (columnValues.rejected) {
             return <div>Error</div>
         } else if (columnValues.fulfilled) {
+            
+            var emptyRow = {};
+            for (var i = 0; i < columnValues.value.size(); i++)
+            {
+                emptyRow[columnValues.value[i]] = "";
+            }
+            this.state.data.unshift(emptyRow);
 
             return (
                 <ReactTable

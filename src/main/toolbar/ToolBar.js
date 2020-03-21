@@ -16,6 +16,12 @@ class ToolBar extends Component {
     onFeedStart = () => {
         this.setState({started: true}, this.props.startFeed())
     };
+    onSampleFeed= () => {
+        this.setState({started: true}, this.props.sampleFeed())
+    };
+    onSingleFeed= () => {
+        this.setState({started: true}, this.props.singleFeed())
+    };
 
     onFeedStop = () => {
         this.props.stopFeed()
@@ -47,6 +53,8 @@ class ToolBar extends Component {
                     <ButtonToolbar>
                         <ButtonGroup>
                             <Button onClick={this.onFeedStart} active>Start</Button>
+                            <Button onClick={this.onSampleFeed} active>Sample</Button>
+                            <Button onClick={this.onSingleFeed} active>Single</Button>
                             <Button onClick={this.onFeedStop} disabled variant="secondary">Stop</Button>
                         </ButtonGroup>
                     </ButtonToolbar>
@@ -59,7 +67,13 @@ class ToolBar extends Component {
 export default connect(props => ({
 
     startFeed: () => ({
-        startFeedResponse: {url: `/feedmanager/startFeed/${props.feedName}`}
+        startFeedResponse: {url: `/feedmanager/startFeed/${props.feedName}/run`}
+    }),
+    sampleFeed: () => ({
+        startFeedResponse: {url: `/feedmanager/startFeed/${props.feedName}/test`}
+    }),
+    singleFeed: () => ({
+        startFeedResponse: {url: `/feedmanager/startFeed/${props.feedName}/single`}
     }),
     stopFeed: () => ({
         stopFeedResponse: {url: `/feedmanager/stopFeed/${props.feedName}`}
