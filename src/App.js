@@ -10,6 +10,7 @@ import Scheduler from "./main/screens/scheduler/Scheduler"
 import ToolBar from "./main/toolbar/ToolBar";
 import {Grid, Container} from "semantic-ui-react";
 import Mapping from "./main/screens/mapping/Mapping";
+import SamplerViewer from "./main/screens/sampler/Sampler"
 
 
 class App extends Component {
@@ -75,6 +76,9 @@ class App extends Component {
                                 </Tab>
                                 <Tab eventKey="mapping" title="Mapping">
                                     <Mapping feedName={this.state.feedName} tableName={this.state.tableName}/>
+                                </Tab>
+                                <Tab eventKey="sampling" title="Sampling">
+                                    <SamplerViewer feedName={this.state.feedName} />
                                 </Tab>
                                 </Tabs>
                         </Grid.Column>
