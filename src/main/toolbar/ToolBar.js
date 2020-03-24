@@ -80,5 +80,6 @@ export default connect(props => ({
     }),
     feedStatus: {
         url: `/feedmanager/feedStatus/${props.feedName}`, refreshInterval: 10000
-    }
+    },
+
 }))(ToolBar)
