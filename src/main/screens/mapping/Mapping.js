@@ -16,38 +16,25 @@ class Mapping extends Component {
         }
     };
 
-    DisplayButton = (isRunning, request, name) => 
+    renderButtons = (commandStatus) =>
     {
-        if (request)
+        if (commandStatus.fulfilled)
         {
-            if (request.rejected)
+            let arr = []; 
+            for (var i=0; i < commandStatus.value.length; i++)
             {
-                return (
-                <Button disabled={true} color='red'>{name}`</Button>
-                )
+                let isRunning = commandStatus.value[i].isRunning;
+                let name = commandStatus.value[i].name;
+                arr.push(
+                    <Button color={ isRunning ? 'green' : 'red'}
+                            onClick={ () => isRunning ? this.onStop(name) : this.onStart(name) }
+                    >
+                        {`${commandStatus.value[i].name}`}
+                    </Button>);
             }
-        }
-        if (isRunning.fulfilled)
-        { 
-            const loading = isRunning.value.running;
-            return (
-                <Button loading={loading}
-                        onClick={() => this.onStartMapper(name)}>{`${name}`}
-                </Button>
-            )
-        }
-
-    };
-
-    renderButtons = (isRunningMapper, isRunningSummarizer) =>
-    {
-        const {mapRequest, sumRequest} = this.props;
-        if (!(isRunningMapper.rejected || isRunningSummarizer.rejected))
-        {
             return( 
                 <ButtonGroup>
-                    {this.DisplayButton(isRunningMapper, mapRequest, "Mapper")}
-                    {this.DisplayButton(isRunningSummarizer, sumRequest, "Summarizer")}
+                    {arr}
                 </ButtonGroup>
             )
         }
@@ -57,17 +44,13 @@ class Mapping extends Component {
         }
     }
 
-    onStartMapper = (name) =>
+    onStart = (name) =>
     {
-        if (name === 'Mapper')
-        {
-            this.props.startMapper();
-        } 
-        else
-        {
-            this.props.startSummarizer();
-        }
-        this.setState({triggered: true});
+        this.props.start(name);
+    }
+    onStop = (name) =>
+    {
+        this.props.stop(name);
     }
     
 
@@ -82,8 +65,7 @@ class Mapping extends Component {
     render() {
 
         const {columnValues} = this.props;
-        const {isRunningMapper} = this.props;
-        const {isRunningSummarizer} = this.props;
+        const {commandStatus} = this.props;
         const {mappingValue} = this.props;
 
 
@@ -110,7 +92,7 @@ class Mapping extends Component {
                 }
             };
 
-            if (mappingValue.fulfilled && isRunningMapper.fulfilled && isRunningSummarizer.fulfilled) {
+            if (mappingValue.fulfilled && commandStatus.fulfilled) {
                 const formData = mappingValue.value;
                 return (
                     <div>
@@ -118,10 +100,10 @@ class Mapping extends Component {
                               onSubmit={this.onSubmit}
                               formData={formData}
                         />
-                        {this.renderButtons(isRunningSummarizer, isRunningMapper)}
+                        {this.renderButtons(commandStatus)}
                     </div>
                 );
-            } else if (mappingValue.pending || isRunningSummarizer.pending || isRunningMapper.pending) {
+            } else if (mappingValue.pending || commandStatus.pending) {
                 return <ReactLoading/>
             } else if (mappingValue.rejected) {
                 return (
@@ -150,20 +132,17 @@ export default connect(props => ({
             method: 'PUT'
         }
     }),
-    isRunningSummarizer: {
-        url: `/mappermanager/isRunning/summarizer` 
+    commandStatus : {
+        url: `/commandmanager/getCommands/`
     },
-    isRunningMapper: {
-        url: `/mappermanager/isRunning/persistence`
-    },
-    startSummarizer: () =>({
-        sumRequest: {
-            url: `/mappermanager/startSummarizer/`
+    start: (name) => ({
+        startRequest: {
+            url: `/commandmanager/startService/${name}`
         }
     }),
-    startMapper: () => ({
-        mapRequest: {
-            url: `/mappermanager/startMapper/`
+    stop: (name) => ({
+        stopRequest: {
+            url: `commandmanager/stopService/${name}`
         }
     })
 }))(Mapping)
