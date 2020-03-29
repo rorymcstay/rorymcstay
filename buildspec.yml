@@ -1,12 +1,11 @@
 version: 0.2
 
 phases:
+  env:
+      git-credential-helper: yes
   install:
     runtime-versions:
       docker: 18
-  env:
-      git-credential-helper: yes
-
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
