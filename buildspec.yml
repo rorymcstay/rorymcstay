@@ -14,8 +14,8 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $COMPONENT:$CODEBUILD_RESOLVED_SOURCE_VERSION .
+      - docker build -t $IMAGE_REPOSITORY/$PROJECT_NAME/$COMPONENT .
   post_build:
     commands:
       - echo Build completed on `date`
-      - $CODEBUILD_SRC_DIR_platform/scripts/publish-if-release-tag.sh 
+      - $CODEBUILD_SRC_DIR_platform/scripts/publish-if-release-tag.sh
