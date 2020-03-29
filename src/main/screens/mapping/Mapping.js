@@ -48,6 +48,7 @@ class Mapping extends Component {
     {
         this.props.start(name);
     }
+
     onStop = (name) =>
     {
         this.props.stop(name);
