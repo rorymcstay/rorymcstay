@@ -7,6 +7,8 @@ phases:
       docker: 18
   pre_build:
     commands:
+      - git status
+      - env
       - echo Logging in to Amazon ECR...
   build:
     commands:
