@@ -10,6 +10,7 @@ phases:
     commands:
       - env
       - echo Logging in to Amazon ECR...
+      - aws ecs list-services --cluster feed-cluster
   build:
     commands:
       - echo Build started on `date`
