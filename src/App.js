@@ -77,9 +77,11 @@ class App extends Component {
                                 <Tab eventKey="mapping" title="Mapping">
                                     <Mapping feedName={this.state.feedName} tableName={this.state.tableName}/>
                                 </Tab>
+                                {/*
                                 <Tab eventKey="sampling" title="Sampling">
                                     <SamplerViewer feedName={this.state.feedName} />
                                 </Tab>
+                                */}
                                 </Tabs>
                         </Grid.Column>
                     </Grid.Row>

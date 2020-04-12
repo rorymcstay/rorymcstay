@@ -29,4 +29,11 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    '/feedjobmanager',
+    createProxyMiddleware({
+      target: 'http://localhost:5001',
+      changeOrigin: true,
+    })
+  );
 };

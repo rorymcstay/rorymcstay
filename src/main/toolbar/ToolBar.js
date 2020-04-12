@@ -43,8 +43,9 @@ class ToolBar extends Component {
                 return (
                     <ButtonToolbar>
                         <ButtonGroup>
-                            <Button onClick={this.onFeedStart} disabled variant="success">Running...</Button>
+                            <Button onClick={this.onFeedStart} disabled variant="success">Last Page: {feedStatus.value.status.lastPage}</Button>
                             <Button onClick={this.onFeedStop} active variant="warning">Stop</Button>
+                            <Button diabled variant="info">{feedStatus.value.status.pagesProcessed}</Button>
                         </ButtonGroup>
                     </ButtonToolbar>
                 )
@@ -53,8 +54,6 @@ class ToolBar extends Component {
                     <ButtonToolbar>
                         <ButtonGroup>
                             <Button onClick={this.onFeedStart} active>Start</Button>
-                            <Button onClick={this.onSampleFeed} active>Sample</Button>
-                            <Button onClick={this.onSingleFeed} active>Single</Button>
                             <Button onClick={this.onFeedStop} disabled variant="secondary">Stop</Button>
                         </ButtonGroup>
                     </ButtonToolbar>
@@ -67,19 +66,13 @@ class ToolBar extends Component {
 export default connect(props => ({
 
     startFeed: () => ({
-        startFeedResponse: {url: `/feedmanager/startFeed/${props.feedName}/run`}
-    }),
-    sampleFeed: () => ({
-        startFeedResponse: {url: `/feedmanager/startFeed/${props.feedName}/test`}
-    }),
-    singleFeed: () => ({
-        startFeedResponse: {url: `/feedmanager/startFeed/${props.feedName}/single`}
+        startFeedResponse: {url: `/feedjobmanager/addFeed/${props.feedName}`}
     }),
     stopFeed: () => ({
-        stopFeedResponse: {url: `/feedmanager/stopFeed/${props.feedName}`}
+        stopFeedResponse: {url: `/feedjobmanager/disableFeed/${props.feedName}`}
     }),
     feedStatus: {
-        url: `/feedmanager/feedStatus/${props.feedName}`, refreshInterval: 10000
+        url: `/feedjobmanager/getStatus/${props.feedName}`
     },
 
 }))(ToolBar)
