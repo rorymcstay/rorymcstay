@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import DataViewer from "./DataViewer";
 import QueryConstructor from "./QueryConstructor";
 import {Dropdown, Grid} from "semantic-ui-react";
-import {connect} from "react-refetch";
+import connect from "../../../api-connector";
 import ReactLoading from "react-loading";
 
 

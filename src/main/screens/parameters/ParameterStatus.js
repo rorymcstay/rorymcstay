@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import ReactLoading from 'react-loading';
-import {connect} from 'react-refetch'
+import connect from '../../../api-connector.js'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 

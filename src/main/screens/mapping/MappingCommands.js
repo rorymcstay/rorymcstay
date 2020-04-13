@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import Form from "react-jsonschema-form";
 import ReactLoading from 'react-loading';
-import {connect} from 'react-refetch'
+import connect from '../../../api-connector'
 import { ButtonGroup, Button } from "semantic-ui-react";
 import Loading from "react-loading";
 

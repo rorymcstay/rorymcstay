@@ -14,7 +14,13 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
-
+  app.use(
+    '/sampler',
+    createProxyMiddleware({
+      target: 'http://localhost:5004',
+      changeOrigin: true,
+    })
+  );
   app.use(
     '/schedulemanager',
     createProxyMiddleware({

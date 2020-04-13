@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import FormViewer from "./FormViewer";
 import Button from "react-bootstrap/Button";
 import ReactLoading from 'react-loading';
-import {connect} from 'react-refetch'
+import connect from '../../../api-connector'
 import ParameterStatus from "./ParameterStatus";
 import {Dropdown, Grid} from "semantic-ui-react";
 

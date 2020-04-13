@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactLoading from 'react-loading';
-import {connect} from "react-refetch";
+import connect from "../api-connector";
 import {Dropdown, Grid} from "semantic-ui-react";
 
 import ToolBar from "./toolbar/ToolBar";

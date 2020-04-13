@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from "react-refetch";
+import connect from "../../api-connector";
 import {Grid} from "semantic-ui-react";
 import Button from "react-bootstrap/Button";
 import {ButtonGroup, ButtonToolbar} from "react-bootstrap";

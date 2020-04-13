@@ -1,10 +1,9 @@
 
 import React, {Component} from "react";
-import {connect} from 'react-refetch'
+import connect from '../../../api-connector'
 import "react-table/react-table.css";
 import ReactLoading from "react-loading";
-import ReactTable from "react-table";
-import Axios from "axios";
+import Iframe from 'react-iframe';
 
 
 class SampleViewer extends Component {
@@ -22,11 +21,8 @@ class SampleViewer extends Component {
                 {accessor: "html", Header: "html"}
             ]
             return (
-                <ReactTable
-                    style={{width: "100%"}}
-                    data={sampleData.value.data}
-                    columns={columns}
-                    defaultPageSize={10}
+                <Iframe
+                    url={sampleData.value.url}
                 />
             );
         }
@@ -36,6 +32,6 @@ class SampleViewer extends Component {
 
 export default connect(props => ({
     sampleData: {
-        url: `/feedmanager/getSampleData/${props.feedName}`
+        url: `/sampler/getSampleUrl/${props.feedName}`
     },
 }))(SampleViewer)
