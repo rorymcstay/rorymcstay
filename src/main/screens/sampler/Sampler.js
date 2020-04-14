@@ -1,4 +1,3 @@
-
 import React, {Component} from "react";
 import connect from '../../../api-connector'
 import "react-table/react-table.css";

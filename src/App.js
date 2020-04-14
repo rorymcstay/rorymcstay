@@ -1,3 +1,4 @@
+/* global chrome */
 import React, {Component} from 'react';
 import './App.css';
 import Tab from "react-bootstrap/Tab";
@@ -20,8 +21,20 @@ class App extends Component {
         this.state = {
             feedName: undefined,
             parameterType: "leader",
-            tableName: undefined
+            tableName: undefined,
+            domain: undefined
         }
+    }
+
+
+    componentDidMount() {
+        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+            const url = new URL(tabs[0].url);
+            const domain = url.hostname;
+            this.setState({
+                domain: domain,
+            });
+        });
     }
 
     onFeedChange = value => {

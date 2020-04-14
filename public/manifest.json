@@ -3,10 +3,15 @@
     "version": "1.0",
     "manifest_version": 2,
     "description": "Get pages source from a popup",
-    "permissions": ["tabs", "http://*/*", "https://*/*"],
+    "permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*"],
     "browser_action": {},
+    "content_scripts": [{
+      "js": [ "./chrome/content.js"],
+      "matches": [ "<all_urls>"]
+     }],
     "background": {
       "persistent": false,
-      "scripts": ["chrome/background.js"]
-    }
+      "scripts": ["./chrome/background.js"]
+    },
+    "web_accessible_resources" : ["*.html"]
 }
