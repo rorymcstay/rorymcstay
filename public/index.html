@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <script type="text/javascript" src="selectorgadget_combined.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="selectorgadget_combined.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <!--
@@ -15,6 +17,22 @@
     -->
     <title>React App</title>
   </head>
+  <script type="text/javascript">
+  // jQuerySG is the alias for jQuery that SelectorGadget uses:
+  jQuerySG(document).ready(function() {
+    console.log("Hello world");
+    // whenever SelectorGadget makes a prediction, it will call this
+    // function; customize to do whatever you want with it, such as
+    // putting the CSS selector into your code editor
+    window.sg_prediction = function(prediction) {
+      console.log("PREDICTED CSS:", prediction);
+    }
+    jQuerySG("#sg_toggle_btn").click(function() {
+      SelectorGadget.toggle(); // to turn on SelectorGadget, call this method
+                               // call it again to turn off the SelectorGadget
+    });
+  });
+  </script>
   <body>
     <div id="root"></div>
     <!--
@@ -27,5 +45,6 @@
       To begin the development, run `npm start`.
       To create a production bundle, use `npm run build`.
     -->
+  <input type="button" id="sg_toggle_btn" value="Toggle SelectorGadget"></input>
   </body>
 </html>

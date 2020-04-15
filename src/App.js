@@ -26,7 +26,7 @@ class App extends Component {
         }
     }
 
-
+/*
     componentDidMount() {
         chrome.tabs.query({active: true, currentWindow: true}, tabs => {
             const url = new URL(tabs[0].url);
@@ -36,7 +36,7 @@ class App extends Component {
             });
         });
     }
-
+*/
     onFeedChange = value => {
         this.setState({feedName: value})
     };

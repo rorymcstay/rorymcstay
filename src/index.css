@@ -2,4 +2,10 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  min-width: 1005px; /* your desired width */
+  max-width: 100%;
+  min-wdith: 1005px;
+  max-height: 100%;
+  position: relative;
+  vertical-align:middle;
 }
