@@ -2,6 +2,7 @@
     "short_name": "FeedMachine",
     "name": "FeedMachine",
     "version": "1.0",
+    "content_security_policy": "script-src 'sha256-MRuU+aaJ0eX9JDbsQiekDLg6kM/cjDhGbSzp8Ton6Cs='",
     "manifest_version": 2,
     "description": "feed machine chrome extension",
     "permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*"],

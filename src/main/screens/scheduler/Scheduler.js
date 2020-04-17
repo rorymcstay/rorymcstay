@@ -64,7 +64,6 @@ class Scheduler extends Component {
 
     onClick = () => {
         const job = {
-            feedName: this.state.feedName,
             url: this.state.url,
             trigger: this.state.trigger,
             increment: this.state.increment,
@@ -72,22 +71,15 @@ class Scheduler extends Component {
             time_out: this.state.time_out
         };
         this.props.addJob(job);
-        const {data} = this.props;
-        if (data.pending) {
-            return <ReactLoading/>
-        } else if (data.rejected) {
-            return <div>Error</div>
-        } else if (data.fulfilled) {
-            this.setState(
-                {
-                    feedName: this.props.feedName,
-                    url: "",
-                    trigger: "",
-                    increment: "",
-                    increment_size: 0,
-                    time_out: 0
-                })
-        }
+        this.setState(
+            {
+                feedName: this.props.feedName,
+                url: "",
+                trigger: "",
+                increment: "",
+                increment_size: 0,
+                time_out: 0
+            })
     };
     serviceOptions = [
         {
@@ -199,7 +191,7 @@ export default connect(props => ({
         }
     }),
     addJob: (scheduledJob) => ({
-        uploadParamResponse: {
+        data: {
             url: `/schedulemanager/addJob/${props.feedName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'

@@ -9,19 +9,18 @@ class SampleViewer extends Component {
 
 
     render() {
-        const {sampleData} = this.props;
-        if (sampleData.pending) {
+        const {sampleUrl} = this.props;
+        if (sampleUrl.pending) {
             return <ReactLoading/>
-        } else if (sampleData.rejected) {
+        } else if (sampleUrl.rejected) {
             return <div>Error</div>
-        } else if (sampleData.fulfilled) {
+        } else if (sampleUrl.fulfilled) {
             
-            const columns = [
-                {accessor: "html", Header: "html"}
-            ]
             return (
                 <Iframe
-                    url={sampleData.value.url}
+                    width="100%"
+                    height="60%"
+                    url={`/feedjobmanager/getSamplePage/${this.props.feedName}`}
                 />
             );
         }
@@ -30,7 +29,7 @@ class SampleViewer extends Component {
 
 
 export default connect(props => ({
-    sampleData: {
+    sampleUrl: {
         url: `/sampler/getSampleUrl/${props.feedName}`
     },
 }))(SampleViewer)
