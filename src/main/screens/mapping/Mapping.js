@@ -14,6 +14,7 @@ class Mapping extends Component {
             triggered: false
 
         }
+
     };
 
     renderButtons = (commandStatus) =>
@@ -143,7 +144,7 @@ export default connect(props => ({
     }),
     stop: (name) => ({
         stopRequest: {
-            url: `commandmanager/stopService/${name}`
+            url: `/commandmanager/stopService/${name}`
         }
     })
 }))(Mapping)
