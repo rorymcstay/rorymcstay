@@ -1,14 +1,10 @@
 import React, {Component} from "react";
-import Form from "react-jsonschema-form";
 import connect from '../../../api-connector';
-import "react-table/react-table.css";
-import { Input} from '';
+//import { Input} from 'react-bootstrap';
 import ReactLoading from "react-loading";
-import Iframe from 'react-iframe';
-import { Grid, Button, ButtonGroup } from 'semantic-ui-react';
+import { Input, Button} from 'semantic-ui-react';
 import { Card } from 'react-bootstrap';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
-import { Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react';
 import arrayMove from 'array-move';
 
 const EMPTY_ACTION = {
@@ -28,7 +24,6 @@ const EMPTY_CHAIN_PARAMS = {
     isRepeating: true
 }
 
-
 class ActionRepresentation extends Component
 {
     constructor(props)
@@ -42,10 +37,10 @@ class ActionRepresentation extends Component
 
     onClick = () =>
     {
-        this.props.onSelection();
+        this.props.onSelection(this.state.actionParams);
         this.setState((prevState, props) => ({inFocus: !prevState.inFocus}));
     }
-    
+ 
     disable = () =>
     {
         this.setState((prevState, props) => ({inFocus: false}));
@@ -64,36 +59,89 @@ class ActionRepresentation extends Component
 }
 
 
-const SortableItem = SortableElement(({value}) => <ActionRepresentation actionParams={value}/>);
+class ActionChainsToolBar extends Component
+{
+    constructor(props)
+    {
+        super(props)
+        this.state={
+            startUrl: props.startUrl,
+            name: props.name,
+            isRepeating: props.isRepeating
+        }
+    }
 
-const SortableList = SortableContainer(({items}) => {
-  return (
-    <ul>
-      {items.map((value, index) => (
-        <SortableItem key={`item-${value.css}`} index={index} value={value} />
-      ))}
-    </ul>
-  );
-});
+    componentWillReceiveProps(nextProps)
+    {
+        this.setState({
+            startUrl: nextProps.startUrl,
+            name: nextProps.name,
+            isRepeating: nextProps.isRepeating
+        });
+    }
 
+    onNewAction = () => {
+        this.props.onNewAction();
+    }
+
+    onSubmit = () =>
+    {
+        this.props.onSubmitAction(this.state.name, this.state.startUrl, this.state.isRepeating);
+    }
+
+    render ()
+    {
+        return (<div>
+            <Button onClick={ () => {this.onSubmit()}}>SubmitChain</Button>
+            <Button onClick={ () => {this.onNewAction()}}>NewAction</Button>
+            <Input onChange={(e, {target}) => {this.props.onUpdateName(e.target.value)}} placeholder='Name' value={this.state.name}/>
+            <Input onChange={(e, {target}) => {this.props.onUpdateStartUrl(e.target.value)}} placeholder='StartUrl' value={this.state.startUrl}/>
+            <Input type='checkbox' label='isRepeating' placeholder='isRepeating' value={this.state.isRepeating}/>
+        </div>);
+    }
+}
 
 class ActionChain extends Component
 {
     constructor(props)
     {
         super(props)
+        this.state = {
+            actions: props.actions,
+            startUrl: props.startUrl,
+            isRepeating: props.isRepeating,
+            name: props.name
+        }
     }
-    
-    componentDidMount()
+
+    componentWillReceiveProps(nextProps)
     {
-        this.setState((prevState, props) => ({startUrl: props.startUrl, name: props.name}));           
+        this.setState({
+            actions: nextProps.actions,
+            startUrl: nextProps.startUrl,
+            isRepeating: nextProps.isRepeating,
+            name: nextProps.name
+        });
     }
 
     onSortEnd = ({oldIndex, newIndex}) => {
-        this.setState(({items}) => ({
-        items: arrayMove(items, oldIndex, newIndex),
+        this.setState(({actions}) => ({
+            actions: arrayMove(actions, oldIndex, newIndex),
         }));
     };
+
+    ActionNode = SortableElement(({value}) => <ActionRepresentation onSelection={this.props.onActionFocus} actionParams={value}/>);
+
+    Chain = SortableContainer(({actions}) => {
+        var counter = 0;
+      return (
+        <ul>
+          {actions.map((value, index) => {  
+              return <this.ActionNode key={counter++} index={index} value={value} />;
+          })}
+        </ul>
+      );
+    });
 
     getActionParams = () =>
     {
@@ -133,15 +181,21 @@ class ActionChain extends Component
         }
     }
 
-    onSubmitActionChain()
+    onSubmitActionChain = (name, url, isRepeating) =>
     {
-        this.props.submitActionChain(this.state);
+        const payload = {
+            startUrl: url,
+            isRepeating: isRepeating,
+            actions: this.state.actions,
+            name: name
+        }
+        this.props.submitActionChain(payload);
     }
 
-    onNewAction()
+    onNewAction = () =>
     {
         this.setState((prevState, props) => {
-            props.actions.push(EMPTY_ACTION);
+            prevState.actions.push(EMPTY_ACTION);
             return {actions: prevState.actions};
         });
     }
@@ -150,43 +204,23 @@ class ActionChain extends Component
     {
         // TODO: ActionChain tool bar
         // TODO: render a list of actions
-        const actionChain = this.getActionParams();
-        const items = actionChain.actions;
-        const {actionChainParams, newActionchain} = this.props;
-
-        if (actionChainParams.pending || newActionchain.pending)
-        {
-            return <ReactLoading/>
-        }
-        else if (actionChainParams.rejected || newActionchain.pending)
-        {
-            return <div>Error loading actionParams</div>
-        }
-        else if (actionChainParams.fulfilled && newActionchain.fulfilled)
-        {
-            return (
-                <div>
-                    <SortableList items={items}/> 
-                    <Button onClick={ () => {this.onNewAction()}}>NewAction</Button>
-                    <Input placeholder='Name' value={actionChainParams.name}/>
-                    <Input placeholder='StartUrl' value={actionChainParams.startUrl}/>
-                    <Input type='checkbox' label='isRepeating' placeholder='isRepeating' value={actionChainParams.isRepeating}/>
-                </div>
-            );
-        }
-        else
-        {
-            return <ReactLoading/>;
-        }
+        return (
+            <div>
+                <this.Chain actions={this.state.actions} onSortEnd={this.onSortEnd}/> 
+                <ActionChainsToolBar 
+                    name={this.state.name}
+                    startUrl={this.state.startUrl}
+                    isRepeating={this.state.isRepeating}
+                    onNewAction={this.onNewAction}
+                    onSubmitAction={this.onSubmitActionChain}
+                    onUpdateName={this.props.onUpdateName}
+                    onUpdateStartUrl={this.props.onUpdateStartUrl}
+                />
+            </div>
+        );
     }
 }
 export default connect(props => ({
-    actionChainParams: {
-        url: `actionsmanager/getActionChain/${props.actionChainName}`
-    },
-    newActionchain: {
-        url: `actionsmanager/newActionSchema/`
-    },
     submitActionChain: (payload) => ({
         submitAction: {
             url: `actionsmanager/setActionChain/`,

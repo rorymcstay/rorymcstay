@@ -13,6 +13,7 @@ class Selector extends Component {
 
         this.state = {
             feedName: props.feedName,
+            actionChain: props.actionChainName,
             started: false
         }
     }
@@ -25,24 +26,46 @@ class Selector extends Component {
         this.setState({feedName: event.target.value}, this.props.onFeedChange(event.target.value))
     };
 
+    onActionChainChange = (e, {value}) => {
+        this.setState({actionChainName: value}, this.props.onActionChainChange(value));
+    }
+    
+    getMenuOptions( req )
+    {
+        const menuOptions = [];
+        for (let i = 0; i < req.value.length; i++) {
+            menuOptions.push({
+                key: req.value[i],
+                value: req.value[i],
+                text: req.value[i]
+            });
+        }
+        return menuOptions;
+    }
+
     render() {
-        const {fetchFeeds} = this.props;
-        if (fetchFeeds.pending) {
+        const {fetchFeeds, actionChains} = this.props;
+        if (fetchFeeds.pending || fetchFeeds.pending) {
             return <ReactLoading/>
-        } else if (fetchFeeds.rejected) {
+        } else if (fetchFeeds.rejected || actionChains.rejected) {
             return <div>Error</div>
-        } else if (fetchFeeds.fulfilled) {
-            const menuOptions = [];
-            for (let i = 0; i < fetchFeeds.value.length; i++) {
-                menuOptions.push({
-                    key: fetchFeeds.value[i],
-                    value: fetchFeeds.value[i],
-                    text: fetchFeeds.value[i]
-                });
-            }
+        } else if (fetchFeeds.fulfilled && actionChains.fulfilled) {
+
+            const feedMenuOptions = this.getMenuOptions(fetchFeeds);
+            const actionChainMenuOptions = this.getMenuOptions(actionChains);
 
             return (
                 <Grid columns='equal' relaxed>
+                    <Grid.Column>
+                        <Dropdown
+                            placeholder='Select ActionChain'
+                            fluid
+                            search
+                            selection
+                            onChange={this.onActionChainChange}
+                            options={actionChainMenuOptions}
+                        />
+                    </Grid.Column>
                     <Grid.Column>
                         <Dropdown
                             placeholder='Select Feed'
@@ -50,7 +73,7 @@ class Selector extends Component {
                             search
                             selection
                             onChange={this.onFeedChange}
-                            options={menuOptions}
+                            options={feedMenuOptions}
                         />
                     </Grid.Column>
                     <Grid.Column>
@@ -67,7 +90,9 @@ class Selector extends Component {
                         </ButtonToolbar>
                     </Grid.Column>
                 </Grid>
-            )
+            );
+        } else {
+            return <ReactLoading/>;
         }
     }
 }
@@ -75,6 +100,9 @@ class Selector extends Component {
 export default connect(props => ({
     fetchFeeds: {
         url: `/feedmanager/getFeeds/`
+    },
+    actionChains: {
+        url: `/actionsmanager/getActionChains/`
     },
     newFeed: (value) => ({
         newFeedResponse: {

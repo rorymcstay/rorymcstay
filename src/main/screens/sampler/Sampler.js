@@ -1,41 +1,13 @@
 import React, {Component} from "react";
-import Form from "react-jsonschema-form";
 import connect from '../../../api-connector';
 import "react-table/react-table.css";
 import ReactLoading from "react-loading";
 import Iframe from 'react-iframe';
-import { Grid, Button, ButtonGroup } from 'semantic-ui-react';
-import {Dropdown} from "semantic-ui-react";
-
-import { Header, Icon, Image, Menu, Input, Segment, Sidebar } from 'semantic-ui-react';
+import { Grid, Button } from 'semantic-ui-react';
 
 import ActionChain from './ActionChain';
+import ActionViewer from './ActionViewer';
 
-
-class CaptureOptions extends Component
-{
-    constructor(props)
-    {
-        super(props);
-        this.state = {
-            selectorPrediction: undefined,
-            selectorUsage: undefined,
-            captureName: undefined 
-        }
-    }
-
-    render (){
-
-        return (
-            <div>
-                <Input placeholder='Css selector or Xpath' value={this.state.selectorPrediction}/>
-                <Input placeholder='component and name' value={this.state.selectorUsage}/>
-                <Input placeholder='name' value={this.state.captureName}/>
-                <Button>Save</Button>
-            </div>
-        );
-    }
-}
   
 class SampleViewer extends Component {
 // TODO: visible state and setVisible
@@ -43,9 +15,24 @@ class SampleViewer extends Component {
         super(props);
         window.addEventListener("message", this.receiveMessage, false);
         this.state = {
-            actionChainName: undefined
+            actionChainName: props.actionChainName,
+            currentAction: {}
         };
 
+    }
+
+    componentWillReceiveProps(props)
+    {
+        console.log(`actionChainParams: ${props.actionChainParams.fulfilled}`);
+        if (props.actionChainParams.fulfilled)
+        {
+            this.setState({
+                startUrl: props.actionChainParams.value.startUrl,
+                name: props.actionChainParams.value.name,
+                isRepeating: props.actionChainParams.value.isRepeating,
+                actions: props.actionChainParams.value.actions
+            });
+        }
     }
 
     onSetVisible = () => {
@@ -57,7 +44,7 @@ class SampleViewer extends Component {
         console.log('updating prediction')
         if (event.data.predicted == undefined || event.data.predicted == '')
         {
-            
+    
         }
         else
         {
@@ -72,48 +59,64 @@ class SampleViewer extends Component {
 
     onActionChainChange = ({e}, value) =>
     {
-        this.setState( {selected: true, actionName: value} );
+        this.setState( {selected: true, actionChainName: value} );
     }
 
-    onNewAction = () => {
-        this.props.newActionSchema();
-        this.setState((prevState, props) => ({newAction: true}));
+    onActionFocus = (actionParams) => {
+        this.setState((prevState, props) => {
+            return {currentAction: actionParams};
+        });
     }
 
-    onSubmit = ({formData}, e) => {
-        const payload = {
-            feed: this.props.tableName,
-            captures: this.state.captures
-        };
-        this.props.uploadCaptures(payload);
-    };
+    onUpdateName = (value) =>
+    {
+        this.setState({name: value});
+    }
 
+    onUpdateStartUrl = (value) =>
+    {
+        this.setState({startUrl: value});
+    }
+
+    onUpdateAction = (updatedAction, pos) =>
+    {
+        // TODO: replace the item in the list position
+        this.setState((prevState, props) =>{
+            prevState.actions[pos] = updatedAction;
+            return {action: prevState.actions}
+        });
+    }
+ 
+    onDeleteAction = (updatedAction) =>
+    {
+        // TODO: replace the item in the list position
+        this.setState();
+    }
 
     render() 
     {
-        const {actionChains, sampleUrl} = this.props;
-        if (sampleUrl.pending) {
+        const {actionChainParams} = this.props;
+        if (actionChainParams.pending) {
             return <ReactLoading/>
-        } else if (sampleUrl.rejected) {
+        } else if (actionChainParams.rejected) {
             return <div>Error</div>
-        } else if (sampleUrl.fulfilled) { 
+        } else if (actionChainParams.fulfilled) {
             return (
                 <Grid width="150%">
                     <Grid.Row columns={1}height={2}>
                         <Button onClick={ () => this.props.reloadSampleUrl() }>RefreshSample</Button>
-                        <Dropdown
-                            placeholder='Select ActionChain'
-                            fluid
-                            search
-                            selection
-                            onChange={this.onActionChainChange}
-                            options={actionChains.value}
-                        />;
-
                     </Grid.Row>
                     <Grid.Row columns={1} height={13}>
                         <Grid.Column width={2}>
-                            <ActionChain actionChainName={this.state.actionName} selected={this.state.selected}/>
+                            <ActionChain
+                                onUpdateName={this.onUpdateName}
+                                onUpdateStartUrl={this.onUpdateStartUrl}
+                                onActionFocus={this.onActionFocus} 
+                                name={this.state.name} 
+                                startUrl={this.state.startUrl}
+                                actions={this.state.actions}
+                                selected={this.state.selected}
+                            />
                         </Grid.Column>
                         <Grid.Column width={13}>
                             <Iframe
@@ -123,33 +126,39 @@ class SampleViewer extends Component {
                             />
                         </Grid.Column>
                     </Grid.Row>
-                    </Grid>
-                );
-            }
-        }
+                    <Grid.Row width={13}>
+                        <ActionViewer
+                            actionParameters={this.state.currentAction}
+                            updateAction={this.onUpdateAction}
+                        />
+                    </Grid.Row>
+                </Grid>
+             );
+         }
     }
+}
 
 
-    export default connect(props => ({
-        sampleUrl: {
-            url: `/sampler/getSampleUrl/${props.feedName}`
-        },
-        captureValues: {
-            url: `/feedmanager/getCaptures/list/${props.feedName}`
-        },
-        uploadCaptures: (payload) => ({
-            uploadCaptureResposne: {
-                url: `/feedmanager/uploadCaptures/${props.feedName}`,
-                body: JSON.stringify(payload),
-                method: 'PUT'
-            }
-        }),
-        actionChains: {
-            url: `/actionsmanager/getActionChains/`
-        },
-        reloadSampleUrl : () => ({
-            reloadSample: {
-            url: `/feedjobmanager/requestSamplePage/${props.feedName}`
+export default connect(props => ({
+    sampleUrl: {
+        url: `/sampler/getSampleUrl/${props.feedName}`
+    },
+    captureValues: {
+        url: `/feedmanager/getCaptures/list/${props.feedName}`
+    },
+    uploadCaptures: (payload) => ({
+        uploadCaptureResposne: {
+            url: `/feedmanager/uploadCaptures/${props.feedName}`,
+            body: JSON.stringify(payload),
+            method: 'PUT'
         }
-    })
+    }),
+    actionChainParams: {
+         url: `actionsmanager/getActionChain/${props.actionChainName}`
+    },
+    reloadSampleUrl : () => ({
+        reloadSample: {
+        url: `/feedjobmanager/requestSamplePage/${props.feedName}`
+    }
+})
 }))(SampleViewer)

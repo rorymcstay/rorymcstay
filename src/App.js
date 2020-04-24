@@ -26,17 +26,6 @@ class App extends Component {
         }
     }
 
-/*
-    componentDidMount() {
-        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-            const url = new URL(tabs[0].url);
-            const domain = url.hostname;
-            this.setState({
-                domain: domain,
-            });
-        });
-    }
-*/
     onFeedChange = value => {
         this.setState({feedName: value})
     };
@@ -54,6 +43,10 @@ class App extends Component {
         this.setState( { tableName: value})
     };
 
+    onActionChainChange = (value) => {
+        this.setState( { actionChainName: value } );
+    }
+
     render() {
         return (
             <Container className="App">
@@ -62,12 +55,13 @@ class App extends Component {
                         <Grid.Column>
                             <Selector
                                 onFeedChange={this.onFeedChange}
+                                onActionChainChange={this.onActionChainChange}
                                 onNewFeed={this.onNewFeed}
                                 feedName={this.state.feedName}
+                                actionChainName={this.state.actionChainName}
                             />
                         </Grid.Column>
                         <Grid.Column>
-
                             <ToolBar feedName={this.state.feedName}/>
                         </Grid.Column>
                     </Grid.Row>
@@ -79,19 +73,34 @@ class App extends Component {
                                 onSelect={key => this.setState({key})}
                             >
                                 <Tab eventKey="viewer" title="Viewer">
-                                    <Viewer feedName={this.state.feedName} updateTableName={this.onTableChange}/>
+                                    <Viewer 
+                                        feedName={this.state.feedName} 
+                                        updateTableName={this.onTableChange}
+                                    />
                                 </Tab>
                                 <Tab eventKey="parametermanager" title="Parameter Manager">
-                                    <ParameterManager feedName={this.state.feedName} parameterType={this.state.parameterType} onParameterChange={this.onParameterChange}/>
+                                    <ParameterManager 
+                                        feedName={this.state.feedName} 
+                                        parameterType={this.state.parameterType} 
+                                        onParameterChange={this.onParameterChange}
+                                    />
                                 </Tab>
                                 <Tab eventKey="scheduler" title="Scheduler">
-                                    <Scheduler feedName={this.state.feedName}/>
+                                    <Scheduler 
+                                        feedName={this.state.feedName}
+                                    />
                                 </Tab>
                                 <Tab eventKey="mapping" title="Mapping">
-                                    <Mapping feedName={this.state.feedName} tableName={this.state.tableName}/>
+                                    <Mapping 
+                                        feedName={this.state.feedName} 
+                                        tableName={this.state.tableName}
+                                />
                                 </Tab>
                                 <Tab eventKey="sampling" title="Sampling">
-                                    <SamplerViewer feedName={this.state.feedName} />
+                                    <SamplerViewer 
+                                        feedName={this.state.feedName} 
+                                        actionChainName={this.state.actionChainName}
+                                    />
                                 </Tab>
                                 </Tabs>
                         </Grid.Column>
