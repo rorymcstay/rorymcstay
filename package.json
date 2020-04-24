@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "array-move": "^2.2.1",
     "axios": "^0.19.1",
     "bootstrap": "^4.3.1",
     "chrome": "^0.1.0",
@@ -17,10 +18,12 @@
     "react-loading": "latest",
     "react-refetch": "latest",
     "react-scripts": "3.4.1",
+    "react-sortable-hoc": "^1.11.0",
     "react-table": "^6.10.0",
     "react-widgets": "^4.4.11",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2"
+    "semantic-ui-react": "^0.88.2",
+    "url-join": "^4.0.1"
   },
   "devDependencies": {
     "csp-html-webpack-plugin": "^4.0.0",

@@ -42,4 +42,11 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    '/actionsmanager',
+    createProxyMiddleware({
+      target: 'http://localhost:5003',
+      changeOrigin: true,
+    })
+  );
 };

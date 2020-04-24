@@ -4,24 +4,19 @@ import connect from '../../../api-connector'
 import "react-table/react-table.css";
 import ReactLoading from "react-loading";
 import Iframe from 'react-iframe';
-import { Grid, Button, ButtonGroup } from 'semantic-ui-react';
+import { Dropdown, Grid, Button, ButtonGroup } from 'semantic-ui-react';
 
 import { Header, Icon, Image, Menu, Input, Segment, Sidebar } from 'semantic-ui-react';
 
-class ActionChain extends Component
-{
-
-}
-
-class ActionParameter extends Component
+class ActionViewerParameter extends Component
 {
     constructor(props)
     {
         this.state = {
             name: props.name,
-            value: props.name,
-            inFocus: false,
-            freeForm: true
+            value: props.value,
+            inFocus: props.infocus,
+            freeForm: props.freeForm
         }
         if (props.values)
         {
@@ -32,16 +27,18 @@ class ActionParameter extends Component
 
     onClick = () =>
     {
+        this.props.clearOthers();
         this.setState((prevState, props) => ({inFocus: !prevState.value}));
     }
 
     setValue = (value) =>
     {
-        if (this.inFocus)
+        if (this.state.inFocus && this.state.freeForm)
         {
             this.setState({value: value});
         }
     }
+
     renderField = () =>
     {
         if (this.state.freeForm)
@@ -62,49 +59,56 @@ class ActionParameter extends Component
 
     render ()
     {
-    return (
-        <div>
-            {this.renderField()}
-            <Button onClick={this.onClick}>select</Button>
-        </div>
+        return (
+            <div>
+                {this.renderField()}
+                <Button onClick={this.onClick}>Edit</Button>
+            </div>
+        );
     }
-
 }
 
-class ActionView extends Component
+
+class ActionViewer extends Component
 { 
     constructor(props)
     {
+        const { parameters } = props;
         this.state = {
-            parameters: {},
-            actionType: undefined,
-            focus: undefined,
-
+            actionName:  props.actionName,
+            parameters: !parameters.fulfilled ? {} : parameters.value,
+            actionType: props.actionType,
+            focus: undefined
         };
     }
 
     onActionTypeChange = (event) =>
     {
         this.props.getActionFields(event);
+    }
 
+    onSubmit = (actionParams) =>
+    {
+        this.props.saveAction(actionParams);
     }
 
     render()
     {
-        const {actionTypes, params} = this.props;
+        const {actionTypes, params, possibleValues} = this.props;
         var selector = undefined;
         if (actionTypes.rejected)
         {
             selector = <div>Error</div>;
-        } 
+        }
         else if (actionTypes.pending)
         {
             selector = <ReactLoading>Types loading...</ReactLoading>;
         }
         else if (actionTypes.fulfilled)
         {
+            // TODO: render data then the selector
             selector = <Dropdown
-                placeholder='Select Feed'
+                placeholder='Select Action Type'
                 fluid
                 search
                 selection
@@ -112,33 +116,30 @@ class ActionView extends Component
                 options={actionTypes.value}
             />;
         }
-        if (params)
+        var actionParams = [];
+        for (param in paramFields)
         {
-            if (params.pending)
-            {
-
-            }
-            else if (params.rejected)
-            {
-
-            } 
-            else if (params.fulfilled)
-            {
-                
-            }
-
+            const freeForm = true ? (param.name === 'css' || param.name ==='xpath' || param.name === 'text') : false;
+            actionParams.push(<ActionViewerParameter name={param.name} 
+                                                     freeForm={freeForm} 
+                                                     value={params[param.name]}
+                                                     values={this.props.possibleValues[param.name]} />);
         }
-        return selector;
+ 
+        return <div>{selector} {actionParams}</div>;
     }
 }
 
-    export default connect(props =>({
-        actionTypes: {
-            url: '/actionsmanager/getActionTypes/'
-        },
-        getActionFields: (actionType) => ({
-            params: {
-                url: `/actionsmanager/getActionFields${actionType}`
-            }
-        })
-}))(ActionView)
+export default connect(props =>({
+    actionTypes: {
+        url: '/actionsmanager/getActionTypes/'
+    },
+    possibleValues: {
+        url: `actionsmanager/getPossibleValues/`
+    },
+    getActionFields: (actionType) => ({
+        paramFields: {
+            url: `/actionsmanager/getActionFields/${actionType}`
+        }
+    })
+}))(ActionViewer)
