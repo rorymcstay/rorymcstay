@@ -39,7 +39,7 @@ class ActionViewerParameter extends Component
             value: value,
             values: (nextProps.values === undefined) ? [] : nextProps.values,
             freeForm: (nextProps.values === undefined) ? true : false,
-         });   
+         });
     }
 
     onClick = () =>
@@ -48,15 +48,16 @@ class ActionViewerParameter extends Component
     }
 
     onSelectionChange = (e, {value}) => {
-        this.setState({value: value});
+        this.setState({value: value, inFocus: true});
+        console.log(`target value: ${value}, target name: ${this.state.key}`);
+        this.props.onChange( this.state.key,  value);
     }
 
-    onChange = (e, {target}) =>
+    onChange = (e, {value}) =>
     {
-        this.setState({value: e.target.value, inFocus: true});
-        console.log(e);
-        console.log(`target value: ${e.target.value}, target name: ${e.target.name}`);
-        this.props.onChange( this.state.key,  e.target.value);
+        this.setState({value: value, inFocus: true});
+        console.log(`target value: ${value}, target name: ${this.state.key}`);
+        this.props.onChange( this.state.key,  value);
     }
 
     getMenuOptions( req )
@@ -87,6 +88,8 @@ class ActionViewerParameter extends Component
         } else {
             return (<Dropdown
                 placeholder={this.state.name}
+                labelled
+                label={this.state.name}
                 fluid
                 value={this.state.value}
                 search
@@ -121,7 +124,7 @@ class ActionViewer extends Component
         };
     }
 
-    componentWillReceiveProps = (nextProps) =>
+    componentWillReceiveProps(nextProps)
     {
         this.setState({
             actionParameters: nextProps.actionParameters,
@@ -131,17 +134,14 @@ class ActionViewer extends Component
 
     onActionParameterChange = (key, value)  =>
     {
-        this.setState((prevState, props) => {
-            console.log(prevState);
+        /*
+         * TODO prevState is undefined in firefox here. Why?*/
+        this.setState(prevState => {
             prevState.actionParameters[key] = value;
             return {actionParameters: prevState.actionParameters};
         });
-        this.onUpdateAction(this.state.position);
-    }
-
-    onUpdateAction = (key) =>
-    {
-        this.props.updateAction(this.state.actionParameters, key);
+        console.log(`will update parent  with ${this.state.actionParameters[key]}`);
+        this.props.onUpdateAction(this.state.actionParameters);
     }
 
     onActionTypeChange = (e) =>
@@ -181,7 +181,7 @@ class ActionViewer extends Component
                                                          values={possibleValues.value[name]} />);
             }
         } 
-        return <div><Button onClick={this.onUpdateAction}>Update</Button>{actionParams}</div>;
+        return <div>{actionParams}</div>;
     }
 }
 

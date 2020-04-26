@@ -16,7 +16,8 @@ class SampleViewer extends Component {
         window.addEventListener("message", this.receiveMessage, false);
         this.state = {
             actionChainName: props.actionChainName,
-            currentAction: {}
+            currentAction: {},
+            currentPosition: 0
         };
 
     }
@@ -65,9 +66,9 @@ class SampleViewer extends Component {
         this.setState( {selected: true, actionChainName: value} );
     }
 
-    onActionFocus = (actionParams) => {
+    onActionFocus = (actionParams, position) => {
         this.setState((prevState, props) => {
-            return {currentAction: actionParams};
+            return {currentAction: actionParams, currentPosition: position};
         });
     }
 
@@ -81,12 +82,12 @@ class SampleViewer extends Component {
         this.setState({startUrl: value});
     }
 
-    onUpdateAction = (updatedAction, pos) =>
+    onUpdateAction = (updatedAction) =>
     {
         // TODO: replace the item in the list position
-        this.setState((prevState, props) =>{
-            prevState.actions[pos] = updatedAction;
-            return {action: prevState.actions}
+        this.setState(prevState => {
+            prevState.actions[prevState.currentPosition] = updatedAction;
+            return prevState;
         });
     }
  
@@ -117,7 +118,8 @@ class SampleViewer extends Component {
                         <ActionViewer
                             selectorPrediction={this.state.prediction}
                             actionParameters={this.state.currentAction}
-                            updateAction={this.onUpdateAction}
+                            onUpdateAction={this.onUpdateAction}
+                            position={this.state.currentAction.position}
                         />
                         </Grid.Column>
                         <Grid.Column width={12}>
@@ -126,7 +128,7 @@ class SampleViewer extends Component {
                              * going to the next action.
                              */}
                             <SourceViewer
-                                position={(this.state.currentAction.position === undefined) ? 0 : this.state.currentAction.position}
+                                position={this.state.currentPosition}
                                 actionChainName={this.props.actionChainName}
                                 srcUrl={this.state.startUrl}
                             />
