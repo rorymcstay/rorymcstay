@@ -17,18 +17,26 @@ class ActionViewerParameter extends Component
             key: props.name, 
             name: props.name,
             value: props.value,
-            inFocus: false,
             values: (props.values === undefined) ? [] : props.values,
             freeForm: (props.values === undefined) ? true : false
         }
     }
+
     componentWillReceiveProps(nextProps)
     {
+        var value;
+        if (this.state.inFocus)
+        {
+            value = nextProps.value;
+        }
+        else
+        {
+            value = this.state.value;
+        }
          this.setState({
             key: nextProps.name, 
             name: nextProps.name,
-            value: nextProps.value,
-            inFocus: false,
+            value: value,
             values: (nextProps.values === undefined) ? [] : nextProps.values,
             freeForm: (nextProps.values === undefined) ? true : false,
          });   
@@ -39,17 +47,13 @@ class ActionViewerParameter extends Component
         this.setState((prevState, props) => ({inFocus: !prevState.inFocus}));
     }
 
-    setValue = (value) =>
-    {
-        if (this.state.inFocus && this.state.freeForm)
-        {
-            this.setState({value: value});
-        }
+    onSelectionChange = (e, {value}) => {
+        this.setState({value: value});
     }
 
     onChange = (e, {target}) =>
     {
-        this.setState({value: e.target.value});
+        this.setState({value: e.target.value, inFocus: true});
         console.log(e);
         console.log(`target value: ${e.target.value}, target name: ${e.target.name}`);
         this.props.onChange( this.state.key,  e.target.value);
@@ -72,7 +76,14 @@ class ActionViewerParameter extends Component
     {
         if (this.state.freeForm)
         {
-            return <Input placeholder={this.state.name} onChange={this.onChange} value={this.state.value} key={this.state.name} disabled={!this.state.inFocus}></Input>;
+            return (<Input 
+                        placeholder={this.state.name} 
+                        onChange={this.onChange} 
+                        label={this.state.name}
+                        value={this.state.value} 
+                        key={this.state.name} 
+                        disabled={!this.state.inFocus}>
+                    </Input>);
         } else {
             return (<Dropdown
                 placeholder={this.state.name}
@@ -81,7 +92,7 @@ class ActionViewerParameter extends Component
                 search
                 selection
                 disabled={!this.state.inFocus}
-                onChange={this.onActionTypeChange}
+                onChange={this.onSelectionChange}
                 options={this.getMenuOptions(this.state.values)}
             />);
         }
@@ -90,9 +101,9 @@ class ActionViewerParameter extends Component
     render ()
     {
         return (
-            <div>
-                {this.renderField()}
-                <Button onClick={this.onClick}>Edit</Button>
+            <div width='100%'>
+                    {this.renderField()}
+                    <Button onClick={this.onClick}>Edit</Button>
             </div>
         );
     }

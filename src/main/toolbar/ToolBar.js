@@ -45,7 +45,7 @@ class ToolBar extends Component {
                         <ButtonGroup>
                             <Button onClick={this.onFeedStart} disabled variant="success">Last Page: {feedStatus.value.status.lastPage}</Button>
                             <Button onClick={this.onFeedStop} active variant="warning">Stop</Button>
-                            <Button diabled variant="info">{feedStatus.value.status.pagesProcessed}</Button>
+                            <Button disabled variant="info">{feedStatus.value.status.pagesProcessed}</Button>
                         </ButtonGroup>
                     </ButtonToolbar>
                 )

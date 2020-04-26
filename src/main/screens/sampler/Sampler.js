@@ -2,11 +2,11 @@ import React, {Component} from "react";
 import connect from '../../../api-connector';
 import "react-table/react-table.css";
 import ReactLoading from "react-loading";
-import Iframe from 'react-iframe';
 import { Grid, Button } from 'semantic-ui-react';
 
 import ActionChain from './ActionChain';
 import ActionViewer from './ActionViewer';
+import SourceViewer from './SourceViewer'
 
   
 class SampleViewer extends Component {
@@ -24,6 +24,7 @@ class SampleViewer extends Component {
     componentWillReceiveProps(props)
     {
         console.log(`actionChainParams: ${props.actionChainParams.fulfilled}`);
+        window.addEventListener("message", this.receiveMessage, false);
         if (props.actionChainParams.fulfilled)
         {
             this.setState({
@@ -35,26 +36,28 @@ class SampleViewer extends Component {
         }
     }
 
-    onSetVisible = () => {
-        this.setState({visible: true});
-    }
-    
     receiveMessage = (event) => 
     {
         console.log('updating prediction')
-        if (event.data.predicted == undefined || event.data.predicted == '')
+        if (event.data.predicted === undefined || event.data.predicted === '')
         {
+            console.log('no prediction');
     
         }
         else
         {
             // TODO Run chain update here
+            console.log(`precited value is ${event.data.predicted}`);
+            this.setState((prevState, props) => {
+                for (var key in prevState.currentAction)
+                {
+                    prevState.currentAction[key] = event.data.predicted;
+                    // TODO this prints to log
+                    console.log(`updating ${key} with ${event.data.predicted}`)
+                }
+                return {currentAction: prevState.currentAction}
+            });
         }
-    }
-
-    latestCapture = () =>
-    {
-        return this.state.captures[this.state.captures.length - 1];
     }
 
     onActionChainChange = ({e}, value) =>
@@ -87,12 +90,6 @@ class SampleViewer extends Component {
         });
     }
  
-    onDeleteAction = (updatedAction) =>
-    {
-        // TODO: replace the item in the list position
-        this.setState();
-    }
-
     render() 
     {
         const {actionChainParams} = this.props;
@@ -102,12 +99,12 @@ class SampleViewer extends Component {
             return <div>Error</div>
         } else if (actionChainParams.fulfilled) {
             return (
-                <Grid width="150%">
-                    <Grid.Row columns={1}height={2}>
+                <Grid width="200%">
+                    <Grid.Row columns={1} height={8}>
                         <Button onClick={ () => this.props.reloadSampleUrl() }>RefreshSample</Button>
                     </Grid.Row>
-                    <Grid.Row columns={1} height={13}>
-                        <Grid.Column width={2}>
+                    <Grid.Row columns={1} height={13} >
+                        <Grid.Column width={4}>
                             <ActionChain
                                 onUpdateName={this.onUpdateName}
                                 onUpdateStartUrl={this.onUpdateStartUrl}
@@ -117,20 +114,23 @@ class SampleViewer extends Component {
                                 actions={this.state.actions}
                                 selected={this.state.selected}
                             />
-                        </Grid.Column>
-                        <Grid.Column width={13}>
-                            <Iframe
-                                width="100%"
-                                height="800px"
-                                url={`/feedjobmanager/getSamplePage/${this.props.feedName}`}
-                            />
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row width={13}>
                         <ActionViewer
+                            selectorPrediction={this.state.prediction}
                             actionParameters={this.state.currentAction}
                             updateAction={this.onUpdateAction}
                         />
+                        </Grid.Column>
+                        <Grid.Column width={12}>
+                            {/** TODO: here should render iframe as a seperate refreshing component 
+                             * given the startUrl. Should also have a next and back arrow for 
+                             * going to the next action.
+                             */}
+                            <SourceViewer
+                                position={(this.state.currentAction.position === undefined) ? 0 : this.state.currentAction.position}
+                                actionChainName={this.props.actionChainName}
+                                srcUrl={this.state.startUrl}
+                            />
+                        </Grid.Column>
                     </Grid.Row>
                 </Grid>
              );
@@ -143,22 +143,12 @@ export default connect(props => ({
     sampleUrl: {
         url: `/sampler/getSampleUrl/${props.feedName}`
     },
-    captureValues: {
-        url: `/feedmanager/getCaptures/list/${props.feedName}`
-    },
-    uploadCaptures: (payload) => ({
-        uploadCaptureResposne: {
-            url: `/feedmanager/uploadCaptures/${props.feedName}`,
-            body: JSON.stringify(payload),
-            method: 'PUT'
-        }
-    }),
     actionChainParams: {
          url: `actionsmanager/getActionChain/${props.actionChainName}`
     },
     reloadSampleUrl : () => ({
         reloadSample: {
-        url: `/feedjobmanager/requestSamplePage/${props.feedName}`
+        url: `/feedjobmanager/requestSamplePages/${props.actionChainName}`
     }
 })
 }))(SampleViewer)
