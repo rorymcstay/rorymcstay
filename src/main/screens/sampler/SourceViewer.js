@@ -1,6 +1,8 @@
-
 import React, {Component} from "react";
 import Iframe from 'react-iframe';
+import ReactLoading from "react-loading";
+import connect from '../../../api-connector';
+
   
 class SourceViewer extends Component {
 
@@ -23,15 +25,55 @@ class SourceViewer extends Component {
         });
     }
 
+    getPreviousAvailableSource = (sourceStatus, initialPosition) =>
+    {
+        if (initialPosition - 1 <= 0) {
+            return 0;
+        }
+        else if (sourceStatus[initialPosition - 1].ready) {
+            return initialPosition - 1;
+        } else {
+            return this.getPreviousAvailableSource(sourceStatus, initialPosition - 1);
+        }
+    }
+
     render ()
     {
-        return (<Iframe
-            width="100%"
-            height="800px"
-            url={`/feedjobmanager/getSamplePage/${this.props.actionChainName}/${this.props.position}`}
-        />
-        );
+        const {sourcesReady} = this.props;
+        if (sourcesReady.pending)
+        {
+            return <ReactLoading/>;
+        } else if (sourcesReady.rejected) {
+            return <div>Error</div>;
+        } else if (sourcesReady.fulfilled)
+        {
+            
+            const sourceStatus = sourcesReady.value;
+            if (sourceStatus.length === 0)
+            {
+                return <div>Select a chain</div>
+            }
+            var displaying = this.props.position;
+            if (sourceStatus[displaying] === undefined || !sourceStatus[displaying].ready) {
+                displaying = this.getPreviousAvailableSource(sourceStatus, displaying);
+                // TODO get the previous available source
+            }
+            return (
+                <div>
+                    <div>{`Current Position is ${displaying}`}</div>;
+                    <Iframe
+                        width="100%"
+                        height="800px"
+                        url={`/samplepages/getSamplePage/${this.props.actionChainName}/${displaying}`}
+                    />
+                </div>
+            );
+        }
     }
 }
 
-export default SourceViewer;
+export default connect(props => ({
+    sourcesReady: {
+        url: `/samplepages/getSourceStatus/${props.actionChainName}`, refreshInterval: 60000
+    }
+}))(SourceViewer);

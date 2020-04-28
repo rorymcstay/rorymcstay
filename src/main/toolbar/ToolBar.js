@@ -66,13 +66,13 @@ class ToolBar extends Component {
 export default connect(props => ({
 
     startFeed: () => ({
-        startFeedResponse: {url: `/feedjobmanager/addFeed/${props.feedName}`}
+        startFeedResponse: {url: `/runningmanager/addFeed/${props.feedName}`}
     }),
     stopFeed: () => ({
-        stopFeedResponse: {url: `/feedjobmanager/disableFeed/${props.feedName}`}
+        stopFeedResponse: {url: `/runningmanager/disableFeed/${props.feedName}`}
     }),
     feedStatus: {
-        url: `/feedjobmanager/getStatus/${props.feedName}`
+        url: `/runningmanager/getStatus/${props.feedName}`
     },
 
 }))(ToolBar)

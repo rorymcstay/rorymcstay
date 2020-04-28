@@ -32,7 +32,7 @@ class ActionRepresentation extends Component
         this.state = {
             inFocus: false,
             actionParams: props.actionParams,
-            position: props.position
+            index: props.index
         }
     }
 
@@ -43,7 +43,7 @@ class ActionRepresentation extends Component
 
     onClick = () =>
     {
-        this.props.onSelection(this.state.actionParams);
+        this.props.onSelection(this.state.actionParams, this.state.index);
         this.setState((prevState, props) => ({inFocus: !prevState.inFocus}));
     }
  
@@ -124,7 +124,8 @@ class ActionChain extends Component
             actions: props.actions,
             startUrl: props.startUrl,
             isRepeating: props.isRepeating,
-            name: props.name
+            name: props.name,
+            currentPosition: 0
         }
     }
 
@@ -152,14 +153,21 @@ class ActionChain extends Component
             return {actions: prevState.actions};
         });
     }
+    
+    onActionFocus = (actionParams, index) =>
+    {
+        this.setState({currentPosition: index});
+        this.props.onActionFocus(actionParams, index);
+    }
 
-    ActionRepresentationNode = SortableElement(({value, index}) => <ActionRepresentation onDelete={this.onDelete} onSelection={this.props.onActionFocus} actionParams={value} position={index}/>);
+    ActionRepresentationNode = SortableElement(({value}, { index}) => <ActionRepresentation onDelete={this.onDelete} onSelection={this.onActionFocus} actionParams={value} index={index}/>);
 
     Chain = SortableContainer(({actions}) => {
         //var counter = 0;
       return (
         <ul>
           {actions.map((value, index) => { 
+              console.log(`index is ${index}`)
               return <this.ActionRepresentationNode  key={value.css} position={index} value={value} index={index} />;
           })}
         </ul>

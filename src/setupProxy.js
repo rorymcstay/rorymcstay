@@ -29,16 +29,16 @@ module.exports = function(app) {
     })
   );
   app.use(
-    '/commandmanager',
+    '/runningmanager',
     createProxyMiddleware({
-      target: 'http://localhost:5001',
+      target: 'http://localhost:5003',
       changeOrigin: true,
     })
   );
   app.use(
-    '/feedjobmanager',
+    '/samplepages',
     createProxyMiddleware({
-      target: 'http://localhost:5001',
+      target: 'http://localhost:5003',
       changeOrigin: true,
     })
   );

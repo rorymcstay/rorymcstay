@@ -142,15 +142,12 @@ class SampleViewer extends Component {
 
 
 export default connect(props => ({
-    sampleUrl: {
-        url: `/sampler/getSampleUrl/${props.feedName}`
-    },
     actionChainParams: {
          url: `actionsmanager/getActionChain/${props.actionChainName}`
     },
     reloadSampleUrl : () => ({
         reloadSample: {
-        url: `/feedjobmanager/requestSamplePages/${props.actionChainName}`
+        url: `/samplepages/requestSamplePages/${props.actionChainName}`
     }
 })
 }))(SampleViewer)
