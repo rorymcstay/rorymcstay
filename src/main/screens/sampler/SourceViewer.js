@@ -59,14 +59,11 @@ class SourceViewer extends Component {
                 // TODO get the previous available source
             }
             return (
-                <div>
-                    <div>{`Current Position is ${displaying}`}</div>;
                     <Iframe
                         width="100%"
                         height="800px"
                         url={`/samplepages/getSamplePage/${this.props.actionChainName}/${displaying}`}
                     />
-                </div>
             );
         }
     }

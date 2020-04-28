@@ -18,14 +18,6 @@ class Selector extends Component {
         }
     }
 
-    onFeedChange = (e, {value}) => {
-        this.setState({feedName: value}, this.props.onFeedChange(value))
-    };
-
-    onNewFeedWrite = (event) => {
-        this.setState({feedName: event.target.value}, this.props.onFeedChange(event.target.value))
-    };
-
     onActionChainChange = (e, {value}) => {
         this.setState({actionChainName: value}, this.props.onActionChainChange(value));
     }
@@ -45,13 +37,12 @@ class Selector extends Component {
 
     render() {
         const {fetchFeeds, actionChains} = this.props;
-        if (fetchFeeds.pending || fetchFeeds.pending) {
+        if (actionChains.pending) {
             return <ReactLoading/>
-        } else if (fetchFeeds.rejected || actionChains.rejected) {
+        } else if (actionChains.rejected) {
             return <div>Error</div>
-        } else if (fetchFeeds.fulfilled && actionChains.fulfilled) {
+        } else if (actionChains.fulfilled) {
 
-            const feedMenuOptions = this.getMenuOptions(fetchFeeds);
             const actionChainMenuOptions = this.getMenuOptions(actionChains);
 
             return (
@@ -67,26 +58,8 @@ class Selector extends Component {
                         />
                     </Grid.Column>
                     <Grid.Column>
-                        <Dropdown
-                            placeholder='Select Feed'
-                            fluid
-                            search
-                            selection
-                            onChange={this.onFeedChange}
-                            options={feedMenuOptions}
-                        />
-                    </Grid.Column>
-                    <Grid.Column>
                         <ButtonToolbar>
-                            <InputGroup>
-                            <FormControl
-                                   type='text'
-                                   placeholder='Create...'
-                                   onChange={this.onNewFeedWrite}
-                            /></InputGroup>
-                            <ButtonGroup>
-                            <Button onClick={() => this.props.newFeed(this.state.feedName)} active>New</Button>
-                            </ButtonGroup>
+                            <Button onClick={() => this.props.onNewFeed(this.state.feedName)} active>New</Button>
                         </ButtonToolbar>
                     </Grid.Column>
                 </Grid>
@@ -98,15 +71,7 @@ class Selector extends Component {
 }
 
 export default connect(props => ({
-    fetchFeeds: {
-        url: `/feedmanager/getFeeds/`
-    },
     actionChains: {
         url: `/actionsmanager/getActionChains/`
-    },
-    newFeed: (value) => ({
-        newFeedResponse: {
-            url: `/feedmanager/newFeed/${value}`
-        }
-    }),
+    }
 }))(Selector)

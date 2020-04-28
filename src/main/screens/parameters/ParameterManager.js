@@ -12,7 +12,7 @@ class ParameterManager extends Component {
         super(props);
         this.state = {
             parameterType: props.parameterType,
-            feedName: props.feedName,
+            feedName: props.actionChainName,
             isLoaded: false
         }
     }
@@ -63,7 +63,7 @@ class ParameterManager extends Component {
                             <Grid.Column>
                                 <FormViewer
                                     parameterType={this.state.parameterType}
-                                    feedName={this.props.feedName}
+                                    feedName={this.props.actionChainName}
                                 />
                             </Grid.Column>
                             <Grid.Column>

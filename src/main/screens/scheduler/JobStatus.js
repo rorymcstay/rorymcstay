@@ -30,8 +30,11 @@ class JobStatus extends Component {
         } else if (data.fulfilled) {
             return (
                 <ReactTable
+                    style={{width: "100%"}}
                     data={data.value.jobs}
                     columns={columns}
+                    defaultPageSize={10}
+                    pageSizeOptions={[5, 10, 20, 25, 50, 100]}
                 />
             );
         }

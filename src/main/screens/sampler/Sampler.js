@@ -90,6 +90,11 @@ class SampleViewer extends Component {
             return prevState;
         });
     }
+
+    onPositionChange = (newIndex) =>
+    {
+        this.setState({currentPosition: newIndex});
+    }
  
     render() 
     {
@@ -101,26 +106,34 @@ class SampleViewer extends Component {
         } else if (actionChainParams.fulfilled) {
             return (
                 <Grid width="200%">
-                    <Grid.Row columns={1} height={8}>
-                        <Button onClick={ () => this.props.reloadSampleUrl() }>RefreshSample</Button>
-                    </Grid.Row>
-                    <Grid.Row columns={1} height={13} >
-                        <Grid.Column width={4}>
-                            <ActionChain
-                                onUpdateName={this.onUpdateName}
-                                onUpdateStartUrl={this.onUpdateStartUrl}
-                                onActionFocus={this.onActionFocus} 
-                                name={this.state.name} 
-                                startUrl={this.state.startUrl}
-                                actions={this.state.actions}
-                                selected={this.state.selected}
-                            />
+                    <Grid.Row columns={1} width={13} height={8}>
+                        <table>
+                        <tr>
+                        <td>
+                        <Button size='small' onClick={ () => this.props.reloadSampleUrl() }>RefreshSample</Button>
+                        </td>
                         <ActionViewer
                             selectorPrediction={this.state.prediction}
                             actionParameters={this.state.currentAction}
                             onUpdateAction={this.onUpdateAction}
                             position={this.state.currentAction.position}
                         />
+                        </tr>
+                        </table>
+                    </Grid.Row>
+                    <Grid.Row columns={1} height={13} >
+                        <Grid.Column width={4}>
+                            <ActionChain
+                                onUpdateName={this.onUpdateName}
+                                onUpdateStartUrl={this.onUpdateStartUrl}
+                                onPositionChange={this.onPositionChange}
+                                onActionFocus={this.onActionFocus} 
+                                name={this.state.name} 
+                                startUrl={this.state.startUrl}
+                                actions={this.state.actions}
+                                selected={this.state.selected}
+                            />
+
                         </Grid.Column>
                         <Grid.Column width={12}>
                             {/** TODO: here should render iframe as a seperate refreshing component 
@@ -148,6 +161,5 @@ export default connect(props => ({
     reloadSampleUrl : () => ({
         reloadSample: {
         url: `/samplepages/requestSamplePages/${props.actionChainName}`
-    }
-})
+    }})
 }))(SampleViewer)

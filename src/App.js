@@ -19,20 +19,16 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            feedName: undefined,
+            actionChainName: undefined,
             parameterType: "leader",
             tableName: undefined,
             domain: undefined
         }
     }
 
-    onFeedChange = value => {
-        this.setState({feedName: value})
-    };
-
 
     onNewFeed = (value) => {
-        this.setState({feedName: value})
+        this.setState({actionChainName: 'NewActionChain'})
     };
 
     onParameterChange = (value) => {
@@ -44,7 +40,7 @@ class App extends Component {
     };
 
     onActionChainChange = (value) => {
-        this.setState( { actionChainName: value } );
+        this.setState( { actionChainName: value, actionChainName: value} );
     }
 
     render() {
@@ -57,12 +53,12 @@ class App extends Component {
                                 onFeedChange={this.onFeedChange}
                                 onActionChainChange={this.onActionChainChange}
                                 onNewFeed={this.onNewFeed}
-                                feedName={this.state.feedName}
+                                actionChainName={this.state.actionChainName}
                                 actionChainName={this.state.actionChainName}
                             />
                         </Grid.Column>
                         <Grid.Column>
-                            <ToolBar feedName={this.state.feedName}/>
+                            <ToolBar actionChainName={this.state.actionChainName}/>
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
@@ -74,33 +70,33 @@ class App extends Component {
                             >
                                 <Tab eventKey="viewer" title="Viewer">
                                     <Viewer 
-                                        feedName={this.state.feedName} 
+                                        actionChainName={this.state.actionChainName} 
                                         updateTableName={this.onTableChange}
                                     />
                                 </Tab>
                                 <Tab eventKey="parametermanager" title="Parameter Manager">
                                     <ParameterManager 
-                                        feedName={this.state.feedName} 
+                                        actionChainName={this.state.actionChainName} 
                                         parameterType={this.state.parameterType} 
                                         onParameterChange={this.onParameterChange}
                                     />
                                 </Tab>
                                 <Tab eventKey="scheduler" title="Scheduler">
                                     <Scheduler 
-                                        feedName={this.state.feedName}
+                                        actionChainName={this.state.actionChainName}
                                     />
                                 </Tab>
                                 {/*
                                 <Tab eventKey="mapping" title="Mapping">
                                     <Mapping 
-                                        feedName={this.state.feedName} 
+                                        actionChainName={this.state.actionChainName} 
                                         tableName={this.state.tableName}
                                 />
                                 </Tab>
                                 */}
                                 <Tab eventKey="sampling" title="Sampling">
                                     <SamplerViewer 
-                                        feedName={this.state.feedName} 
+                                        actionChainName={this.state.actionChainName} 
                                         actionChainName={this.state.actionChainName}
                                     />
                                 </Tab>

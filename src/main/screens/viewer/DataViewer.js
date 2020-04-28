@@ -146,6 +146,7 @@ export default connect(props => ({
         url: `/tablemanager/getColumnSchema/${props.tableName}`
     },
     mappingValue: {
+        // TODO: This should send the capture name and action chain name to get the correct mapping
         url: `/tablemanager/getMappingValue/map/${props.feedName}`
     },
     uploadMapping: (payload) => ({

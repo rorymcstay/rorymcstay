@@ -129,7 +129,6 @@ class ActionChain extends Component
         }
     }
 
-
     componentWillReceiveProps(nextProps)
     {
         this.setState({
@@ -141,9 +140,15 @@ class ActionChain extends Component
     }
 
     onSortEnd = ({oldIndex, newIndex}) => {
-        this.setState(({actions}) => ({
-            actions: arrayMove(actions, oldIndex, newIndex),
-        }));
+        this.setState( prevState => {
+            if (prevState.currentPosition == oldIndex)
+            {
+                 prevState.currentPosition = newIndex;
+                 this.props.onPositionChange(newIndex);
+            }
+            prevState.actions = arrayMove(prevState.actions, oldIndex, newIndex);
+            return prevState;
+        });
     };
 
     onDelete = (index) =>
@@ -160,15 +165,19 @@ class ActionChain extends Component
         this.props.onActionFocus(actionParams, index);
     }
 
-    ActionRepresentationNode = SortableElement(({value}, { index}) => <ActionRepresentation onDelete={this.onDelete} onSelection={this.onActionFocus} actionParams={value} index={index}/>);
+    ActionRepresentationNode = SortableElement(({value}) => <ActionRepresentation 
+                                                                onDelete={this.onDelete} 
+                                                                onSelection={this.onActionFocus} 
+                                                                actionParams={value.value} 
+                                                                index={value.index}/>);
 
-    Chain = SortableContainer(({actions}) => {
+    Chain = SortableContainer(({actions, }) => {
         //var counter = 0;
       return (
         <ul>
           {actions.map((value, index) => { 
-              console.log(`index is ${index}`)
-              return <this.ActionRepresentationNode  key={value.css} position={index} value={value} index={index} />;
+              var actionRepresentation = {value: value, index: index};
+              return <this.ActionRepresentationNode index={index} key={value.css} value={actionRepresentation} />;
           })}
         </ul>
       );

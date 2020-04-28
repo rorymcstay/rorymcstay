@@ -125,36 +125,36 @@ class Scheduler extends Component {
             }
         ];
         return (
-            <Grid columns={2} relaxed>
+            <Grid  >
+                <Grid.Row width='100%' columns={4}>
                 <Grid.Column>
-                    <Grid.Row>
                         <Dropdown
                             onChange={this.onTriggerChange}
+                            size='small'
                             options={triggerOptions}
                             placeholder='trigger'
                             selection
                         />
-                    </Grid.Row>
+                </Grid.Column>
+                <Grid.Column>
                     <Grid.Row>
                         <Input name="searchField"
                                placeholder="number"
                                value={this.state.increment_size}
+                               size='small'
                                onChange={value => this.onIncrementSizeChange(value)}/>
                     </Grid.Row>
-                    <Grid.Row>
+                </Grid.Column>
+                <Grid.Column>
                         <Dropdown
                             onChange={this.onIncrementChange}
                             options={incrementOptions}
                             placeholder='when'
                             selection
+                            size='small'
                         />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Input name="urlField"
-                               placeholder="Url to capture"
-                               value={this.state.url}
-                               onChange={value => this.onUrlChange(value)}/>
-                    </Grid.Row>
+                </Grid.Column>
+                <Grid.Column>
                     <Grid.Row>
                         <Button
                             variant="primary"
@@ -162,21 +162,10 @@ class Scheduler extends Component {
                         >Schedule Job</Button>
                     </Grid.Row>
                 </Grid.Column>
-                <Grid.Column>
-                    <Dropdown
-                        onChange={this.onServiceChange}
-                        options={this.serviceOptions}
-                        placeholder='when'
-                        selection
-                    />
-                    <Button
-                        variant="primary"
-                        onClick={() => this.props.scheduleService(this.state.service, this.state)}
-                    >Schedule Service</Button>
-                </Grid.Column>
-                <Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
                     <JobStatus/>
-                </Grid.Column>
+                </Grid.Row>
             </Grid>
         )
     }
@@ -185,7 +174,7 @@ class Scheduler extends Component {
 export default connect(props => ({
     scheduleService: (serviceName, scheduledJob) => ({
         uploadParamResponse: {
-            url: `/schedulemanager/scheduleContainer/${serviceName}`,
+            url: `/schedulemanager/scheduleActionChain/leader-route/${serviceName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }

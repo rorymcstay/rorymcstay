@@ -112,7 +112,7 @@ class Viewer extends Component {
                     {/*this should be a render function for triggered*/}
                     <Grid.Row>
                         <DataViewer
-                            feedName={this.props.feedName}
+                            feedName={this.props.actionChainName}
                             tableName={this.state.tableName}
                             triggered={this.state.triggered}
                             queryObject={this.state.queryObject}

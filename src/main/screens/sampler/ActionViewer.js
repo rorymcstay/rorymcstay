@@ -81,6 +81,7 @@ class ActionViewerParameter extends Component
                         placeholder={this.state.name} 
                         onChange={this.onChange} 
                         label={this.state.name}
+                        size='mini'
                         value={this.state.value} 
                         key={this.state.name} 
                         disabled={!this.state.inFocus}>
@@ -88,12 +89,12 @@ class ActionViewerParameter extends Component
         } else {
             return (<Dropdown
                 placeholder={this.state.name}
-                labelled
                 label={this.state.name}
                 fluid
                 value={this.state.value}
                 search
                 selection
+                size='mini'
                 disabled={!this.state.inFocus}
                 onChange={this.onSelectionChange}
                 options={this.getMenuOptions(this.state.values)}
@@ -104,10 +105,15 @@ class ActionViewerParameter extends Component
     render ()
     {
         return (
-            <div width='100%'>
-                    {this.renderField()}
-                    <Button onClick={this.onClick}>Edit</Button>
-            </div>
+
+            <>
+            <td> 
+                {this.renderField()}
+            </td>
+            <td> 
+                <Button size='mini' onClick={this.onClick}>Edit</Button>
+            </td>
+            </>
         );
     }
 }
@@ -138,7 +144,7 @@ class ActionViewer extends Component
          * TODO prevState is undefined in firefox here. Why?*/
         this.setState(prevState => {
             prevState.actionParameters[key] = value;
-            return {actionParameters: prevState.actionParameters};
+            return prevState
         });
         console.log(`will update parent  with ${this.state.actionParameters[key]}`);
         this.props.onUpdateAction(this.state.actionParameters);
@@ -181,7 +187,7 @@ class ActionViewer extends Component
                                                          values={possibleValues.value[name]} />);
             }
         } 
-        return <div>{actionParams}</div>;
+        return <>{actionParams}</>;
     }
 }
 
