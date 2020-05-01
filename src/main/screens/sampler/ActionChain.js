@@ -9,12 +9,12 @@ import arrayMove from 'array-move';
 const EMPTY_ACTION = {
     actionType: 'CaptureAction',
     isSingle: false,
-    css: undefined,
-    xpath: undefined,
-    text: undefined,
+    css: '',
+    xpath: '',
+    text: '',
     //TODO: attribute should be predetermined list of possible values, be it predictions or 
     //actuals. eg: href and class src are obvious ones but not necessarily there
-    attribute: undefined
+    attribute: ''
 }
 
 const EMPTY_CHAIN_PARAMS = {
