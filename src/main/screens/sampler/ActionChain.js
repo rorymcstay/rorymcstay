@@ -28,7 +28,7 @@ class ActionRepresentation extends Component
     constructor(props)
     {
         console.log(`ActionRepresentation: ${props.actionParams.actionType}`);
-        super(props)
+        super(props);
         this.state = {
             inFocus: false,
             actionParams: props.actionParams,
@@ -47,7 +47,7 @@ class ActionRepresentation extends Component
 
     onDelete = () =>
     {
-        this.props.onDelete(this.state.position);
+        this.props.onDelete(this.state.index);
     }
 
     onClick = () =>
@@ -258,10 +258,16 @@ class ActionChain extends Component
         });
     }
 
+    newAction = () =>
+    {
+        const action = JSON.parse(JSON.stringify(EMPTY_ACTION));
+        return action;
+    }
+
     onNewAction = () =>
     {
         this.setState((prevState, props) => {
-            prevState.actions.push(EMPTY_ACTION);
+            prevState.actions.push(this.newAction());
             return {actions: prevState.actions};
         });
     }

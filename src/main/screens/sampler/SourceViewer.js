@@ -30,7 +30,7 @@ class SourceViewer extends Component {
         if (initialPosition - 1 <= 0) {
             return 0;
         }
-        else if (sourceStatus[initialPosition - 1].ready) {
+        else if (sourceStatus[initialPosition - 1] && sourceStatus[initialPosition - 1].ready) {
             return initialPosition - 1;
         } else {
             return this.getPreviousAvailableSource(sourceStatus, initialPosition - 1);
@@ -47,7 +47,7 @@ class SourceViewer extends Component {
             return <div>Error</div>;
         } else if (sourcesReady.fulfilled)
         {
-            
+ 
             const sourceStatus = sourcesReady.value;
             if (sourceStatus.length === 0)
             {
