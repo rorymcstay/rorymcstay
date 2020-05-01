@@ -13,7 +13,7 @@ class ActionViewerParameter extends Component
     {
         super(props);
         this.state = {
-            key: props.name, 
+            key: props.name,
             name: props.name,
             value: props.value,
             values: (props.values === undefined) ? [] : props.values,
@@ -24,7 +24,7 @@ class ActionViewerParameter extends Component
     componentWillReceiveProps(nextProps)
     {
         var value;
-        if (this.state.inFocus)
+        if (this.state.inFocus || !nextProps.selectorTriggered)
         {
             value = nextProps.value;
         }
@@ -174,6 +174,7 @@ class ActionViewer extends Component
                 const value = this.props.actionParameters[name];
                 const freeForm = true ? (name === 'css' || name ==='xpath' || name === 'text') : false;
                 actionParams.push(<ActionViewerParameter name={name}
+                                                         selectorTriggered={this.props.selectorTriggered}
                                                          key={name}
                                                          onChange={this.onActionParameterChange}
                                                          freeForm={freeForm}

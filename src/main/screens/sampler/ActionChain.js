@@ -67,7 +67,7 @@ class ActionRepresentation extends Component
         return (
         <Card style={{ width: '12rem' }}>
             <Card.Body >
-                <Card.Title>{this.state.actionParams.actionType}</Card.Title>
+                <Card.Title>{this.props.actionParams.actionType}</Card.Title>
                 <ButtonGroup size="mini">
                     <Button  onClick={this.onClick}>Focus</Button>
                     <Button onClick={this.onDelete}>Delete</Button>
@@ -112,7 +112,7 @@ class ActionChainsToolBar extends Component
     {
         console.log(`rendering startUrl=${this.state.startUrl}, name=${this.state.name}, isRepeating=${this.state.isRepeating} `);
         return (<div>
-            <ButtonGroup horizontal>
+            <ButtonGroup vertical>
                 <Button size='tiny' onClick={ () => {this.onSubmit()}}>SubmitChain</Button>
                 <Button size='tiny' onClick={ () => {this.onNewAction()}}>NewAction</Button>
                 <Button size='tiny' onClick={ () => this.props.reloadSampleUrl() }>RefreshSample</Button>
@@ -172,8 +172,7 @@ class ActionChain extends Component
     
     onActionFocus = (actionParams, index) =>
     {
-        this.setState({currentPosition: index});
-        this.props.onActionFocus(actionParams, index);
+        this.setState({currentPosition: index}, this.props.onActionFocus(actionParams, index));
     }
 
     Chain = SortableContainer(({actions}) => {
@@ -276,15 +275,15 @@ class ActionChain extends Component
             <div>
                 <ActionChainsToolBar 
                     reloadSampleUrl={this.props.reloadSampleUrl}
-                    name={this.props.name}
-                    startUrl={this.props.startUrl}
-                    isRepeating={this.props.isRepeating}
+                    name={this.state.name}
+                    startUrl={this.state.startUrl}
+                    isRepeating={this.state.isRepeating}
                     onNewAction={this.onNewAction}
                     onSubmitAction={this.onSubmitActionChain}
                     onUpdateName={this.props.onUpdateName}
-                    onUpdateStartUrl={this.props.onUpdateStartUrl}
+                    onUpdateStartUrl={this.state.onUpdateStartUrl}
                 />
-                <this.Chain actions={this.props.actions} onSortEnd={this.onSortEnd}/> 
+                <this.Chain actions={this.state.actions} onSortEnd={this.onSortEnd}/> 
             </div>
         );
     }

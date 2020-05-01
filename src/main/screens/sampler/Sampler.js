@@ -16,6 +16,7 @@ class SampleViewer extends Component {
         window.addEventListener("message", this.receiveMessage, false);
         this.state = {
             actionChainName: props.actionChainName,
+            selectorTriggered: false,
             currentAction: {},
             currentPosition: 0
         };
@@ -31,7 +32,8 @@ class SampleViewer extends Component {
                 startUrl: props.actionChainParams.value.startUrl,
                 name: props.actionChainParams.value.name,
                 isRepeating: props.actionChainParams.value.isRepeating,
-                actions: props.actionChainParams.value.actions
+                actions: props.actionChainParams.value.actions,
+                selectorTriggered: false,
             });
         }
     }
@@ -41,7 +43,7 @@ class SampleViewer extends Component {
         console.log('updating prediction')
         if (event.data.predicted === undefined || event.data.predicted === '')
         {
-            console.log('no prediction'); 
+            console.log('no prediction');
         }
         else
         {
@@ -54,7 +56,7 @@ class SampleViewer extends Component {
                     // TODO this prints to log
                     console.log(`updating ${key} with ${event.data.predicted}`)
                 }
-                return {currentAction: prevState.currentAction}
+                return {currentAction: prevState.currentAction, selectorTriggered: true}
             });
         }
     }
@@ -65,9 +67,10 @@ class SampleViewer extends Component {
     }
 
     onActionFocus = (actionParams, position) => {
-        this.setState((prevState, props) => {
-            return {currentAction: actionParams, currentPosition: position};
-        });
+        this.setState(prevState => ({
+            currentAction: actionParams,
+            currentPosition: position
+        }));
     }
 
     onUpdateName = (value) =>
@@ -93,21 +96,22 @@ class SampleViewer extends Component {
     {
         this.setState({currentPosition: newIndex});
     }
- 
+  
     render() 
     {
         const {actionChainParams} = this.props;
         if (actionChainParams.pending) {
-            return <ReactLoading/>
+            return <ReactLoading/>;
         } else if (actionChainParams.rejected) {
-            return <div>Error</div>
-        } else if (actionChainParams.fulfilled) {
-            
+            return <div>Error</div>;
+        } else if (actionChainParams.fulfilled) { 
             return (
                 <Grid width="200%">
                     <Grid.Row width={17}>
                         <ActionViewer
+                            selectorTriggered={this.state.selectorTriggered}
                             selectorPrediction={this.state.prediction}
+                            selectionChanged={this.state.selectionChanged}
                             actionParameters={this.state.currentAction}
                             onUpdateAction={this.onUpdateAction}
                             position={this.state.currentAction.position}
