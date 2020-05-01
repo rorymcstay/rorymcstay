@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import Button from "react-bootstrap/Button";
-import {Dropdown, Grid, Input} from "semantic-ui-react";
-import ReactLoading from "react-loading";
+import { Grid, Input} from "semantic-ui-react";
 
 
 class QueryConstructor extends Component {

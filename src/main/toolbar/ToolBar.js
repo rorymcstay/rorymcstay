@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import connect from "../../api-connector";
-import {Grid} from "semantic-ui-react";
 import Button from "react-bootstrap/Button";
 import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 
@@ -8,9 +7,6 @@ class ToolBar extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            feedName: props.feedName
-        }
     }
 
     onFeedStart = () => {
@@ -66,13 +62,13 @@ class ToolBar extends Component {
 export default connect(props => ({
 
     startFeed: () => ({
-        startFeedResponse: {url: `/runningmanager/addFeed/${props.feedName}`}
+        startFeedResponse: {url: `/runningmanager/addFeed/${props.actionChainName}`}
     }),
     stopFeed: () => ({
-        stopFeedResponse: {url: `/runningmanager/disableFeed/${props.feedName}`}
+        stopFeedResponse: {url: `/runningmanager/disableFeed/${props.actionChainName}`}
     }),
     feedStatus: {
-        url: `/runningmanager/getStatus/${props.feedName}`
-    },
+        url: `/runningmanager/getStatus/${props.actionChainName}`
+    }
 
 }))(ToolBar)

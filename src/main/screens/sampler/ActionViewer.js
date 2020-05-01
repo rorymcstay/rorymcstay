@@ -1,10 +1,9 @@
 import React, {Component} from "react";
-import Form from "react-jsonschema-form";
 import connect from '../../../api-connector'
 import "react-table/react-table.css";
+import "../screens.css";
 import ReactLoading from "react-loading";
-import Iframe from 'react-iframe';
-import { Dropdown, Grid, Button, ButtonGroup } from 'semantic-ui-react';
+import { Dropdown,  Button } from 'semantic-ui-react';
 
 import  {Input} from 'semantic-ui-react';
 
@@ -73,11 +72,13 @@ class ActionViewerParameter extends Component
         return menuOptions;
     }
 
-    renderField = () =>
+    render()
     {
         if (this.state.freeForm)
         {
-            return (<Input 
+            return (
+                <div>
+                    <Input 
                         placeholder={this.state.name} 
                         onChange={this.onChange} 
                         label={this.state.name}
@@ -85,36 +86,29 @@ class ActionViewerParameter extends Component
                         value={this.state.value} 
                         key={this.state.name} 
                         disabled={!this.state.inFocus}>
-                    </Input>);
+                    </Input>
+                    <Button size='mini' onClick={this.onClick}>Edit</Button>
+                </div>
+            );
         } else {
-            return (<Dropdown
-                placeholder={this.state.name}
-                label={this.state.name}
-                fluid
-                value={this.state.value}
-                search
-                selection
-                size='mini'
-                disabled={!this.state.inFocus}
-                onChange={this.onSelectionChange}
-                options={this.getMenuOptions(this.state.values)}
-            />);
+            return (
+                <div>
+                    <Dropdown
+                        placeholder={this.state.name}
+                        label={this.state.name}
+                        fluid
+                        value={this.state.value}
+                        search
+                        selection
+                        size='mini'
+                        disabled={!this.state.inFocus}
+                        onChange={this.onSelectionChange}
+                        options={this.getMenuOptions(this.state.values)}
+                    />
+                    <Button size='mini' onClick={this.onClick}>Edit</Button>
+                </div>
+            );
         }
-    }
-
-    render ()
-    {
-        return (
-
-            <>
-            <td> 
-                {this.renderField()}
-            </td>
-            <td> 
-                <Button size='mini' onClick={this.onClick}>Edit</Button>
-            </td>
-            </>
-        );
     }
 }
 
@@ -186,7 +180,11 @@ class ActionViewer extends Component
                                                          value={value}
                                                          values={possibleValues.value[name]} />);
             }
-        } 
+        }
+        if (actionParams.length === 0)
+        {
+            return <div>Focus on an Action</div>;
+        }
         return <>{actionParams}</>;
     }
 }

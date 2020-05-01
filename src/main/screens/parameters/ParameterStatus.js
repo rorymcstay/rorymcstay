@@ -9,7 +9,7 @@ class ParameterStatus extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            feedName: props.feedName,
+            actionChainName: props.actionChainName,
         }
     }
 
@@ -52,6 +52,6 @@ class ParameterStatus extends Component {
 
 export default connect(props => ({
     parameterStatus: {
-        url: `/feedmanager/getParameterStatus/${props.feedName}`
+        url: `/feedmanager/getParameterStatus/${props.actionChainName}`
     }
 }))(ParameterStatus)

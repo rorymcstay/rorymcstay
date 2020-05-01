@@ -1,4 +1,3 @@
-/* global chrome */
 import React, {Component} from 'react';
 import './App.css';
 import Tab from "react-bootstrap/Tab";
@@ -10,7 +9,7 @@ import 'semantic-ui-css/semantic.min.css'
 import Scheduler from "./main/screens/scheduler/Scheduler"
 import ToolBar from "./main/toolbar/ToolBar";
 import {Grid, Container} from "semantic-ui-react";
-import Mapping from "./main/screens/mapping/Mapping";
+//import Mapping from "./main/screens/mapping/Mapping";
 import SamplerViewer from "./main/screens/sampler/Sampler"
 
 
@@ -19,15 +18,14 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            actionChainName: undefined,
+            actionChainName: 'GoogleSearch',
             parameterType: "leader",
             tableName: undefined,
             domain: undefined
         }
     }
 
-
-    onNewFeed = (value) => {
+    onNew = () => {
         this.setState({actionChainName: 'NewActionChain'})
     };
 
@@ -40,7 +38,7 @@ class App extends Component {
     };
 
     onActionChainChange = (value) => {
-        this.setState( { actionChainName: value, actionChainName: value} );
+        this.setState( { actionChainName: value} );
     }
 
     render() {
@@ -50,10 +48,8 @@ class App extends Component {
                     <Grid.Row centered={false}>
                         <Grid.Column>
                             <Selector
-                                onFeedChange={this.onFeedChange}
                                 onActionChainChange={this.onActionChainChange}
-                                onNewFeed={this.onNewFeed}
-                                actionChainName={this.state.actionChainName}
+                                onNew={this.onNew}
                                 actionChainName={this.state.actionChainName}
                             />
                         </Grid.Column>
@@ -96,11 +92,10 @@ class App extends Component {
                                 */}
                                 <Tab eventKey="sampling" title="Sampling">
                                     <SamplerViewer 
-                                        actionChainName={this.state.actionChainName} 
                                         actionChainName={this.state.actionChainName}
                                     />
                                 </Tab>
-                                </Tabs>
+                            </Tabs>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

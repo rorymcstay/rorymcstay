@@ -6,24 +6,12 @@ import {Grid} from "semantic-ui-react";
 import Button from "react-bootstrap/Button";
 import ReactLoading from "react-loading";
 
-const getCircularReplacer = () => {
-        const seen = new WeakSet();
-        return (key, value) => {
-            if (typeof value === "object" && value !== null) {
-                if (seen.has(value)) {
-                    return;
-                }
-                seen.add(value);
-            }
-            return value;
-        };
-    };
 
 class Scheduler extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            feedName: props.feedName,
+            actionChainName: props.actionChainName,
             url: "",
             trigger: "",
             increment: "",
@@ -73,7 +61,7 @@ class Scheduler extends Component {
         this.props.addJob(job);
         this.setState(
             {
-                feedName: this.props.feedName,
+                actionChainName: this.props.actionChainName,
                 url: "",
                 trigger: "",
                 increment: "",
@@ -181,7 +169,7 @@ export default connect(props => ({
     }),
     addJob: (scheduledJob) => ({
         data: {
-            url: `/schedulemanager/addJob/${props.feedName}`,
+            url: `/schedulemanager/addJob/${props.actionChainName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }

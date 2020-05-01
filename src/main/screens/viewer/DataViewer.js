@@ -147,11 +147,11 @@ export default connect(props => ({
     },
     mappingValue: {
         // TODO: This should send the capture name and action chain name to get the correct mapping
-        url: `/tablemanager/getMappingValue/map/${props.feedName}`
+        url: `/tablemanager/getMappingValue/map/${props.actionChainName}`
     },
     uploadMapping: (payload) => ({
         uploadParamResponse: {
-            url: `/tablemanager/uploadMapping/${props.feedName}`,
+            url: `/tablemanager/uploadMapping/${props.actionChainName}`,
             body: JSON.stringify(payload),
             method: 'PUT'
         }

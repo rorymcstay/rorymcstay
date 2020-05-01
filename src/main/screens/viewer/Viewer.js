@@ -112,7 +112,7 @@ class Viewer extends Component {
                     {/*this should be a render function for triggered*/}
                     <Grid.Row>
                         <DataViewer
-                            feedName={this.props.actionChainName}
+                            actionChainName={this.props.actionChainName}
                             tableName={this.state.tableName}
                             triggered={this.state.triggered}
                             queryObject={this.state.queryObject}
@@ -126,6 +126,6 @@ class Viewer extends Component {
 
 export default connect(props => ({
     tableOptions: {
-        url: `/tablemanager/getTableNames/${props.feedName}`
+        url: `/tablemanager/getTableNames/${props.actionChainName}`
     }
 }))(Viewer)

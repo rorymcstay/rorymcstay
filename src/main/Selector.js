@@ -3,8 +3,7 @@ import ReactLoading from 'react-loading';
 import connect from "../api-connector";
 import {Dropdown, Grid} from "semantic-ui-react";
 
-import ToolBar from "./toolbar/ToolBar";
-import {ButtonToolbar, Button, InputGroup, FormControl, ButtonGroup} from "react-bootstrap";
+import {ButtonToolbar, Button, FormControl } from "react-bootstrap";
 
 class Selector extends Component {
 
@@ -12,7 +11,6 @@ class Selector extends Component {
         super(props);
 
         this.state = {
-            feedName: props.feedName,
             actionChain: props.actionChainName,
             started: false
         }
@@ -36,7 +34,7 @@ class Selector extends Component {
     }
 
     render() {
-        const {fetchFeeds, actionChains} = this.props;
+        const {actionChains} = this.props;
         if (actionChains.pending) {
             return <ReactLoading/>
         } else if (actionChains.rejected) {
@@ -59,7 +57,7 @@ class Selector extends Component {
                     </Grid.Column>
                     <Grid.Column>
                         <ButtonToolbar>
-                            <Button onClick={() => this.props.onNewFeed(this.state.feedName)} active>New</Button>
+                            <Button onClick={() => this.props.onNew()} active>New</Button>
                         </ButtonToolbar>
                     </Grid.Column>
                 </Grid>

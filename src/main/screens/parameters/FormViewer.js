@@ -9,7 +9,7 @@ class FormViewer extends Component {
         super(props);
         this.state = {
             parameterType: props.parameterType,
-            feedName: props.feedName,
+            actionChainName: props.actionChainName,
         }
     }
 
@@ -54,11 +54,11 @@ export default connect(props => ({
         url: `/feedmanager/getParameterSchema/${props.parameterType}`
     },
     parameterValue: {
-        url: `/feedmanager/getParameter/${props.parameterType}/${props.feedName}`
+        url: `/feedmanager/getParameter/${props.parameterType}/${props.actionChainName}`
     },
     uploadParam: (formData) => ({
         uploadParamResponse: {
-            url: `/feedmanager/setParameter/${props.parameterType}/${props.feedName}`,
+            url: `/feedmanager/setParameter/${props.parameterType}/${props.actionChainName}`,
             body: JSON.stringify(formData),
             method: 'PUT'
         }

@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import connect from '../../../api-connector';
-//import { Input} from 'react-bootstrap';
 import ReactLoading from "react-loading";
 import { Input, Button, ButtonGroup} from 'semantic-ui-react';
 import { Card, InputGroup } from 'react-bootstrap';
@@ -28,12 +27,22 @@ class ActionRepresentation extends Component
 {
     constructor(props)
     {
+        console.log(`ActionRepresentation: ${props.actionParams.actionType}`);
         super(props)
         this.state = {
             inFocus: false,
             actionParams: props.actionParams,
             index: props.index
         }
+    }
+
+    componentWillReceiveProps(nextProps)
+    {
+        this.setState(prevState => {
+            prevState.actionParams = nextProps.actionParams;
+            prevState.index = nextProps.index;
+            return prevState;
+        });
     }
 
     onDelete = () =>
@@ -54,6 +63,7 @@ class ActionRepresentation extends Component
 
     render ()
     {
+        console.log(`have action ${this.state.actionParams}`);
         return (
         <Card style={{ width: '12rem' }}>
             <Card.Body >
@@ -73,7 +83,7 @@ class ActionChainsToolBar extends Component
     constructor(props)
     {
         super(props)
-        this.state={
+        this.state = {
             startUrl: props.startUrl,
             name: props.name,
             isRepeating: props.isRepeating
@@ -93,7 +103,6 @@ class ActionChainsToolBar extends Component
         this.props.onNewAction();
     }
 
-
     onSubmit = () =>
     {
         this.props.onSubmitAction(this.state.name, this.state.startUrl, this.state.isRepeating);
@@ -101,10 +110,12 @@ class ActionChainsToolBar extends Component
 
     render ()
     {
+        console.log(`rendering startUrl=${this.state.startUrl}, name=${this.state.name}, isRepeating=${this.state.isRepeating} `);
         return (<div>
-            <ButtonGroup vertical>
-                <Button onClick={ () => {this.onSubmit()}}>SubmitChain</Button>
-                <Button onClick={ () => {this.onNewAction()}}>NewAction</Button>
+            <ButtonGroup horizontal>
+                <Button size='tiny' onClick={ () => {this.onSubmit()}}>SubmitChain</Button>
+                <Button size='tiny' onClick={ () => {this.onNewAction()}}>NewAction</Button>
+                <Button size='tiny' onClick={ () => this.props.reloadSampleUrl() }>RefreshSample</Button>
             </ButtonGroup>
             <InputGroup >
                 <Input onChange={(e, {target}) => {this.props.onUpdateName(e.target.value)}} placeholder='Name' value={this.state.name}/>
@@ -165,19 +176,20 @@ class ActionChain extends Component
         this.props.onActionFocus(actionParams, index);
     }
 
-    ActionRepresentationNode = SortableElement(({value}) => <ActionRepresentation 
-                                                                onDelete={this.onDelete} 
-                                                                onSelection={this.onActionFocus} 
-                                                                actionParams={value.value} 
-                                                                index={value.index}/>);
-
-    Chain = SortableContainer(({actions, }) => {
+    Chain = SortableContainer(({actions}) => {
         //var counter = 0;
+        console.log(`returning actionlist of length ${actions.length}`);
+        const Node = SortableElement(({value}) => <ActionRepresentation 
+                            onDelete={this.onDelete} 
+                            onSelection={this.onActionFocus} 
+                            actionParams={value.value} 
+                            index={value.index}/>);
+                    
       return (
         <ul>
           {actions.map((value, index) => { 
-              var actionRepresentation = {value: value, index: index};
-              return <this.ActionRepresentationNode index={index} key={value.css} value={actionRepresentation} />;
+              const actionRepresentation = {value: value, index: index};
+              return <Node index={index} key={value.css} value={actionRepresentation}/> 
           })}
         </ul>
       );
@@ -259,18 +271,20 @@ class ActionChain extends Component
     {
         // TODO: ActionChain tool bar
         // TODO: render a list of actions
+        console.log(`rendering actionchain actions.length=${this.props.actions.length} name=${this.props.name} startUrl=${this.props.startUrl}`);
         return (
             <div>
-                <this.Chain actions={this.state.actions} onSortEnd={this.onSortEnd}/> 
                 <ActionChainsToolBar 
-                    name={this.state.name}
-                    startUrl={this.state.startUrl}
-                    isRepeating={this.state.isRepeating}
+                    reloadSampleUrl={this.props.reloadSampleUrl}
+                    name={this.props.name}
+                    startUrl={this.props.startUrl}
+                    isRepeating={this.props.isRepeating}
                     onNewAction={this.onNewAction}
                     onSubmitAction={this.onSubmitActionChain}
                     onUpdateName={this.props.onUpdateName}
                     onUpdateStartUrl={this.props.onUpdateStartUrl}
                 />
+                <this.Chain actions={this.props.actions} onSortEnd={this.onSortEnd}/> 
             </div>
         );
     }
@@ -282,5 +296,9 @@ export default connect(props => ({
             method: 'PUT',
             body: JSON.stringify(payload) 
         }
-    })
+    }),
+    reloadSampleUrl : () => ({
+        reloadSample: {
+        url: `/samplepages/requestSamplePages/${props.actionChainName}`
+    }})
 }))(ActionChain)

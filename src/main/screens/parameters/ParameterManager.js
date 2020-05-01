@@ -11,9 +11,7 @@ class ParameterManager extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            parameterType: props.parameterType,
-            feedName: props.actionChainName,
-            isLoaded: false
+            parameterType: props.parameterType
         }
     }
 
@@ -23,20 +21,13 @@ class ParameterManager extends Component {
         }, this.props.onParameterChange(value))
     };
 
-    createNew = e => {
-        this.setState({
-            feedName: e.target.value
-        })
-    };
-
-
     render() {
         const {parameterTypes} = this.props;
 
         if (parameterTypes.pending) {
             return <ReactLoading/>
         } else if (parameterTypes.rejected) {
-            return <Button onClick={this.createNew}>Create</Button>
+            return <div>Error</div>
         } else if (parameterTypes.fulfilled) {
             const menuOptions = [];
             for (let i = 0; i < parameterTypes.value.length; i++) {
@@ -62,13 +53,13 @@ class ParameterManager extends Component {
                         <Grid.Row columns={2}>
                             <Grid.Column>
                                 <FormViewer
+                                    actionChainName={this.props.actionChainName}
                                     parameterType={this.state.parameterType}
-                                    feedName={this.props.actionChainName}
                                 />
                             </Grid.Column>
                             <Grid.Column>
                                 <ParameterStatus
-                                    feedName={this.state.feedName}
+                                    actionChainName={this.props.actionChainName}
                                     parameterName={this.state.parameterType}
                                 />
                             </Grid.Column>

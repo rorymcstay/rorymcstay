@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import connect from '../../../api-connector';
 import "react-table/react-table.css";
 import ReactLoading from "react-loading";
-import { Grid, Button } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 
 import ActionChain from './ActionChain';
 import ActionViewer from './ActionViewer';
@@ -24,7 +24,6 @@ class SampleViewer extends Component {
 
     componentWillReceiveProps(props)
     {
-        console.log(`actionChainParams: ${props.actionChainParams.fulfilled}`);
         window.addEventListener("message", this.receiveMessage, false);
         if (props.actionChainParams.fulfilled)
         {
@@ -42,8 +41,7 @@ class SampleViewer extends Component {
         console.log('updating prediction')
         if (event.data.predicted === undefined || event.data.predicted === '')
         {
-            console.log('no prediction');
-    
+            console.log('no prediction'); 
         }
         else
         {
@@ -104,24 +102,18 @@ class SampleViewer extends Component {
         } else if (actionChainParams.rejected) {
             return <div>Error</div>
         } else if (actionChainParams.fulfilled) {
+            
             return (
                 <Grid width="200%">
-                    <Grid.Row columns={1} width={13} height={8}>
-                        <table>
-                        <tr>
-                        <td>
-                        <Button size='small' onClick={ () => this.props.reloadSampleUrl() }>RefreshSample</Button>
-                        </td>
+                    <Grid.Row width={17}>
                         <ActionViewer
                             selectorPrediction={this.state.prediction}
                             actionParameters={this.state.currentAction}
                             onUpdateAction={this.onUpdateAction}
                             position={this.state.currentAction.position}
                         />
-                        </tr>
-                        </table>
                     </Grid.Row>
-                    <Grid.Row columns={1} height={13} >
+                    <Grid.Row  width={17} >
                         <Grid.Column width={4}>
                             <ActionChain
                                 onUpdateName={this.onUpdateName}
@@ -133,13 +125,8 @@ class SampleViewer extends Component {
                                 actions={this.state.actions}
                                 selected={this.state.selected}
                             />
-
-                        </Grid.Column>
+                        </Grid.Column> 
                         <Grid.Column width={12}>
-                            {/** TODO: here should render iframe as a seperate refreshing component 
-                             * given the startUrl. Should also have a next and back arrow for 
-                             * going to the next action.
-                             */}
                             <SourceViewer
                                 position={this.state.currentPosition}
                                 actionChainName={this.props.actionChainName}
@@ -147,6 +134,7 @@ class SampleViewer extends Component {
                             />
                         </Grid.Column>
                     </Grid.Row>
+                 
                 </Grid>
              );
          }
@@ -156,10 +144,7 @@ class SampleViewer extends Component {
 
 export default connect(props => ({
     actionChainParams: {
-         url: `actionsmanager/getActionChain/${props.actionChainName}`
-    },
-    reloadSampleUrl : () => ({
-        reloadSample: {
-        url: `/samplepages/requestSamplePages/${props.actionChainName}`
-    }})
+         url: `/actionsmanager/getActionChain/${props.actionChainName}`
+    }
+
 }))(SampleViewer)

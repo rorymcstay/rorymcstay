@@ -6,7 +6,7 @@ if [[ -z $1 ]]; then
 fi
 
 # substitute environment variables in template file
-envsubst "\$UISERVER:\$SERVERNAME:\$COMMANDSERVER" < $1 > /etc/nginx/nginx.conf
+envsubst "\$UISERVER:\$SERVERNAME:\$COMMANDSERVER\$NANNYSERVER" < $1 > /etc/nginx/nginx.conf
 
 cat /etc/nginx/nginx.conf
 
