@@ -160,16 +160,9 @@ class Scheduler extends Component {
 }
 
 export default connect(props => ({
-    scheduleService: (serviceName, scheduledJob) => ({
-        uploadParamResponse: {
-            url: `/schedulemanager/scheduleActionChain/leader-route/${serviceName}`,
-            body: JSON.stringify(scheduledJob),
-            method: 'PUT'
-        }
-    }),
     addJob: (scheduledJob) => ({
         data: {
-            url: `/schedulemanager/addJob/${props.actionChainName}`,
+            url: `/schedulemanager/scheduleActionChain/leader-route/${props.actionChainName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'
         }

@@ -155,22 +155,32 @@ class ActionViewer extends Component
 
     render()
     {
-        const {possibleValues} = this.props;
+        const {mandatoryParams, possibleValues} = this.props;
         var actionParams = [];
-        if (possibleValues.rejected)
+        if (possibleValues.rejected || mandatoryParams.rejected)
         {
             return <div>Error</div>;
         }
-        else if (possibleValues.pending)
+        else if (possibleValues.pending || mandatoryParams.pending)
         {
             return <ReactLoading/>;
         }
-        else if (possibleValues.fulfilled)
+        else if (possibleValues.fulfilled && mandatoryParams.fulfilled)
         {
-
+            for(var param in mandatoryParams.value)
+            {
+                if (this.props.actionParameters[mandatoryParams.value[param]] === undefined)
+                {
+                    this.props.actionParameters[mandatoryParams[param]] = '';
+                }
+            }
             for (var name in this.props.actionParameters)
             {
                 const value = this.props.actionParameters[name];
+                if (mandatoryParams.value.indexOf(name) == -1)
+                {
+                    continue;
+                }
                 const freeForm = true ? (name === 'css' || name ==='xpath' || name === 'text') : false;
                 actionParams.push(<ActionViewerParameter name={name}
                                                          selectorTriggered={this.props.selectorTriggered}
@@ -180,6 +190,10 @@ class ActionViewer extends Component
                                                          value={value}
                                                          values={possibleValues.value[name]} />);
             }
+        }
+        else
+        {
+            return <ReactLoading/>;
         }
         if (actionParams.length === 0)
         {
@@ -191,6 +205,9 @@ class ActionViewer extends Component
 
 export default connect(props =>({
     possibleValues: {
-        url: `actionsmanager/getPossibleValues/`
+        url: `/actionsmanager/getPossibleValues/`
+    },
+    mandatoryParams: {
+        url: `/actionsmanager/getActionParameters/${props.actionParameters.actionType}`
     }
 }))(ActionViewer)
