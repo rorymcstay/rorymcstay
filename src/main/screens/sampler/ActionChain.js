@@ -297,13 +297,13 @@ class ActionChain extends Component
 export default connect(props => ({
     submitActionChain: (payload) => ({
         submitAction: {
-            url: `actionsmanager/setActionChain/`,
+            url: `/actionsmanager/setActionChain/`,
             method: 'PUT',
             body: JSON.stringify(payload) 
         }
     }),
     reloadSampleUrl : () => ({
         reloadSample: {
-        url: `/samplepages/requestSamplePages/${props.actionChainName}`
+        url: `/samplepages/requestSamplePages/${props.name}`
     }})
 }))(ActionChain)
