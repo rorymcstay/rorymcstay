@@ -17,6 +17,7 @@ class SampleViewer extends Component {
         this.state = {
             actionChainName: props.actionChainName,
             selectorTriggered: false,
+            startUrl: undefined,
             currentAction: {},
             currentPosition: 0
         };
@@ -30,7 +31,7 @@ class SampleViewer extends Component {
         {
             this.setState({
                 startUrl: props.actionChainParams.value.startUrl,
-                name: props.actionChainParams.value.name,
+                actionChainName: props.actionChainParams.value.name,
                 isRepeating: props.actionChainParams.value.isRepeating,
                 actions: props.actionChainParams.value.actions,
                 selectorTriggered: false,
@@ -75,12 +76,20 @@ class SampleViewer extends Component {
 
     onUpdateName = (value) =>
     {
-        this.setState({name: value});
+        this.setState({actionChainName: value});
     }
 
     onUpdateStartUrl = (value) =>
     {
         this.setState({startUrl: value});
+    }
+
+    onToolbarValChange = (val, key) =>
+    {
+        this.setState(prevState => {
+            prevState[key] = val;
+            return prevState;
+        });
     }
 
     onUpdateAction = (updatedAction) =>
@@ -107,7 +116,7 @@ class SampleViewer extends Component {
         } else if (actionChainParams.fulfilled) { 
             return (
                 <Grid width="200%">
-                    <Grid.Row width={17}>
+                    <Grid.Row width={11}>
                         <ActionViewer
                             selectorTriggered={this.state.selectorTriggered}
                             selectorPrediction={this.state.prediction}
@@ -117,20 +126,21 @@ class SampleViewer extends Component {
                             position={this.state.currentAction.position}
                         />
                     </Grid.Row>
-                    <Grid.Row  width={17} >
-                        <Grid.Column width={4}>
+                    <Grid.Row width={17}>
+                        <Grid.Column width={3}>
                             <ActionChain
                                 onUpdateName={this.onUpdateName}
                                 onUpdateStartUrl={this.onUpdateStartUrl}
+                                onToolbarValChange={this.onToolbarValChange}
                                 onPositionChange={this.onPositionChange}
                                 onActionFocus={this.onActionFocus} 
-                                name={this.state.name} 
+                                actionChainName={this.state.actionChainName} 
                                 startUrl={this.state.startUrl}
                                 actions={this.state.actions}
                                 selected={this.state.selected}
                             />
                         </Grid.Column> 
-                        <Grid.Column width={12}>
+                        <Grid.Column width={13}>
                             <SourceViewer
                                 position={this.state.currentPosition}
                                 actionChainName={this.props.actionChainName}
@@ -138,7 +148,7 @@ class SampleViewer extends Component {
                             />
                         </Grid.Column>
                     </Grid.Row>
-                 
+
                 </Grid>
              );
          }

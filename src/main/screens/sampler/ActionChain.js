@@ -85,7 +85,7 @@ class ActionChainsToolBar extends Component
         super(props)
         this.state = {
             startUrl: props.startUrl,
-            name: props.name,
+            actionChainName: props.actionChainName,
             isRepeating: props.isRepeating
         }
     }
@@ -94,7 +94,7 @@ class ActionChainsToolBar extends Component
     {
         this.setState({
             startUrl: nextProps.startUrl,
-            name: nextProps.name,
+            actionChainName: nextProps.actionChainName,
             isRepeating: nextProps.isRepeating
         });
     }
@@ -105,22 +105,22 @@ class ActionChainsToolBar extends Component
 
     onSubmit = () =>
     {
-        this.props.onSubmitAction(this.state.name, this.state.startUrl, this.state.isRepeating);
+        this.props.onSubmitAction(this.state.actionChainName, this.state.startUrl, this.state.isRepeating);
     }
 
     render ()
     {
-        console.log(`rendering startUrl=${this.state.startUrl}, name=${this.state.name}, isRepeating=${this.state.isRepeating} `);
+        console.log(`rendering startUrl=${this.state.startUrl}, actionChainName=${this.state.actionChainName}, isRepeating=${this.state.isRepeating} `);
         return (<div>
             <ButtonGroup vertical>
                 <Button size='tiny' onClick={ () => {this.onSubmit()}}>SubmitChain</Button>
                 <Button size='tiny' onClick={ () => {this.onNewAction()}}>NewAction</Button>
-                <Button size='tiny' onClick={ () => this.props.reloadSampleUrl() }>RefreshSample</Button>
+                <Button size='tiny' onClick={ () => this.props.reloadSampleUrl(this.state.actionChainName) }>RefreshSample</Button>
             </ButtonGroup>
             <InputGroup >
-                <Input onChange={(e, {target}) => {this.props.onUpdateName(e.target.value)}} placeholder='Name' value={this.state.name}/>
-                <Input onChange={(e, {target}) => {this.props.onUpdateStartUrl(e.target.value)}} placeholder='StartUrl' value={this.state.startUrl}/>
-                <Input type='checkbox' label='isRepeating' placeholder='isRepeating' value={this.state.isRepeating}/>
+                <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'actionChainName')}} placeholder='Name' value={this.state.actionChainName}/>
+                <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'startUrl')}} placeholder='StartUrl' value={this.state.startUrl}/>
+                <Input type='checkbox' label='isRepeating' onChange={(e) => {this.props.onToolbarValChange(e.target.checked, 'isRepeating')}} placeholder='isRepeating' checked={this.state.isRepeating}/>
             </InputGroup>
         </div>);
     }
@@ -135,7 +135,7 @@ class ActionChain extends Component
             actions: props.actions,
             startUrl: props.startUrl,
             isRepeating: props.isRepeating,
-            name: props.name,
+            actionChainName: props.actionChainName,
             currentPosition: 0
         }
     }
@@ -146,7 +146,7 @@ class ActionChain extends Component
             actions: nextProps.actions,
             startUrl: nextProps.startUrl,
             isRepeating: nextProps.isRepeating,
-            name: nextProps.name
+            actionChainName: nextProps.actionChainName
         });
     }
 
@@ -154,8 +154,8 @@ class ActionChain extends Component
         this.setState( prevState => {
             if (prevState.currentPosition == oldIndex)
             {
-                 prevState.currentPosition = newIndex;
-                 this.props.onPositionChange(newIndex);
+                prevState.currentPosition = newIndex;
+                this.props.onPositionChange(newIndex);
             }
             prevState.actions = arrayMove(prevState.actions, oldIndex, newIndex);
             return prevState;
@@ -169,7 +169,7 @@ class ActionChain extends Component
             return {actions: prevState.actions};
         });
     }
-    
+
     onActionFocus = (actionParams, index) =>
     {
         this.setState({currentPosition: index}, this.props.onActionFocus(actionParams, index));
@@ -179,19 +179,19 @@ class ActionChain extends Component
         //var counter = 0;
         console.log(`returning actionlist of length ${actions.length}`);
         const Node = SortableElement(({value}) => <ActionRepresentation 
-                            onDelete={this.onDelete} 
-                            onSelection={this.onActionFocus} 
-                            actionParams={value.value} 
-                            index={value.index}/>);
-                    
-      return (
-        <ul>
-          {actions.map((value, index) => { 
-              const actionRepresentation = {value: value, index: index};
-              return <Node index={index} key={value.css} value={actionRepresentation}/> 
-          })}
-        </ul>
-      );
+            onDelete={this.onDelete} 
+            onSelection={this.onActionFocus} 
+            actionParams={value.value} 
+            index={value.index}/>);
+
+        return (
+            <ul>
+            {actions.map((value, index) => { 
+                const actionRepresentation = {value: value, index: index};
+                return <Node index={index} key={value.css} value={actionRepresentation}/> 
+            })}
+            </ul>
+        );
     });
 
     getActionParams = () =>
@@ -201,7 +201,7 @@ class ActionChain extends Component
             const {actionChainParams}  = this.props;
             const chain = this.loadParams(actionChainParams);
             const params = {
-                name: chain.name,
+                actionChainName: chain.name,
                 actions: chain.actions,
                 startUrl: chain.startUrl
             }
@@ -212,7 +212,7 @@ class ActionChain extends Component
             const {newActionchain}  = this.props;
             const chain = this.loadParams(newActionchain);
             const params = {
-                name: chain.name,
+                actionChainName: chain.name,
                 actions: chain.actions,
                 startUrl: chain.startUrl
             }
@@ -232,13 +232,13 @@ class ActionChain extends Component
         }
     }
 
-    onSubmitActionChain = (name, url, isRepeating) =>
+    onSubmitActionChain = (actionChainName, url, isRepeating) =>
     {
         const payload = {
             startUrl: url,
             isRepeating: isRepeating,
             actions: this.state.actions,
-            name: name
+            name: actionChainName
         }
         this.props.submitActionChain(payload);
     }
@@ -250,17 +250,27 @@ class ActionChain extends Component
             startUrl: url
         })
     }
-    onUpdateName = (name) =>
+    onUpdateName = (actionChainName) =>
     {
-        this.props.onUpdateName(name);
+        this.props.onUpdateName(actionChainName);
         this.setState({
-            name: name 
+            actionChainName: actionChainName 
+        });
+    }
+
+    onToolbarValChange = (val, key) =>
+    {
+        this.props.onToolbarValChange(val, key);
+        this.setState(prevState => {
+            prevState[key] = val;
+            return prevState;
         });
     }
 
     newAction = () =>
     {
         const action = JSON.parse(JSON.stringify(EMPTY_ACTION));
+        console.log(`#### ActionType=${action.actionType}`);
         return action;
     }
 
@@ -276,17 +286,18 @@ class ActionChain extends Component
     {
         // TODO: ActionChain tool bar
         // TODO: render a list of actions
-        console.log(`rendering actionchain actions.length=${this.props.actions.length} name=${this.props.name} startUrl=${this.props.startUrl}`);
+        console.log(`rendering actionchain actions.length=${this.props.actions.length} actionChainName=${this.props.actionChainName} startUrl=${this.props.startUrl}`);
         return (
             <div>
                 <ActionChainsToolBar 
                     reloadSampleUrl={this.props.reloadSampleUrl}
-                    name={this.state.name}
+                    actionChainName={this.state.actionChainName}
                     startUrl={this.state.startUrl}
                     isRepeating={this.state.isRepeating}
                     onNewAction={this.onNewAction}
                     onSubmitAction={this.onSubmitActionChain}
                     onUpdateName={this.props.onUpdateName}
+                    onToolbarValChange={this.props.onToolbarValChange}
                     onUpdateStartUrl={this.state.onUpdateStartUrl}
                 />
                 <this.Chain actions={this.state.actions} onSortEnd={this.onSortEnd}/> 
@@ -302,8 +313,8 @@ export default connect(props => ({
             body: JSON.stringify(payload) 
         }
     }),
-    reloadSampleUrl : () => ({
+    reloadSampleUrl : (name) => ({
         reloadSample: {
-        url: `/samplepages/requestSamplePages/${props.name}`
+        url: `/samplepages/requestSamplePages/${name}`
     }})
 }))(ActionChain)

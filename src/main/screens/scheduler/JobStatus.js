@@ -13,6 +13,10 @@ class JobStatus extends Component {
                 accessor: "job_name"
             },
             {
+                Header: "Job ID",
+                accessor: "job_id"
+            },
+            {
                 Header: "Next Run",
                 accessor: "next_run"
             },
@@ -28,6 +32,7 @@ class JobStatus extends Component {
         } else if (data.rejected) {
             return <div>Error</div>
         } else if (data.fulfilled) {
+            // TODO Complete job table with drop down results on clicking row
             return (
                 <ReactTable
                     style={{width: "100%"}}

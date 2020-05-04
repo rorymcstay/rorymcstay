@@ -190,6 +190,19 @@ class ActionViewer extends Component
                                                          value={value}
                                                          values={possibleValues.value[name]} />);
             }
+            let difference = mandatoryParams.value.filter(x => !Object.keys(this.props.actionParameters).includes(x));
+            for (var mand in difference)
+            {
+                const name = difference[mand];
+                const freeForm = true ? (name === 'css' || name ==='xpath' || name === 'text') : false;
+                actionParams.push(<ActionViewerParameter name={name}
+                                                         selectorTriggered={this.props.selectorTriggered}
+                                                         key={name}
+                                                         onChange={this.onActionParameterChange}
+                                                         freeForm={freeForm}
+                                                         value={''}
+                                                         values={possibleValues.value[name]} />);
+            }
         }
         else
         {

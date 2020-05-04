@@ -71,6 +71,6 @@ class SourceViewer extends Component {
 
 export default connect(props => ({
     sourcesReady: {
-        url: `/samplepages/getSourceStatus/${props.actionChainName}`, refreshInterval: 60000
+        url: `/samplepages/getSourceStatus/${props.actionChainName}`
     }
 }))(SourceViewer);
