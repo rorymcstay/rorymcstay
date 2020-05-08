@@ -64,12 +64,18 @@ class App extends Component {
                                 activeKey={this.state.key}
                                 onSelect={key => this.setState({key})}
                             >
-                                <Tab eventKey="viewer" title="Viewer">
+                                <Tab eventKey="sampling" title="ChainEditor">
+                                    <SamplerViewer 
+                                        actionChainName={this.state.actionChainName}
+                                    />
+                                </Tab>
+                                <Tab eventKey="viewer" title="CaptureViewer">
                                     <Viewer 
                                         actionChainName={this.state.actionChainName} 
                                         updateTableName={this.onTableChange}
                                     />
                                 </Tab>
+                                {/*
                                 <Tab eventKey="parametermanager" title="Parameter Manager">
                                     <ParameterManager 
                                         actionChainName={this.state.actionChainName} 
@@ -77,7 +83,8 @@ class App extends Component {
                                         onParameterChange={this.onParameterChange}
                                     />
                                 </Tab>
-                                <Tab eventKey="scheduler" title="Scheduler">
+                                */}
+                                <Tab eventKey="scheduler" title="ChainScheduler">
                                     <Scheduler 
                                         actionChainName={this.state.actionChainName}
                                     />
@@ -90,11 +97,7 @@ class App extends Component {
                                 />
                                 </Tab>
                                 */}
-                                <Tab eventKey="sampling" title="Sampling">
-                                    <SamplerViewer 
-                                        actionChainName={this.state.actionChainName}
-                                    />
-                                </Tab>
+
                             </Tabs>
                         </Grid.Column>
                     </Grid.Row>
