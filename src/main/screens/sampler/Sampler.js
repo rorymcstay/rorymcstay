@@ -136,6 +136,7 @@ class SampleViewer extends Component {
                                 onActionFocus={this.onActionFocus} 
                                 actionChainName={this.state.actionChainName} 
                                 startUrl={this.state.startUrl}
+                                isRepeating={this.state.isRepeating}
                                 actions={this.state.actions}
                                 selected={this.state.selected}
                             />
