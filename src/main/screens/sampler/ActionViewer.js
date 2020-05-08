@@ -4,7 +4,7 @@ import "react-table/react-table.css";
 import ReactLoading from "react-loading";
 import { Dropdown,  Button } from 'semantic-ui-react';
 
-import  {Input} from 'semantic-ui-react';
+import  {Input, Checkbox} from 'semantic-ui-react';
 
 class ActionViewerParameter extends Component
 {
@@ -36,7 +36,7 @@ class ActionViewerParameter extends Component
             name: nextProps.name,
             value: value,
             values: (nextProps.values === undefined) ? [] : nextProps.values,
-            freeForm: (nextProps.values === undefined) ? true : false,
+            //freeForm: (nextProps.values === undefined) ? true : false,
          });
     }
 
@@ -73,6 +73,23 @@ class ActionViewerParameter extends Component
 
     render()
     {
+        console.log(`ActionViewerParameter::render(): name=[${this.state.name}], value=[${this.state.value}], freeForm=[${this.state.freeForm}]`)
+        if (this.state.name == 'isSingle')
+        {
+            return (
+                <div>
+                    <Checkbox  
+                        label='isSingle'
+                        size='tiny'
+                        key={this.state.key}
+                        disabled={!this.state.inFocus}
+                        onChange={() => { this.props.onChange(this.state.key, !this.state.value) }}
+                        placeholder='isSingle'
+                        checked={this.state.value}/>
+                    <Button size='mini' onClick={this.onClick}>Edit</Button>
+                </div>
+            );
+        }
         if (this.state.freeForm)
         {
             return (
@@ -90,6 +107,7 @@ class ActionViewerParameter extends Component
                 </div>
             );
         } else {
+            console.log(`rendering non free form name=[${this.state.name}]`)
             return (
                 <div>
                     <Dropdown
@@ -181,7 +199,8 @@ class ActionViewer extends Component
                 {
                     continue;
                 }
-                const freeForm = true ? (name === 'css' || name ==='xpath' || name === 'text') : false;
+                const freeForm = (name === 'css' || name ==='xpath' || name === 'text' || name === 'inputString') ? true : false;
+                console.log(`ActionViewer::render(): name=[${name}], freeForm=[${freeForm}], value=[${value}]`)
                 actionParams.push(<ActionViewerParameter name={name}
                                                          selectorTriggered={this.props.selectorTriggered}
                                                          key={name}
@@ -194,7 +213,8 @@ class ActionViewer extends Component
             for (var mand in difference)
             {
                 const name = difference[mand];
-                const freeForm = true ? (name === 'css' || name ==='xpath' || name === 'text') : false;
+                const freeForm = (name === 'css' || name ==='xpath' || name === 'text' || name === 'inputString') ? true : false;
+                console.log(`ActionViewer::render(): Missing mandatory param: name=[${name}], freeForm=[${freeForm}]`)
                 actionParams.push(<ActionViewerParameter name={name}
                                                          selectorTriggered={this.props.selectorTriggered}
                                                          key={name}

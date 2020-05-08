@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import connect from '../../../api-connector';
 import ReactLoading from "react-loading";
-import { Input, Button, ButtonGroup} from 'semantic-ui-react';
+import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
 import { Card, InputGroup } from 'react-bootstrap';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
@@ -120,7 +120,7 @@ class ActionChainsToolBar extends Component
             <InputGroup >
                 <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'actionChainName')}} placeholder='Name' value={this.state.actionChainName}/>
                 <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'startUrl')}} placeholder='StartUrl' value={this.state.startUrl}/>
-                <Input type='checkbox' label='isRepeating' onChange={(e) => {this.props.onToolbarValChange(e.target.checked, 'isRepeating')}} placeholder='isRepeating' checked={this.state.isRepeating}/>
+                <Checkbox label='isRepeating' onChange={(e) => {this.props.onToolbarValChange(!this.state.isRepeating, 'isRepeating')}} placeholder='isRepeating' checked={this.state.isRepeating}/>
             </InputGroup>
         </div>);
     }
@@ -297,7 +297,7 @@ class ActionChain extends Component
                     onNewAction={this.onNewAction}
                     onSubmitAction={this.onSubmitActionChain}
                     onUpdateName={this.props.onUpdateName}
-                    onToolbarValChange={this.props.onToolbarValChange}
+                    onToolbarValChange={this.onToolbarValChange}
                     onUpdateStartUrl={this.state.onUpdateStartUrl}
                 />
                 <this.Chain actions={this.state.actions} onSortEnd={this.onSortEnd}/> 
