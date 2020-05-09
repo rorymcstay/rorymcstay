@@ -168,7 +168,16 @@ class ActionViewer extends Component
 
     onSubmit = (actionParams) =>
     {
-        this.props.saveAction(actionParams);
+        // filter the actionParams so that only parameters which are in the manadory
+        // params list are submitted.
+        const minimalParams = Object.keys(actionParams).filter(
+                                key => this.props.mandatoryParams.value
+                                    .includes(key))
+                                    .reduce((obj, key) => {
+                                        obj[key] = raw[key];
+                                        return objl
+                                    }, {}); 
+        this.props.saveAction(minimalParams);
     }
 
     render()
