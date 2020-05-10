@@ -5,7 +5,7 @@ import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
 import { Card, InputGroup } from 'react-bootstrap';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
-
+import { useAlert } from 'react-alert'; 
 // router integration
 import {withRouter} from 'react-router-dom';
 import queryString from 'query-string';
@@ -147,12 +147,16 @@ class ActionChain extends Component
 
     componentWillReceiveProps(nextProps)
     {
-        this.setState({
-            actions: nextProps.actions,
-            startUrl: nextProps.startUrl,
-            isRepeating: nextProps.isRepeating,
-            actionChainName: nextProps.actionChainName
-        });
+        if (!this.state.loaded)
+        {
+            this.setState({
+                loaded: true,
+                actions: nextProps.actions,
+                startUrl: nextProps.startUrl,
+                isRepeating: nextProps.isRepeating,
+                actionChainName: nextProps.actionChainName
+            });
+        }
     }
 
     updateCurrentUrlParams = (value) =>
@@ -247,15 +251,18 @@ class ActionChain extends Component
         }
     }
 
+
     onSubmitActionChain = (actionChainName, url, isRepeating) =>
     {
         const payload = {
+            saved: true,
             startUrl: url,
             isRepeating: isRepeating,
             actions: this.state.actions,
             name: actionChainName
         }
         this.props.submitActionChain(payload);
+        this.setState({saved: true, notified: false});
     }
 
     onUpdateStartUrl = (url) =>
@@ -297,11 +304,43 @@ class ActionChain extends Component
         });
     }
 
+    submissionInfo = () =>
+    {
+        const {submitAction} = this.props;
+        if (!this.state.saved)
+        {
+        }
+        else 
+        {
+            if (submitAction.pending)
+            {
+                this.setState({loading: true});
+            }
+            else if (!this.state.notified && submitAction.rejected)
+            {
+                this.props.alert.show(`Failed to communicate with Actions manager`);
+                this.setState({notified: true});
+            } 
+            else
+            {
+                if (!this.state.notified && !submitAction.value.valid)
+                {
+                    this.props.alert.show(`Invalid Chain: ${submitAction.value.reason}`);
+                    this.setState({notified: true});
+                }
+            }
+        }
+    }
+
     render ()
     {
         // TODO: ActionChain tool bar
         // TODO: render a list of actions
         console.log(`rendering actionchain actions.length=${this.props.actions.length} actionChainName=${this.props.actionChainName} startUrl=${this.props.startUrl}`);
+        const {submitAction} = this.props;
+        this.submissionInfo()
+
+
         return (
             <div>
                 <ActionChainsToolBar 

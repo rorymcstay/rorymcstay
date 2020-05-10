@@ -30,9 +30,10 @@ class SampleViewer extends Component {
     componentWillReceiveProps(props)
     {
         window.addEventListener("message", this.receiveMessage, false);
-        if (props.actionChainParams.fulfilled)
+        if (!this.state.loaded && props.actionChainParams.fulfilled)
         {
             this.setState({
+                loaded: true,
                 startUrl: props.actionChainParams.value.startUrl,
                 actionChainName: props.actionChainParams.value.name,
                 isRepeating: props.actionChainParams.value.isRepeating,
@@ -133,6 +134,7 @@ class SampleViewer extends Component {
                     <Grid.Row width={17}>
                         <Grid.Column width={3}>
                             <ActionChain
+                                alert={this.props.alert}
                                 onUpdateName={this.onUpdateName}
                                 onUpdateStartUrl={this.onUpdateStartUrl}
                                 onToolbarValChange={this.onToolbarValChange}

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import {withAlert} from 'react-alert';
 import 'semantic-ui-css/semantic.min.css'
 
 // layout
@@ -71,6 +72,7 @@ class App extends Component {
                 />
                     <Route path={`/chain-viewer`}>
                         <SamplerViewer
+                            alert={this.props.alert}
                             actionChainName={this.state.actionChainName}
                         />
                     </Route>
@@ -124,4 +126,4 @@ class App extends Component {
     }
 }
 
-export default withRouter(App);
+export default withAlert()(withRouter(App));
