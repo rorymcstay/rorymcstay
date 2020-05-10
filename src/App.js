@@ -54,7 +54,13 @@ class App extends Component {
     }
 
     onActionChainChange = (value) => {
+        // update the url params
+        const oldParams = queryString.parse(this.props.location.search);
+        oldParams.chain = value;
+        const newUrlParams = queryString.stringify(oldParams);
+        console.log(`newUrlParams=[${newUrlParams}]`);
         this.setState( { actionChainName: value} );
+        this.props.history.push({pathname: this.props.location.pathname, search: `${newUrlParams}`});
     }
 
     renderLinkedTabs = () => {
@@ -67,20 +73,20 @@ class App extends Component {
                 <Route
                   exact
                   path='/'
-                  render={() => <Redirect replace to={`/chain-viewer/*`} />}
+                  render={() => <Redirect replace to={`/chain-viewer`} />}
                 />
-                    <Route path={`/chain-viewer/*`}>
-                        <SamplerViewer 
+                    <Route path={`/chain-viewer`}>
+                        <SamplerViewer
                             actionChainName={this.state.actionChainName}
                         />
                     </Route>
-                    <Route path={`/capture-viewer/*`}>
+                    <Route path={`/capture-viewer`}>
                         <Viewer 
                             actionChainName={this.state.actionChainName} 
                             updateTableName={this.onTableChange}
                         />
                     </Route>
-                    <Route path={`/chain-scheduler/*`}>
+                    <Route path={`/chain-scheduler`}>
                         <Scheduler 
                             actionChainName={this.state.actionChainName}
                         />

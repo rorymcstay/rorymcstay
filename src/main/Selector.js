@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
 import ReactLoading from 'react-loading';
 import connect from "../api-connector";
-import {Dropdown, Grid} from "semantic-ui-react";
 
+
+// router integration
+import {Link, withRouter } from "react-router-dom";
+import queryString from 'query-string';
+
+// ui-componets
 import {ButtonToolbar, Button, FormControl } from "react-bootstrap";
+import {Dropdown, Grid} from "semantic-ui-react";
 
 class Selector extends Component {
 
@@ -17,7 +23,8 @@ class Selector extends Component {
     }
 
     onActionChainChange = (e, {value}) => {
-        this.setState({actionChainName: value}, this.props.onActionChainChange(value));
+        this.props.onActionChainChange(value);
+        this.setState({actionChainName: value});
     }
     
     getMenuOptions( req )
@@ -73,4 +80,4 @@ export default connect(props => ({
     actionChains: {
         url: `/actionsmanager/getActionChains/`
     }
-}))(Selector)
+}))(withRouter(Selector))
