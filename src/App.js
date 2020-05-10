@@ -8,10 +8,11 @@ import Tabs from "react-bootstrap/Tabs";
 import {Grid, Container} from "semantic-ui-react";
 
 // routing 
-import { Route, Switch, Redirect, Link } from "react-router-dom";
+import { Route, Switch, Redirect, Link, withRouter } from "react-router-dom";
 // https://github.com/chacestew/react-router-tabs
 import { RoutedTabs, NavTab } from "react-router-tabs";
 import "react-router-tabs/styles/react-router-tabs.css";
+import queryString from 'query-string';
 
 // Navigation
 import Selector from "./main/Selector";
@@ -25,13 +26,15 @@ import Viewer from "./main/screens/viewer/Viewer";
 import SamplerViewer from "./main/screens/sampler/Sampler"
 
 
+
 class App extends Component {
 
     constructor(props) {
         super(props);
+        console.log(props);
+        const params = queryString.parse(props.location.search);
         this.state = {
-            actionChainName: 'GoogleSearch',
-            selectedTab: 'chain-viewer',
+            actionChainName: params.chain,
             parameterType: "leader",
             tableName: undefined,
             domain: undefined
@@ -57,27 +60,27 @@ class App extends Component {
     renderLinkedTabs = () => {
 
         return (<div> 
-            <NavTab to={`/chain-viewer/${this.state.actionChainName}`}>Chain-Viewer</NavTab>
-            <NavTab to={`/capture-viewer/${this.state.actionChainName}`}>Capture-Viewer</NavTab>
-            <NavTab to={`/chain-scheduler/${this.state.actionChainName}`}>Chain-Scheduler</NavTab>
+            <NavTab to={`/chain-viewer/?chain=${this.state.actionChainName}`}>Chain-Viewer</NavTab>
+            <NavTab to={`/capture-viewer/?chain=${this.state.actionChainName}`}>Capture-Viewer</NavTab>
+            <NavTab to={`/chain-scheduler/?chain=${this.state.actionChainName}`}>Chain-Scheduler</NavTab>
             <Switch>
                 <Route
                   exact
                   path='/'
-                  render={() => <Redirect replace to={`/chain-viewer/${this.state.actionChainName}`} />}
+                  render={() => <Redirect replace to={`/chain-viewer/*`} />}
                 />
-                    <Route path={`/chain-viewer/${this.state.actionChainName}`}>
+                    <Route path={`/chain-viewer/*`}>
                         <SamplerViewer 
                             actionChainName={this.state.actionChainName}
                         />
                     </Route>
-                    <Route path={`/capture-viewer/${this.state.actionChainName}`}>
+                    <Route path={`/capture-viewer/*`}>
                         <Viewer 
                             actionChainName={this.state.actionChainName} 
                             updateTableName={this.onTableChange}
                         />
                     </Route>
-                    <Route path={`/chain-scheduler/${this.state.actionChainName}`}>
+                    <Route path={`/chain-scheduler/*`}>
                         <Scheduler 
                             actionChainName={this.state.actionChainName}
                         />
@@ -121,4 +124,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default withRouter(App);

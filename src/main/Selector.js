@@ -11,7 +11,7 @@ class Selector extends Component {
         super(props);
 
         this.state = {
-            actionChain: props.actionChainName,
+            actionChainName: props.actionChainName,
             started: false
         }
     }
@@ -52,6 +52,7 @@ class Selector extends Component {
                             search
                             selection
                             onChange={this.onActionChainChange}
+                            value={this.state.actionChainName}
                             options={actionChainMenuOptions}
                         />
                     </Grid.Column>
