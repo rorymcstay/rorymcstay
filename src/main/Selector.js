@@ -24,6 +24,7 @@ class Selector extends Component {
 
     onActionChainChange = (e, {value}) => {
         this.props.onActionChainChange(value);
+        this.updateCurrentUrlParams(value);
         this.setState({actionChainName: value});
     }
     
@@ -38,6 +39,15 @@ class Selector extends Component {
             });
         }
         return menuOptions;
+    }
+
+    updateCurrentUrlParams = (value) =>
+    {
+        const oldParams = queryString.parse(this.props.location.search);
+        oldParams.chain = value;
+        const newUrlParams = queryString.stringify(oldParams);
+        console.log(`newUrlParams=[${newUrlParams}]`);
+        this.props.history.push({pathname: this.props.location.pathname, search: `${newUrlParams}`});
     }
 
     render() {

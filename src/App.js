@@ -54,13 +54,7 @@ class App extends Component {
     }
 
     onActionChainChange = (value) => {
-        // update the url params
-        const oldParams = queryString.parse(this.props.location.search);
-        oldParams.chain = value;
-        const newUrlParams = queryString.stringify(oldParams);
-        console.log(`newUrlParams=[${newUrlParams}]`);
         this.setState( { actionChainName: value} );
-        this.props.history.push({pathname: this.props.location.pathname, search: `${newUrlParams}`});
     }
 
     renderLinkedTabs = () => {

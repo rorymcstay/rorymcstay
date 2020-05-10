@@ -6,6 +6,11 @@ import { Card, InputGroup } from 'react-bootstrap';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
+// router integration
+import {withRouter} from 'react-router-dom';
+import queryString from 'query-string';
+
+
 const EMPTY_ACTION = {
     actionType: 'CaptureAction',
     isSingle: false,
@@ -150,6 +155,15 @@ class ActionChain extends Component
         });
     }
 
+    updateCurrentUrlParams = (value) =>
+    {
+        const oldParams = queryString.parse(this.props.location.search);
+        oldParams.position= value;
+        const newUrlParams = queryString.stringify(oldParams);
+        console.log(`newUrlParams=[${newUrlParams}]`);
+        this.props.history.push({pathname: this.props.location.pathname, search: `${newUrlParams}`});
+    }
+
     onSortEnd = ({oldIndex, newIndex}) => {
         this.setState( prevState => {
             if (prevState.currentPosition == oldIndex)
@@ -173,6 +187,7 @@ class ActionChain extends Component
     onActionFocus = (actionParams, index) =>
     {
         this.setState({currentPosition: index}, this.props.onActionFocus(actionParams, index));
+        this.updateCurrentUrlParams(index);
     }
 
     Chain = SortableContainer(({actions}) => {
@@ -317,4 +332,4 @@ export default connect(props => ({
         reloadSample: {
         url: `/samplepages/requestSamplePages/${name}`
     }})
-}))(ActionChain)
+}))(withRouter(ActionChain))
