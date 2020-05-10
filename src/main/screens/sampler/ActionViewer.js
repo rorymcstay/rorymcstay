@@ -174,8 +174,8 @@ class ActionViewer extends Component
                                 key => this.props.mandatoryParams.value
                                     .includes(key))
                                     .reduce((obj, key) => {
-                                        obj[key] = raw[key];
-                                        return objl
+                                        obj[key] = actionParams[key];
+                                        return obj
                                     }, {}); 
         this.props.saveAction(minimalParams);
     }
