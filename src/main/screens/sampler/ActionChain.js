@@ -139,6 +139,7 @@ class ActionChain extends Component
         this.state = {
             actions: props.actions,
             startUrl: props.startUrl,
+            notified: false,
             isRepeating: props.isRepeating,
             actionChainName: props.actionChainName,
             currentPosition: 0
@@ -304,17 +305,17 @@ class ActionChain extends Component
         });
     }
 
-    submissionInfo = () =>
+
+    submissionInfo = (submitAction) =>
     {
-        const {submitAction} = this.props;
-        if (!this.state.saved)
+        if (submitAction === undefined)
         {
         }
         else 
         {
             if (submitAction.pending)
             {
-                this.setState({loading: true});
+                //this.setState({loading: true});
             }
             else if (!this.state.notified && submitAction.rejected)
             {
@@ -328,6 +329,14 @@ class ActionChain extends Component
                     this.props.alert.show(`Invalid Chain: ${submitAction.value.reason}`);
                     this.setState({notified: true});
                 }
+                else if (!this.state.notified)
+                {
+                    this.props.alert.show(`Success: ${submitAction.value.message}`);
+                    this.setState({notified: true});
+                }
+                else
+                {}
+                
             }
         }
     }
@@ -337,8 +346,9 @@ class ActionChain extends Component
         // TODO: ActionChain tool bar
         // TODO: render a list of actions
         console.log(`rendering actionchain actions.length=${this.props.actions.length} actionChainName=${this.props.actionChainName} startUrl=${this.props.startUrl}`);
-        const {submitAction} = this.props;
-        this.submissionInfo()
+        const {submitAction, reloadSample} = this.props;
+        this.submissionInfo(submitAction);
+        this.submissionInfo(reloadSample);
 
 
         return (

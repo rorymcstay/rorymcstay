@@ -50,6 +50,40 @@ class Scheduler extends Component {
         })
     };
 
+    submissionInfo = () =>
+    {
+        const {addJobResponse} = this.props;
+        if (!this.state.saved)
+        {
+        }
+        else 
+        {
+            if (addJobResponse.pending)
+            {
+            }
+            else if (!this.state.notified && addJobResponse.rejected)
+            {
+                this.props.alert.show(`Failed to communicate with schedule manager`);
+                this.setState({notified: true});
+            } 
+            else if (!this.state.notified)
+            {   
+                if (!addJobResponse.value.valid)
+                {
+                    this.props.alert.show(`Invalid schedule request: ${addJobResponse.value.reason}`);
+                    this.setState({notified: true});
+                }
+                {
+                    this.props.alert.show(`Succesfully scheduled ${this.state.actionChainName} for ${addJobResponse.value.message}`);
+                    this.setState({notified: true});
+                }
+            }
+            else
+            {}
+        }
+    }
+
+
     onClick = () => {
         const job = {
             url: this.state.url,
@@ -63,6 +97,7 @@ class Scheduler extends Component {
             {
                 actionChainName: this.props.actionChainName,
                 url: "",
+                saved: true,
                 trigger: "",
                 increment: "",
                 increment_size: 0,
@@ -112,6 +147,7 @@ class Scheduler extends Component {
                 value: "hours"
             }
         ];
+        this.submissionInfo();
         return (
             <Grid  >
                 <Grid.Row width='100%' columns={4}>
@@ -161,7 +197,8 @@ class Scheduler extends Component {
 
 export default connect(props => ({
     addJob: (scheduledJob) => ({
-        data: {
+        addJobResponse: {
+            // TODO should have this enddpoint without route name
             url: `/schedulemanager/scheduleActionChain/leader-route/${props.actionChainName}`,
             body: JSON.stringify(scheduledJob),
             method: 'PUT'

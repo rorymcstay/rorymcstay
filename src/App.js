@@ -78,12 +78,14 @@ class App extends Component {
                     </Route>
                     <Route path={`/capture-viewer`}>
                         <Viewer 
+                            alert={this.props.alert}
                             actionChainName={this.state.actionChainName} 
                             updateTableName={this.onTableChange}
                         />
                     </Route>
                     <Route path={`/chain-scheduler`}>
                         <Scheduler 
+                            alert={this.props.alert}
                             actionChainName={this.state.actionChainName}
                         />
                     </Route>

@@ -31,6 +31,7 @@ class DataViewer extends Component {
 
     onUploadMapping = () =>
     {
+        this.setState({saved: true});
         const payload = {
             tableName: this.props.tableName,
             mapping: this.state.mapping 
@@ -38,7 +39,42 @@ class DataViewer extends Component {
         this.props.uploadMapping(payload);
     }
 
+
+    submissionInfo = () =>
+    {
+        const {uploadMappingResponse} = this.props;
+        if (!this.state.saved)
+        {
+        }
+        else 
+        {
+            if (uploadMappingResponse.pending)
+            {
+            }
+            else if (!this.state.notified && uploadMappingResponse.rejected)
+            {
+                this.props.alert.show(`Failed to communicate with manager`);
+                this.setState({notified: true});
+            } 
+            else if (!this.state.notified)
+            {   
+                if (!uploadMappingResponse.value.valid)
+                {
+                    this.props.alert.show(`Invalid mapping: ${uploadMappingResponse.value.reason}`);
+                    this.setState({notified: true});
+                }
+                {
+                    this.props.alert.show(`Succes: ${uploadMappingResponse.value.message}`);
+                    this.setState({notified: true});
+                }
+            }
+            else
+            {}
+        }
+    }
+
     render() {
+        this.submissionInfo()
         if (!this.props.triggered) {
             return <div>Enter query and go</div>
         }
@@ -150,7 +186,7 @@ export default connect(props => ({
         url: `/tablemanager/getMappingValue/map/${props.actionChainName}`
     },
     uploadMapping: (payload) => ({
-        uploadParamResponse: {
+        uploadMappingResponse: {
             url: `/tablemanager/uploadMapping/${props.actionChainName}`,
             body: JSON.stringify(payload),
             method: 'PUT'
