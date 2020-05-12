@@ -120,7 +120,7 @@ class ActionChainsToolBar extends Component
             <ButtonGroup vertical>
                 <Button size='tiny' onClick={ () => {this.onSubmit()}}>SubmitChain</Button>
                 <Button size='tiny' onClick={ () => {this.onNewAction()}}>NewAction</Button>
-                <Button size='tiny' onClick={ () => this.props.reloadSampleUrl(this.state.actionChainName) }>RefreshSample</Button>
+                <Button size='tiny' onClick={ () => this.props.reloadSampleUrl(this.props.actionChainName) }>RefreshSample</Button>
                 <Button size='tiny' onClick={this.props.reloadSource}>Reload</Button>
             </ButtonGroup>
             <InputGroup >
