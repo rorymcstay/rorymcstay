@@ -22,7 +22,9 @@ class SampleViewer extends Component {
             selectorTriggered: false,
             startUrl: undefined,
             currentAction: {},
-            currentPosition: 0
+            currentPosition: 0,
+            // for refresh of iframe
+            random: 0
         };
 
     }
@@ -64,6 +66,10 @@ class SampleViewer extends Component {
                 return {currentAction: prevState.currentAction, selectorTriggered: true}
             });
         }
+    }
+
+    reloadSource = () => {
+        this.setState({random: this.state.random + 1});
     }
 
     onActionChainChange = ({e}, value) =>
@@ -138,6 +144,7 @@ class SampleViewer extends Component {
                                 onUpdateName={this.onUpdateName}
                                 onUpdateStartUrl={this.onUpdateStartUrl}
                                 onToolbarValChange={this.onToolbarValChange}
+                                reloadSource={this.reloadSource}
                                 onPositionChange={this.onPositionChange}
                                 onActionFocus={this.onActionFocus} 
                                 actionChainName={this.state.actionChainName} 
@@ -150,6 +157,7 @@ class SampleViewer extends Component {
                         <Grid.Column width={13}>
                             <SourceViewer
                                 position={this.state.currentPosition}
+                                random={this.state.random}
                                 actionChainName={this.props.actionChainName}
                                 srcUrl={this.state.startUrl}
                             />

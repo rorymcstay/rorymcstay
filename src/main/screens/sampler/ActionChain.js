@@ -121,6 +121,7 @@ class ActionChainsToolBar extends Component
                 <Button size='tiny' onClick={ () => {this.onSubmit()}}>SubmitChain</Button>
                 <Button size='tiny' onClick={ () => {this.onNewAction()}}>NewAction</Button>
                 <Button size='tiny' onClick={ () => this.props.reloadSampleUrl(this.state.actionChainName) }>RefreshSample</Button>
+                <Button size='tiny' onClick={this.props.reloadSource}>Reload</Button>
             </ButtonGroup>
             <InputGroup >
                 <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'actionChainName')}} placeholder='Name' value={this.state.actionChainName}/>
@@ -145,6 +146,7 @@ class ActionChain extends Component
             currentPosition: 0
         }
     }
+
 
     componentWillReceiveProps(nextProps)
     {
@@ -359,6 +361,7 @@ class ActionChain extends Component
                     startUrl={this.state.startUrl}
                     isRepeating={this.state.isRepeating}
                     onNewAction={this.onNewAction}
+                    reloadSource={this.props.reloadSource}
                     onSubmitAction={this.onSubmitActionChain}
                     onUpdateName={this.props.onUpdateName}
                     onToolbarValChange={this.onToolbarValChange}

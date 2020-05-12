@@ -1,6 +1,8 @@
 import React, {Component} from "react";
+import { Grid } from 'semantic-ui-react';
 import Iframe from 'react-iframe';
 import ReactLoading from "react-loading";
+import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
 import connect from '../../../api-connector';
 
   
@@ -12,7 +14,8 @@ class SourceViewer extends Component {
         this.state = {
             chainName: props.actionChainName,
             srcUrl: props.srcUrl,
-            chainPosition: props.position
+            chainPosition: props.position,
+            random: 0
         }
     }
 
@@ -25,6 +28,7 @@ class SourceViewer extends Component {
         });
     }
 
+    
     getPreviousAvailableSource = (sourceStatus, initialPosition) =>
     {
         if (initialPosition - 1 <= 0) {
@@ -64,12 +68,17 @@ class SourceViewer extends Component {
              * https://www.npmjs.com/package/react-iframe
              */
             return (
+                <Grid>
+                <Grid.Row>
                     <Iframe
 
                         width="100%"
                         height="800px"
+                        key={this.props.random}
                         url={`/samplepages/getSamplePage/${this.props.actionChainName}/${displaying}`}
                     />
+                </Grid.Row>
+                </Grid>
             );
         }
     }
