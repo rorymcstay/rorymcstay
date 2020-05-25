@@ -9,6 +9,7 @@ import { useAlert } from 'react-alert';
 // router integration
 import {withRouter} from 'react-router-dom';
 import queryString from 'query-string';
+import ActionRepresentation from './ActionRepresentation'
 
 
 const EMPTY_ACTION = {
@@ -26,60 +27,6 @@ const EMPTY_CHAIN_PARAMS = {
     startUrl: undefined,
     name: undefined,
     isRepeating: true
-}
-
-class ActionRepresentation extends Component
-{
-    constructor(props)
-    {
-        console.log(`ActionRepresentation: ${props.actionParams.actionType}`);
-        super(props);
-        this.state = {
-            inFocus: false,
-            actionParams: props.actionParams,
-            index: props.index
-        }
-    }
-
-    componentWillReceiveProps(nextProps)
-    {
-        this.setState(prevState => {
-            prevState.actionParams = nextProps.actionParams;
-            prevState.index = nextProps.index;
-            return prevState;
-        });
-    }
-
-    onDelete = () =>
-    {
-        this.props.onDelete(this.state.index);
-    }
-
-    onClick = () =>
-    {
-        this.props.onSelection(this.state.actionParams, this.state.index);
-        this.setState((prevState, props) => ({inFocus: !prevState.inFocus}));
-    }
- 
-    disable = () =>
-    {
-        this.setState((prevState, props) => ({inFocus: false}));
-    }
-
-    render ()
-    {
-        console.log(`have action ${this.state.actionParams}`);
-        return (
-        <Card style={{ width: '12rem' }}>
-            <Card.Body >
-                <Card.Title>{this.props.actionParams.actionType}</Card.Title>
-                <ButtonGroup size="mini">
-                    <Button  onClick={this.onClick}>Focus</Button>
-                    <Button onClick={this.onDelete}>Delete</Button>
-                </ButtonGroup>
-            </Card.Body>
-        </Card>);
-    }
 }
 
 
@@ -191,9 +138,9 @@ class ActionChain extends Component
         });
     }
 
-    onActionFocus = (actionParams, index) =>
+    onActionFocus = (actionParams, index, errorReport) =>
     {
-        this.setState({currentPosition: index}, this.props.onActionFocus(actionParams, index));
+        this.setState({currentPosition: index}, this.props.onActionFocus(actionParams, index, errorReport));
         this.updateCurrentUrlParams(index);
     }
 
@@ -204,6 +151,7 @@ class ActionChain extends Component
             onDelete={this.onDelete} 
             onSelection={this.onActionFocus} 
             actionParams={value.value} 
+            actionChainName={this.state.actionChainName}
             index={value.index}/>);
 
         return (

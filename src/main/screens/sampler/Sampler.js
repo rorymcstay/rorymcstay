@@ -77,13 +77,13 @@ class SampleViewer extends Component {
         this.setState( {selected: true, actionChainName: value} );
     }
 
-    onActionFocus = (actionParams, position) => {
+    onActionFocus = (actionParams, position, errorReport) => {
         this.setState(prevState => ({
             currentAction: actionParams,
-            currentPosition: position
+            currentPosition: position,
+            currentActionErrorReport: errorReport
         }));
-    }
-    
+    } 
 
     onUpdateName = (value) =>
     {
@@ -147,7 +147,7 @@ class SampleViewer extends Component {
                                 reloadSource={this.reloadSource}
                                 onPositionChange={this.onPositionChange}
                                 onActionFocus={this.onActionFocus} 
-                                actionChainName={this.state.actionChainName} 
+                                actionChainName={this.props.actionChainName} 
                                 startUrl={this.state.startUrl}
                                 isRepeating={this.state.isRepeating}
                                 actions={this.state.actions}
