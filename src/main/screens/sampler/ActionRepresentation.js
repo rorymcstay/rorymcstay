@@ -14,15 +14,40 @@ class ActionRepresentation extends Component
         this.state = {
             inFocus: false,
             actionParams: props.actionParams,
-            index: props.index
+            index: props.index,
+            errorReport: {},
+            error: false
         }
     }
 
     componentWillReceiveProps(nextProps)
     {
+        
+        const {actionReport} = nextProps;
+        var error = false;
+        var errorReport = {};
+        if (actionReport.pending)
+        {
+            error = false;
+        }
+        else if (actionReport.fulfilled)
+        {
+            if (actionReport.value.length === 0)
+            {
+                error = false;
+            } else {
+                errorReport = actionReport.value[0];
+                error = true;
+            }
+        }
+        else {
+            error = false;
+        }
         this.setState(prevState => {
             prevState.actionParams = nextProps.actionParams;
             prevState.index = nextProps.index;
+            prevState.error = error;
+            prevState.errorReport = errorReport;
             return prevState;
         });
     }
@@ -34,7 +59,7 @@ class ActionRepresentation extends Component
 
     onClick = () =>
     {
-        this.props.onSelection(this.state.actionParams, this.state.index);
+        this.props.onSelection(this.state.actionParams, this.state.index, this.state.errorReport);
         this.setState((prevState, props) => ({inFocus: !prevState.inFocus}));
     }
  
@@ -45,27 +70,10 @@ class ActionRepresentation extends Component
 
     render ()
     {
-        const {actionReport} = this.props;
-        var error = true;
-        if (actionReport.pending)
-        {
-            return <ReactLoading/>
-        }
-        else if (actionReport.fulfilled)
-        {
-            if (actionReport.value.length === 0)
-            {
-                error = false;
-            } else {
-                error = true;
-            }
-        }
-        else {
-            error = false;
-        }
+
         console.log(`have action ${this.state.actionParams}`);
         return (
-        <Card style={{ width: '12rem' }} bg={error == false ? 'primary' : 'danger'}>
+        <Card style={{ width: '12rem' }} bg={this.state.error === false ? 'primary' : 'danger'}>
             <Card.Body >
                 <Card.Title>{this.props.actionParams.actionType}</Card.Title>
                 <ButtonGroup size="mini">

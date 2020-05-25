@@ -22,6 +22,7 @@ class SampleViewer extends Component {
             selectorTriggered: false,
             startUrl: undefined,
             currentAction: {},
+            currentActionErrorReport: {},
             currentPosition: 0,
             // for refresh of iframe
             random: 0
@@ -131,6 +132,7 @@ class SampleViewer extends Component {
                         <ActionViewer
                             selectorTriggered={this.state.selectorTriggered}
                             selectorPrediction={this.state.prediction}
+                            currentActionErrorReport={this.state.currentActionErrorReport}
                             selectionChanged={this.state.selectionChanged}
                             actionParameters={this.state.currentAction}
                             onUpdateAction={this.onUpdateAction}
