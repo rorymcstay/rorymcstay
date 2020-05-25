@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import connect from '../../../api-connector'
 import "react-table/react-table.css";
 import ReactLoading from "react-loading";
-import { Dropdown,  Button } from 'semantic-ui-react';
+import { Label, Dropdown,  Button } from 'semantic-ui-react';
 
 import  {Input, Checkbox} from 'semantic-ui-react';
 
@@ -130,6 +130,23 @@ class ActionViewerParameter extends Component
 }
 
 
+class ActionErrorReport extends Component
+{
+    constructor(props)
+    {
+        super(props);
+        this.state = {
+            errorType: props.report.errorType
+        };
+    }
+
+    render ()
+    {
+        return <Label color='red'>{this.state.errorType}</Label>;
+    }
+}
+
+
 class ActionViewer extends Component
 { 
     constructor(props)
@@ -137,7 +154,8 @@ class ActionViewer extends Component
         super(props);
         this.state = {
             actionParameters: props.actionParameters,
-            position: props.position
+            position: props.position,
+            report: props.currentActionErrorReport
         };
     }
 
@@ -145,7 +163,8 @@ class ActionViewer extends Component
     {
         this.setState({
             actionParameters: nextProps.actionParameters,
-            position: nextProps.position
+            position: nextProps.position,
+            report: nextProps.currentActionErrorReport
         });
     }
 
@@ -240,6 +259,10 @@ class ActionViewer extends Component
         if (actionParams.length === 0)
         {
             return <div>Focus on an Action</div>;
+        }
+        if (this.state.report.errorType)
+        {
+            actionParams.push(<ActionErrorReport report={this.state.report}/>);
         }
         return <>{actionParams}</>;
     }
