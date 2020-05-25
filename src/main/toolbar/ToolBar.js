@@ -18,6 +18,9 @@ class ToolBar extends Component {
     onSingleFeed= () => {
         this.setState({started: true}, this.props.singleFeed())
     };
+    onRefreshHistory= () => {
+        this.setState({started: true}, this.props.refreshHistory())
+    };
 
     onFeedStop = () => {
         this.props.stopFeed()
@@ -41,6 +44,7 @@ class ToolBar extends Component {
                         <ButtonGroup>
                             <Button onClick={this.onFeedStart} disabled variant="success">Last Page: {feedStatus.value.status.lastPage}</Button>
                             <Button onClick={this.onFeedStop} active variant="warning">Stop</Button>
+                            <Button onClick={this.onRefreshHistory} active variant="warning">Refresh History</Button>
                             <Button disabled variant="info">{feedStatus.value.status.pagesProcessed}</Button>
                         </ButtonGroup>
                     </ButtonToolbar>
@@ -63,6 +67,9 @@ export default connect(props => ({
 
     startFeed: () => ({
         startFeedResponse: {url: `/runningmanager/addFeed/${props.actionChainName}`}
+    }),
+    refreshHistory: () => ({
+        refreshResponse: {url: `/runningmanager/refreshHistory/${props.actionChainName}`}
     }),
     stopFeed: () => ({
         stopFeedResponse: {url: `/runningmanager/disableFeed/${props.actionChainName}`}
