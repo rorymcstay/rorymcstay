@@ -8,9 +8,13 @@ import AlertTemplate from 'react-alert-template-basic'
 
 import { BrowserRouter } from "react-router-dom";
 
+
 ReactDOM.render(
     <AlertProvider template={AlertTemplate}>
         <BrowserRouter>
-            <App/>
+            <AuthWrapper>
+                <App/>
+            </AuthWrapper>
         </BrowserRouter>
     </AlertProvider>, document.getElementById('root'));
+
