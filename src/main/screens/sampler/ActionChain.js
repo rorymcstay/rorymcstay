@@ -330,6 +330,14 @@ export default connect(props => ({
     }),
     reloadSampleUrl : (name) => ({
         reloadSample: {
-        url: `/samplepages/requestSamplePages/${name}`
+            url: `/schedulemanager/scheduleActionChain/sample-route/${name}`,
+            body: JSON.stringify({
+                trigger: 'in',
+                increment_size: 2,
+                increment: 'seconds',
+                actionName: name
+            }),
+            method: 'PUT'
+
     }})
 }))(withRouter(ActionChain))
