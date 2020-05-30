@@ -10,6 +10,7 @@ import AuthWrapper from './auth/AuthWrapper'
 import { BrowserRouter } from "react-router-dom";
 
 //const AuthWrappedApp = AuthWrapper(App);
+require('dotenv').config()
 
 ReactDOM.render(
     <AlertProvider template={AlertTemplate}>

@@ -1,12 +1,21 @@
-import React, {Component} from 'react';
-// Auth
-import connect from '../api-connector';
-import ReactLoading from 'react-loading';
-import {InputGroup, FormControl,  Button} from 'react-bootstrap';
+/*jshint esversion: 6 */
 
-import Login from './Login'; 
+import React, { Component } from 'react';
+import {AUTH_URL, AUTH_ENABLED, OAUTH_ENABLED, HOME_URL} from '../auth-config';
 
-var KeratinAuthN = require("keratin-authn");
+import * as KeratinAuthN from 'keratin-authn/dist/keratin-authn';
+
+import {Grid} from 'semantic-ui-react';
+import {InputGroup, Button} from 'react-bootstrap';
+import {FormControl} from 'react-bootstrap';
+
+import {withAlert} from 'react-alert';
+
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
+import SignUp from './SignUp.js';
+import ErrorMessage from './ErrorMessage'
 
 
 class LoginScreen extends Component
@@ -27,90 +36,160 @@ class LoginScreen extends Component
 
     onPasswordChange = (e) =>
     {
-        this.setState({username: e.target.value});
+        this.setState({password: e.target.value});
     }
-
     onLogin = () =>
     {
-        const credentials = {username: this.state.username, password: this.state.password};
-        this.props.onLogin(credentials);
+        const self = this;
+        KeratinAuthN.login({ username: this.state.username, password: this.state.password })
+          .then(function (val) {
+            console.log("login success");
+            self.props.onLoginSuccess();
+          }).catch(function (reason) {
+            console.log("failed login", reason);
+            self.showError(reason);
+          });
+    }
+
+    onSignUp = () =>
+    {
+        const self = this;
+        KeratinAuthN.signup({ username: this.state.username, password: this.state.password })
+          .then(function (val) {
+            console.log(`signup success ${val}`);
+            self.props.onSignUpSuccess(this.state.username);
+          }).catch(function (reason) {
+            console.log("failed signup", reason[0]);
+            self.showError(reason);
+          });
+    }
+
+    showError(reason) {
+        let errorMessage;
+        switch (reason[0].message) {
+            case 'TAKEN':
+                errorMessage = "UserName is taken"
+            break;
+            case 'INSECURE':
+                errorMessage = "Please use a secure password at least 10 characters in length and containing at least 2 symbols";
+            break;
+            default:
+                errorMessage = "Invalid username or password";
+        }
+        this.setState({ showError: true, errorMessage: errorMessage });
     }
 
     render()
     {
+        const showError = this.state.showError;
+        let error;
+        if (showError) {
+            error = <ErrorMessage errorMessage={this.state.errorMessage} />
+        }
         return (
-            <InputGroup>
-                <InputGroup.Prepend>
-                    <FormControl placeholder='Username' onChange={this.onUsernameChange} type='email'/>
-                    <FormControl placeholder='Password' onChange={this.onPasswordChange} type="password"/>
-                </InputGroup.Prepend>
-                <InputGroup.Prepend>
-                    <Button onClick={this.onLogin}>Login</Button>
-                    <Button onRegister={this.onRegister}>Register</Button>
-                </InputGroup.Prepend>
-
-            </InputGroup>
+            <Grid>
+                <Grid.Row>
+                    {error}
+                </Grid.Row>
+                <Grid.Row>
+                    <InputGroup>
+                        <InputGroup.Prepend>
+                            <FormControl placeholder='Username' onChange={this.onUsernameChange} type='email'/>
+                            <FormControl placeholder='Password' onChange={this.onPasswordChange} type="password"/>
+                        </InputGroup.Prepend>
+                        <InputGroup.Prepend>
+                            <Button onClick={this.onLogin}>Login</Button>
+                            <Button onClick={this.onSignUp}>Register</Button>
+                        </InputGroup.Prepend>
+                    </InputGroup>
+                </Grid.Row>
+            </Grid>
         );
     }
 }
 
-
-// TODO if cookies have a user, get there session token and test it.
-// if ok, then render app
-// otherwise, direct to login page
-class AuthWrapper extends Component
-{
-    constructor(props)
-    {
+class AuthWrapper extends Component {
+    constructor(props) {
         super(props);
-        this.state = {
-            user: props.user,
-            sessiontoken: props.sessiontoken
+
+        var event = "ShowHome";
+        if (!AUTH_ENABLED) {
+            this.loggedIn = true;
         }
-        KeratinAuthN.setHost('localhost:8080');
-        KeratinAuthN.setCookieStore('feed-machine');
-        KeratinAuthN.restoreSession().then(this.setState({loggedIn: true, username: ''})).catch(this.setState({loggedIn: false}));
+
+        this.state = {
+            event: event,
+            loggedIn: false,
+            oAuthURI: AUTH_URL + "/oauth/github?redirect_uri=" + HOME_URL,
+            oAuthEnabled: OAUTH_ENABLED,
+        };
+
+        console.log("auth:", AUTH_URL);
+
+        KeratinAuthN.setHost(AUTH_URL);
+        KeratinAuthN.setCookieStore("authn");
+        //KeratinAuthN.setLocalStorageStore("emojify");
     }
 
-    onLogin = (credentials) =>
+    onLoginSuccess = () =>
     {
-        const loginReq = KeratinAuthN.login(credentials).then(this.setState({loggedIn: true, user: credentials.user}));;
-        
+        this.setState({loggedIn: true});
     }
 
-    onLogout = (credentials) =>
+    logout = () =>
     {
-        const logoutReq = KeratinAuthN.logout();
+        KeratinAuthN.logout();
+    }
+  
+    onSignUpSuccess = () =>
+    {
+        this.setState({loggedIn: true});
+    }
+    onLoginFailure = (reason) =>
+    {
+        this.setState({loggedIn: false});
+    }
+    onSignUpFailure = (reason) =>
+    {
+        this.setState({loggedIn: false});
     }
 
-    onRegister = (credentials) =>
-    {
-        const register = KeratinAuthN.signup(credentials);
+    componentDidMount() {
+        const self = this;
+        KeratinAuthN.importSession().then(() => {
+            console.log("restoring session");
+            self.setState({ loggedIn: true });
+        }).catch(error => {
+            console.log("error restoring session: ", error);
+        });
     }
 
     render() {
-        // TODO if authorsed load component else load login page.
-        // TODO overlay the authorised component with a user toolbar.
-       
-        var isVerified;
-        
-        /*
-        if (isVerified)
+        var eventElement = null;
+
+        if (!this.state.loggedIn)
         {
-            return <ReactLoading/>;
+            console.log("show login");
+            return (<LoginScreen oAuthEnabled={this.state.oAuthEnabled} 
+                                 oAuthURI={this.state.oAuthURI}
+                                 onLoginFailure={this.onLoginFailure}
+                                alert={this.props.alert}
+                                 onLoginSuccess={this.onLoginSuccess}
+                                 onSignUpFailure={this.onSignUpFailure}
+                                 onSignUpSuccess={this.onSignUpSuccess}
+                            />);
         }
-        */
-        if ( !this.state.loggedIn)
+        else
         {
-            return <Login/>
+            console.log("logged in");
+            // TODO need to put logout button
+            return <Grid><Grid.Row><Button onClick={this.logout()}>LogOut</Button></Grid.Row><Grid.Row><>{this.props.children}</></Grid.Row></Grid>;
         }
-        // TODO add logout button here
-        return <>{this.children}</>; 
-    }
+
+        return (
+                eventElement
+        );
+  }
 }
 
-// Intentionally defined here so we can load children depending on the sate of there request
-export default AuthWrapper;
-/*
-ReactDOM.render(<Auth user={user}/>, document.getElementById('root'));
-*/
+export default withAlert()(AuthWrapper);

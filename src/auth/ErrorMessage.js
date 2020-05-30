@@ -6,7 +6,7 @@ import Alert from 'react-bootstrap/Alert';
 class ErrorMessage extends Component {
   render() {
     return (
-      <Alert bsStyle="danger">
+      <Alert bsstyle="danger">
         <h3> {this.props.errorMessage}</h3>
       </Alert>
     );
