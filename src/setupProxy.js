@@ -29,23 +29,9 @@ module.exports = function(app) {
     })
   );
   app.use(
-    '/runningmanager',
-    createProxyMiddleware({
-      target: 'http://localhost:5003',
-      changeOrigin: true,
-    })
-  );
-  app.use(
     '/samplepages',
     createProxyMiddleware({
       target: 'http://localhost:5004',
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    '/actionsmanager',
-    createProxyMiddleware({
-      target: 'http://localhost:5003',
       changeOrigin: true,
     })
   );
