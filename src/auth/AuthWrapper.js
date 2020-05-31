@@ -124,7 +124,7 @@ class AuthWrapper extends Component {
             oAuthEnabled: OAUTH_ENABLED,
         };
 
-        console.log("auth:", AUTH_URL);
+        console.log("auth:", '/');
 
         KeratinAuthN.setHost(AUTH_URL);
         KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "None"} );
