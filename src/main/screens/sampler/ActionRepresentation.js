@@ -87,6 +87,6 @@ class ActionRepresentation extends Component
 
 export default connect ((props) => ({
     actionReport: {
-        url: `/actionsmanager/findActionErrorReports/${props.actionChainName}/${props.index}`
+        url: `/feedmanager/findActionErrorReports/${props.actionChainName}/${props.index}`
     }
 }))(ActionRepresentation)

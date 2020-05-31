@@ -175,7 +175,7 @@ class SampleViewer extends Component {
 
 export default connect(props => ({
     actionChainParams: {
-         url: `/actionsmanager/getActionChain/${props.actionChainName}`
+         url: `/feedmanager/getActionChain/${props.actionChainName}`
     }
 
 }))(withRouter(SampleViewer))

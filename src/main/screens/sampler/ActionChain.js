@@ -323,7 +323,7 @@ class ActionChain extends Component
 export default connect(props => ({
     submitActionChain: (payload) => ({
         submitAction: {
-            url: `/actionsmanager/setActionChain/`,
+            url: `/feedmanager/setActionChain/`,
             method: 'PUT',
             body: JSON.stringify(payload) 
         }

@@ -56,8 +56,8 @@ class LoginScreen extends Component
         const self = this;
         KeratinAuthN.signup({ username: this.state.username, password: this.state.password })
           .then(function (val) {
-            console.log(`signup success ${val}`);
-            self.props.onSignUpSuccess(this.state.username);
+            console.log(`signup success ${val} for ${self.state.username}`);
+            self.props.onSignUpSuccess(self.state.username);
           }).catch(function (reason) {
             console.log("failed signup", reason[0]);
             self.showError(reason);
@@ -127,8 +127,8 @@ class AuthWrapper extends Component {
         console.log("auth:", AUTH_URL);
 
         KeratinAuthN.setHost(AUTH_URL);
-        KeratinAuthN.setCookieStore("authn");
-        //KeratinAuthN.setLocalStorageStore("emojify");
+        KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "None"} );
+        //KeratinAuthN.setLocalStorageStore("authn");
     }
 
     onLoginSuccess = () =>
