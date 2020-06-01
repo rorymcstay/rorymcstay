@@ -270,7 +270,7 @@ class ActionViewer extends Component
 
 export default connect(props =>({
     possibleValues: {
-        url: `/actionstaticdata/getPossibleValues/`
+        url: `/actionsstaticdata/getPossibleValues/`
     },
     mandatoryParams: {
         url: `/actionsstaticdata/getActionParameters/${props.actionParameters.actionType}`

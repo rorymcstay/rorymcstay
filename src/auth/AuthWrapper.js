@@ -127,7 +127,7 @@ class AuthWrapper extends Component {
         console.log("auth:", '/');
 
         KeratinAuthN.setHost(AUTH_URL);
-        KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "None"} );
+        KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "Lax"} );
         //KeratinAuthN.setLocalStorageStore("authn");
     }
 

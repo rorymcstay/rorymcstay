@@ -29,6 +29,13 @@ module.exports = function(app) {
     })
   );
   app.use(
+    '/actionsstaticdata',
+    createProxyMiddleware({
+      target: 'http://localhost:5004',
+      changeOrigin: true,
+    })
+  );
+  app.use(
     '/samplepages',
     createProxyMiddleware({
       target: 'http://localhost:5004',

@@ -4,22 +4,22 @@ import urlJoin from 'url-join'
 import * as KeratinAuthN from 'keratin-authn/dist/keratin-authn';
 import {AUTH_URL} from './auth-config'
 
-const baseUrl = 'http://localhost:3000/'
 
 
 export default connect.defaults({
   buildRequest: function (mapping) {
-    console.log(`AuthN session is ${KeratinAuthN.session()}`);
+    mapping.headers.authn = KeratinAuthN.session();
+    console.log(`AuthN session is ${mapping.headers.authn}`);
     const options = {
       method: mapping.method,
-      headers: {authn: KeratinAuthN.session()},
+      headers: mapping.headers,
       credentials: mapping.credentials,
       redirect: mapping.redirect,
       mode: mapping.mode,
       body: mapping.body
     }
 
-    return new Request(urlJoin(baseUrl, mapping.url), options)
+    return new Request(mapping.url, options)
   }
 })
 
