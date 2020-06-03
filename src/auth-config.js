@@ -1,18 +1,33 @@
-let authhost;
+var authurl
+
 
 const hostname = window && window.location && window.location.hostname;
 
-if(hostname === 'feedmachine.rorymcstay.com') {
-  authhost= 'https://10.66.66.2:30002';
-} else if(hostname === 'uatfeedmachine') {
-  authhost= 'https://10.66.66.2:30002';
-} else {
-  authhost = 'http://localhost:8080';
+// TODO here need to add logic for https or not
+if (hostname === 'localhost')
+{
+    authurl = `http://${hostname}:3000`;
+}
+else if  ( hostname === '192.168.1.64')
+{
+    authurl = `https://${hostname}:443`; // assuming it is not a local dev server
+}
+else if (hostname === 'devfeedmachine.local')
+{
+    authurl = `https://${hostname}`;
+}
+if (hostname === 'feedmachine.rorymcstay.com')
+{
+    authurl = `https://${hostname}`;
+}
+if (hostname === `uatfeedmachine`)
+{
+    authurl = `https://${hostname}`;
 }
 
-export const AUTH_URL = authhost;
+export const AUTH_URL = authurl;
+
 export const AUTH_ENABLED = true;
 export const HOME_URL='feedmachine.rorymcstay.com'
 export const OAUTH_ENABLED=false;
-
 

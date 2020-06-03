@@ -42,7 +42,7 @@
     "react-app-rewired": "^2.1.5"
   },
   "scripts": {
-    "start": "AUTH_URL=http://localhost:8080 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "build-ext": "./chrome_extension_build.sh",

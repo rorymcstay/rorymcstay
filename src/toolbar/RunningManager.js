@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import connect from "../../api-connector";
+import connect from "../api-connector";
 import Button from "react-bootstrap/Button";
 import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 
-class ToolBar extends Component {
+class RunningManager extends Component {
 
     constructor(props) {
         super(props);
@@ -81,4 +81,4 @@ export default connect(props => ({
         url: `/feedmanager/getStatus/${props.actionChainName}`
     }
 
-}))(ToolBar)
+}))(RunningManager)

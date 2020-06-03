@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import connect from '../../../api-connector';
+import connect from '../../api-connector';
 import ReactLoading from "react-loading";
 import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
 import { Card, InputGroup } from 'react-bootstrap';

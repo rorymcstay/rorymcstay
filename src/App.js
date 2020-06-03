@@ -15,16 +15,17 @@ import { RoutedTabs, NavTab } from "react-router-tabs";
 import "react-router-tabs/styles/react-router-tabs.css";
 import queryString from 'query-string';
 
-// Navigation
-import Selector from "./main/Selector";
-import ToolBar from "./main/toolbar/ToolBar";
+// Toolbar
+import Selector from "./toolbar/Selector";
+import ToolBar from "./toolbar/RunningManager";
+import UserProfile from "./toolbar/UserProfile";
 
-// Tabs
-import ParameterManager from "./main/screens/parameters/ParameterManager";
-import Scheduler from "./main/screens/scheduler/Scheduler"
-import Viewer from "./main/screens/viewer/Viewer";
+// Tabs/Screens
+import ParameterManager from "./screens/parameters/ParameterManager";
+import Scheduler from "./screens/scheduler/Scheduler"
+import Viewer from "./screens/viewer/Viewer";
 //import Mapping from "./main/screens/mapping/Mapping";
-import SamplerViewer from "./main/screens/sampler/Sampler"
+import SamplerViewer from "./screens/sampler/Sampler"
 
 
 
@@ -104,6 +105,9 @@ class App extends Component {
                                 onNew={this.onNew}
                                 actionChainName={this.state.actionChainName}
                             />
+                        </Grid.Column>
+                        <Grid.Column>
+                            <UserProfile userName={this.props.username} />
                         </Grid.Column>
                         <Grid.Column>
                             <ToolBar actionChainName={this.state.actionChainName}/>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactLoading from 'react-loading';
-import connect from '../../../api-connector'
+import connect from '../../api-connector'
 import ReactTable from "react-table";
 
 

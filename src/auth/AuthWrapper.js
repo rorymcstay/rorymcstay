@@ -20,6 +20,7 @@ import ErrorMessage from './ErrorMessage'
 
 class LoginScreen extends Component
 {
+    // TODO Need to add a toggle for registering or logging in.
     constructor(props)
     {
         super(props);
@@ -28,7 +29,7 @@ class LoginScreen extends Component
             username: undefined
         }
     }
-    
+ 
     onUsernameChange = (e) =>
     {
         this.setState({username: e.target.value});
@@ -36,6 +37,7 @@ class LoginScreen extends Component
 
     onPasswordChange = (e) =>
     {
+        // TODO add password strength metre
         this.setState({password: e.target.value});
     }
     onLogin = () =>
@@ -71,7 +73,7 @@ class LoginScreen extends Component
                 errorMessage = "UserName is taken"
             break;
             case 'INSECURE':
-                errorMessage = "Please use a secure password at least 10 characters in length and containing at least 2 symbols";
+                errorMessage = "Password failed the strength test, try again";
             break;
             default:
                 errorMessage = "Invalid username or password";
@@ -124,10 +126,10 @@ class AuthWrapper extends Component {
             oAuthEnabled: OAUTH_ENABLED,
         };
 
-        console.log("auth:", '/');
+        console.log("auth:", AUTH_URL);
 
         KeratinAuthN.setHost(AUTH_URL);
-        KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "Lax"} );
+        KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "Strict"} );
         //KeratinAuthN.setLocalStorageStore("authn");
     }
 
@@ -135,12 +137,7 @@ class AuthWrapper extends Component {
     {
         this.setState({loggedIn: true});
     }
-
-    logout = () =>
-    {
-        KeratinAuthN.logout();
-    }
-  
+ 
     onSignUpSuccess = () =>
     {
         this.setState({loggedIn: true});
@@ -165,6 +162,7 @@ class AuthWrapper extends Component {
     }
 
     render() {
+        // TODO should have some logic for basic auth or not for local development
         var eventElement = null;
 
         if (!this.state.loggedIn)
@@ -173,7 +171,7 @@ class AuthWrapper extends Component {
             return (<LoginScreen oAuthEnabled={this.state.oAuthEnabled} 
                                  oAuthURI={this.state.oAuthURI}
                                  onLoginFailure={this.onLoginFailure}
-                                alert={this.props.alert}
+                                 alert={this.props.alert}
                                  onLoginSuccess={this.onLoginSuccess}
                                  onSignUpFailure={this.onSignUpFailure}
                                  onSignUpSuccess={this.onSignUpSuccess}
@@ -182,8 +180,12 @@ class AuthWrapper extends Component {
         else
         {
             console.log("logged in");
-            // TODO need to put logout button
-            return <Grid><Grid.Row><Button onClick={this.logout()}>LogOut</Button></Grid.Row><Grid.Row><>{this.props.children}</></Grid.Row></Grid>;
+            return (<Grid>
+                        <Grid.Row>
+                            {/* Render the Auth wrapped component */}
+                            <>{this.props.children}</>
+                        </Grid.Row>
+                    </Grid>);
         }
 
         return (

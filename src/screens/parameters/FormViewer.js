@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-jsonschema-form";
 import ReactLoading from 'react-loading';
-import connect from '../../../api-connector'
+import connect from '../../api-connector'
 
 
 class FormViewer extends Component {
