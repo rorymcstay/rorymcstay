@@ -37,7 +37,7 @@ class ActionChainsToolBar extends Component
         super(props)
         this.state = {
             startUrl: props.startUrl,
-            actionChainName: props.actionChainName,
+            actionChainName: props.actionChainName === undefined ? '' : props.actionChainName,
             isRepeating: props.isRepeating
         }
     }

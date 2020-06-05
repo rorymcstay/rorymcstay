@@ -45,9 +45,10 @@ class LoginScreen extends Component
         const self = this;
         KeratinAuthN.login({ username: this.state.username, password: this.state.password })
           .then(function (val) {
-            console.log("login success");
+            console.log(`login success ${val} for ${self.state.username}`);
+            self.props.storeUserDetails(this.state.username);
             self.props.onLoginSuccess();
-          }).catch(function (reason) {
+          }).catch(reason =>  {
             console.log("failed login", reason);
             self.showError(reason);
           });
@@ -57,10 +58,12 @@ class LoginScreen extends Component
     {
         const self = this;
         KeratinAuthN.signup({ username: this.state.username, password: this.state.password })
-          .then(function (val) {
+          .then(val => {
             console.log(`signup success ${val} for ${self.state.username}`);
-            self.props.onSignUpSuccess(self.state.username);
-          }).catch(function (reason) {
+            self.props.storeUserDetails(this.state.username);
+            self.props.onSignUpSuccess();
+          })
+          .catch((reason) => {
             console.log("failed signup", reason[0]);
             self.showError(reason);
           });
@@ -114,13 +117,11 @@ class AuthWrapper extends Component {
     constructor(props) {
         super(props);
 
-        var event = "ShowHome";
         if (!AUTH_ENABLED) {
-            this.loggedIn = true;
+            this.state = {loggedIn: true};
         }
 
         this.state = {
-            event: event,
             loggedIn: false,
             oAuthURI: AUTH_URL + "/oauth/github?redirect_uri=" + HOME_URL,
             oAuthEnabled: OAUTH_ENABLED,
@@ -130,7 +131,12 @@ class AuthWrapper extends Component {
 
         KeratinAuthN.setHost(AUTH_URL);
         KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "Strict"} );
-        //KeratinAuthN.setLocalStorageStore("authn");
+    }
+ 
+    storeUserDetails = (username) =>
+    {
+        console.log(`Storing username=[${username}]`);
+        localStorage.setItem('username', username);
     }
 
     onLoginSuccess = () =>
@@ -153,8 +159,10 @@ class AuthWrapper extends Component {
 
     componentDidMount() {
         const self = this;
-        KeratinAuthN.importSession().then(() => {
-            console.log("restoring session");
+        KeratinAuthN.importSession().then(function(resp) {
+            console.log(`restoring session KeratinAuthN=[${KeratinAuthN.session()}]`);
+            // TODO here should be a callback function passed to auth wrapper to set the user name.
+            self.storeUserDetails(localStorage.getItem('username'));
             self.setState({ loggedIn: true });
         }).catch(error => {
             console.log("error restoring session: ", error);
@@ -167,11 +175,12 @@ class AuthWrapper extends Component {
 
         if (!this.state.loggedIn)
         {
-            console.log("show login");
+            console.log("show login screen");
             return (<LoginScreen oAuthEnabled={this.state.oAuthEnabled} 
                                  oAuthURI={this.state.oAuthURI}
                                  onLoginFailure={this.onLoginFailure}
                                  alert={this.props.alert}
+                                 storeUserDetails={this.storeUserDetails}
                                  onLoginSuccess={this.onLoginSuccess}
                                  onSignUpFailure={this.onSignUpFailure}
                                  onSignUpSuccess={this.onSignUpSuccess}
@@ -187,10 +196,6 @@ class AuthWrapper extends Component {
                         </Grid.Row>
                     </Grid>);
         }
-
-        return (
-                eventElement
-        );
   }
 }
 

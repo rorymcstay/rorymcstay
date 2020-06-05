@@ -1,15 +1,12 @@
 // api-connector.js
 import { connect } from 'react-refetch'
 import urlJoin from 'url-join'
-import * as KeratinAuthN from 'keratin-authn/dist/keratin-authn';
 import {AUTH_URL} from './auth-config'
 
 
 
 export default connect.defaults({
-  buildRequest: function (mapping) {
-    mapping.headers.authn = KeratinAuthN.session();
-    console.log(`AuthN session is ${mapping.headers.authn}`);
+  buildRequest: (mapping) => {
     const options = {
       method: mapping.method,
       headers: mapping.headers,
