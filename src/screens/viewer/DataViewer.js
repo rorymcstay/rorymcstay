@@ -53,18 +53,18 @@ class DataViewer extends Component {
             }
             else if (!this.state.notified && uploadMappingResponse.rejected)
             {
-                this.props.alert.show(`Failed to communicate with manager`);
+                window.alert(`Failed to communicate with manager`);
                 this.setState({notified: true});
             } 
             else if (!this.state.notified)
             {   
                 if (!uploadMappingResponse.value.valid)
                 {
-                    this.props.alert.show(`Invalid mapping: ${uploadMappingResponse.value.reason}`);
+                    window.alert(`Invalid mapping: ${uploadMappingResponse.value.reason}`);
                     this.setState({notified: true});
                 }
                 {
-                    this.props.alert.show(`Succes: ${uploadMappingResponse.value.message}`);
+                    window.alert(`Succes: ${uploadMappingResponse.value.message}`);
                     this.setState({notified: true});
                 }
             }

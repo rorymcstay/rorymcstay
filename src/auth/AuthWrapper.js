@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import {AUTH_URL, AUTH_ENABLED, OAUTH_ENABLED, HOME_URL} from '../auth-config';
 
 import * as KeratinAuthN from 'keratin-authn/dist/keratin-authn';
+import {useAlert} from 'react-alert';
 
 import {Grid} from 'semantic-ui-react';
 import {InputGroup, Button} from 'react-bootstrap';
@@ -161,7 +162,6 @@ const withAuthentication = (WrappedComponent) =>{
             const self = this;
             KeratinAuthN.importSession().then(function(resp) {
                 console.log(`restoring session KeratinAuthN=[${KeratinAuthN.session()}]`);
-                self.storeUserDetails(localStorage.getItem('username'));
                 self.setState({ loggedIn: true });
             }).catch(error => {
                 console.log("error restoring session: ", error);
@@ -183,7 +183,7 @@ const withAuthentication = (WrappedComponent) =>{
             else
             {
                 console.log("logged in");
-                return <WrappedComponent {...this.props}/>;
+                return <WrappedComponent alert={alert} {...this.props}/>;
             }
         }
     }

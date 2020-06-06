@@ -9,6 +9,7 @@ import arrayMove from 'array-move';
 import {withRouter} from 'react-router-dom';
 import queryString from 'query-string';
 import ActionRepresentation from './ActionRepresentation'
+//import Popup from 'reactjs-popup'; TODO find less fiddly popup package
 
 
 const EMPTY_ACTION = {
@@ -27,6 +28,46 @@ const EMPTY_CHAIN_PARAMS = {
     name: undefined,
     isRepeating: true
 }
+
+/*
+ * TODO fix alerting with auth, this is alrternative
+const SubmissionButton = ({submitAction, buttonText}) => {
+
+
+    let message;
+    if (submitAction === undefined)
+    {
+    }
+    else 
+    {
+        if (submitAction.pending)
+        {
+            //this.setState({loading: true});
+            return <ReactLoading/>
+        }
+        else if (submitAction.rejected)
+        {
+            message = `Failed to communicate with Actions manager`
+        } 
+        else
+        {
+            if (!submitAction.value.valid)
+            {
+                message = `Invalid Chain: ${submitAction.value.reason}`
+            }
+            else
+            {
+                message = `Success: ${submitAction.value.message}`
+            }
+            
+        }
+    }
+    return(<Popup trigger={<Button>{buttonText}</Button>}>
+        <div>{message}</div>
+    </Popup>);
+
+}
+*/
 
 
 class ActionChainsToolBar extends Component
@@ -279,19 +320,19 @@ class ActionChain extends Component
             }
             else if (!this.state.notified && submitAction.rejected)
             {
-                alert.show(`Failed to communicate with Actions manager`);
+                window.alert(`Failed to communicate with Actions manager`);
                 this.setState({notified: true});
             } 
             else
             {
                 if (!this.state.notified && !submitAction.value.valid)
                 {
-                    this.props.alert.show(`Invalid Chain: ${submitAction.value.reason}`);
+                    window.alert(`Invalid Chain: ${submitAction.value.reason}`);
                     this.setState({notified: true});
                 }
                 else if (!this.state.notified)
                 {
-                    this.props.alert.show(`Success: ${submitAction.value.message}`);
+                    window.alert(`Success: ${submitAction.value.message}`);
                     this.setState({notified: true});
                 }
                 else

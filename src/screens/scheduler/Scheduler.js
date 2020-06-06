@@ -70,11 +70,11 @@ class Scheduler extends Component {
             {   
                 if (!addJobResponse.value.valid)
                 {
-                    this.props.alert.show(`Invalid schedule request: ${addJobResponse.value.reason}`);
+                    window.alert(`Invalid schedule request: ${addJobResponse.value.reason}`);
                     this.setState({notified: true});
                 }
                 {
-                    this.props.alert.show(`Succesfully scheduled ${this.state.actionChainName} for ${addJobResponse.value.message}`);
+                    window.alert(`Succesfully scheduled ${this.state.actionChainName} for ${addJobResponse.value.message}`);
                     this.setState({notified: true});
                 }
             }

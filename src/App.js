@@ -26,6 +26,7 @@ import Scheduler from "./screens/scheduler/Scheduler"
 import Viewer from "./screens/viewer/Viewer";
 //import Mapping from "./main/screens/mapping/Mapping";
 import SamplerViewer from "./screens/sampler/Sampler"
+import withAuthentication from './auth/AuthWrapper.js'
 
 
 
@@ -116,4 +117,4 @@ class App extends Component {
     }
 }
 
-export default withAlert()(withRouter(App));
+export default withAlert()(withRouter(withAuthentication(App)));

@@ -17,7 +17,7 @@ const AuthenticatedApp = withAuthentication(App);
 ReactDOM.render(
     <AlertProvider template={AlertTemplate}>
         <BrowserRouter>
-           <AuthenticatedApp/> 
+           <App/> 
         </BrowserRouter>
     </AlertProvider>
     , document.getElementById('root'));
