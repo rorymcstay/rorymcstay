@@ -142,7 +142,6 @@ class SampleViewer extends Component {
                     <Grid.Row width={17}>
                         <Grid.Column width={3}>
                             <ActionChain
-                                alert={this.props.alert}
                                 onUpdateName={this.onUpdateName}
                                 onUpdateStartUrl={this.onUpdateStartUrl}
                                 onToolbarValChange={this.onToolbarValChange}

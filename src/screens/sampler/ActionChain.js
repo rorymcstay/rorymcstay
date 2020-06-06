@@ -29,46 +29,6 @@ const EMPTY_CHAIN_PARAMS = {
     isRepeating: true
 }
 
-/*
- * TODO fix alerting with auth, this is alrternative
-const SubmissionButton = ({submitAction, buttonText}) => {
-
-
-    let message;
-    if (submitAction === undefined)
-    {
-    }
-    else 
-    {
-        if (submitAction.pending)
-        {
-            //this.setState({loading: true});
-            return <ReactLoading/>
-        }
-        else if (submitAction.rejected)
-        {
-            message = `Failed to communicate with Actions manager`
-        } 
-        else
-        {
-            if (!submitAction.value.valid)
-            {
-                message = `Invalid Chain: ${submitAction.value.reason}`
-            }
-            else
-            {
-                message = `Success: ${submitAction.value.message}`
-            }
-            
-        }
-    }
-    return(<Popup trigger={<Button>{buttonText}</Button>}>
-        <div>{message}</div>
-    </Popup>);
-
-}
-*/
-
 
 class ActionChainsToolBar extends Component
 {
