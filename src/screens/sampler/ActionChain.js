@@ -5,7 +5,6 @@ import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
 import { Card, InputGroup } from 'react-bootstrap';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
-import { useAlert } from 'react-alert'; 
 // router integration
 import {withRouter} from 'react-router-dom';
 import queryString from 'query-string';
@@ -57,7 +56,18 @@ class ActionChainsToolBar extends Component
 
     onSubmit = () =>
     {
+        this.props.onToolbarValChange(this.state.actionChainName, 'actionChainName');
+        this.props.onToolbarValChange(this.state.startUrl, 'startUrl');
+        this.props.onToolbarValChange(this.state.isRepeating, 'isRepeating');
         this.props.onSubmitAction(this.state.actionChainName, this.state.startUrl, this.state.isRepeating);
+    }
+
+    onValChange =(val, key) =>
+    {
+        this.setState(prevState => {
+            prevState[key] = val;
+            return prevState;
+        });
     }
 
     render ()
@@ -71,9 +81,9 @@ class ActionChainsToolBar extends Component
                 <Button size='tiny' onClick={this.props.reloadSource}>Reload</Button>
             </ButtonGroup>
             <InputGroup >
-                <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'actionChainName')}} placeholder='Name' value={this.state.actionChainName}/>
-                <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'startUrl')}} placeholder='StartUrl' value={this.state.startUrl}/>
-                <Checkbox label='isRepeating' onChange={(e) => {this.props.onToolbarValChange(!this.state.isRepeating, 'isRepeating')}} placeholder='isRepeating' checked={this.state.isRepeating}/>
+                <Input onChange={(e) => {this.onValChange(e.target.value, 'actionChainName')}} placeholder='Name' value={this.state.actionChainName}/>
+                <Input onChange={(e) => {this.onValChange(e.target.value, 'startUrl')}} placeholder='StartUrl' value={this.state.startUrl}/>
+                <Checkbox label='isRepeating' onChange={(e) => {this.onValChange(!this.state.isRepeating, 'isRepeating')}} placeholder='isRepeating' checked={this.state.isRepeating}/>
             </InputGroup>
         </div>);
     }
@@ -93,7 +103,6 @@ class ActionChain extends Component
             currentPosition: 0
         }
     }
-
 
     componentWillReceiveProps(nextProps)
     {
@@ -223,6 +232,7 @@ class ActionChain extends Component
             startUrl: url
         })
     }
+
     onUpdateName = (actionChainName) =>
     {
         this.props.onUpdateName(actionChainName);
@@ -269,7 +279,7 @@ class ActionChain extends Component
             }
             else if (!this.state.notified && submitAction.rejected)
             {
-                this.props.alert.show(`Failed to communicate with Actions manager`);
+                alert.show(`Failed to communicate with Actions manager`);
                 this.setState({notified: true});
             } 
             else

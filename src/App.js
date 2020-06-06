@@ -47,51 +47,15 @@ class App extends Component {
         this.setState({actionChainName: 'NewActionChain'});
     }
 
-    onParameterChange = (value) => {
-        this.setState({parameterType: value});
-    }
-
+    /*
+     * Seeing if we can remove all other methods apart from renderer
     onTableChange = (value) => {
         this.setState( { tableName: value});
     }
+    */
 
     onActionChainChange = (value) => {
         this.setState( { actionChainName: value} );
-    }
-
-    renderLinkedTabs = () => {
-
-        return (<div> 
-            <NavTab to={`/chain-viewer/?chain=${this.state.actionChainName}`}>Chain-Viewer</NavTab>
-            <NavTab to={`/capture-viewer/?chain=${this.state.actionChainName}`}>Capture-Viewer</NavTab>
-            <NavTab to={`/chain-scheduler/?chain=${this.state.actionChainName}`}>Chain-Scheduler</NavTab>
-            <Switch>
-                <Route
-                  exact
-                  path='/'
-                  render={() => <Redirect replace to={`/chain-viewer`} />}
-                />
-                    <Route path={`/chain-viewer`}>
-                        <SamplerViewer
-                            alert={this.props.alert}
-                            actionChainName={this.state.actionChainName}
-                        />
-                    </Route>
-                    <Route path={`/capture-viewer`}>
-                        <Viewer 
-                            alert={this.props.alert}
-                            actionChainName={this.state.actionChainName} 
-                            updateTableName={this.onTableChange}
-                        />
-                    </Route>
-                    <Route path={`/chain-scheduler`}>
-                        <Scheduler 
-                            alert={this.props.alert}
-                            actionChainName={this.state.actionChainName}
-                        />
-                    </Route>
-             </Switch>
-         </div>);
     }
 
     render() {
@@ -114,16 +78,36 @@ class App extends Component {
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Column>
-                        {this.renderLinkedTabs()}
-                        {/*
-                            <Tabs
-                                id="controlled-tab-example"
-                                activeKey={this.state.key}
-                                onSelect={key => this.setState({selectedTab: key})}
-                            >
-                        */}
-
+                        <Grid.Column> 
+                            <NavTab to={`/chain-viewer/?chain=${this.state.actionChainName}`}>Chain-Viewer</NavTab>
+                            <NavTab to={`/capture-viewer/?chain=${this.state.actionChainName}`}>Capture-Viewer</NavTab>
+                            <NavTab to={`/chain-scheduler/?chain=${this.state.actionChainName}`}>Chain-Scheduler</NavTab>
+                            <Switch>
+                                <Route
+                                  exact
+                                  path='/'
+                                  render={() => <Redirect replace to={`/chain-viewer`} />}
+                                />
+                                    <Route path={`/chain-viewer`}>
+                                        <SamplerViewer
+                                            alert={this.props.alert}
+                                            actionChainName={this.state.actionChainName}
+                                        />
+                                    </Route>
+                                    <Route path={`/capture-viewer`}>
+                                        <Viewer 
+                                            alert={this.props.alert}
+                                            actionChainName={this.state.actionChainName} 
+                                            //updateTableName={this.onTableChange}
+                                        />
+                                    </Route>
+                                    <Route path={`/chain-scheduler`}>
+                                        <Scheduler 
+                                            alert={this.props.alert}
+                                            actionChainName={this.state.actionChainName}
+                                        />
+                                    </Route>
+                             </Switch>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -132,4 +116,4 @@ class App extends Component {
     }
 }
 
-export default withAlert()(withRouter(App));
+export default withRouter(App);

@@ -8,6 +8,14 @@ class UserProfile extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            username: ''
+        }
+    }
+
+    componentWillReceiveProps()
+    {
+        this.setState({'username': localStorage.getItem("username")});
     }
 
     logout = () =>
@@ -20,7 +28,7 @@ class UserProfile extends Component {
         return (
             <ButtonToolbar>
                 <ButtonGroup>
-                    <Button onClick={this.logout} active variant="warning">{`${this.props.username}: Logout`}</Button>
+                    <Button onClick={this.logout} active variant="warning">{`${this.state.username}: Logout`}</Button>
                 </ButtonGroup>
             </ButtonToolbar>
         )

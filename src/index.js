@@ -13,11 +13,12 @@ import { BrowserRouter } from "react-router-dom";
 require('dotenv').config()
 
 ReactDOM.render(
-    <AlertProvider template={AlertTemplate}>
-        <BrowserRouter>
-            <AuthWrapper>
-                <App/>
-            </AuthWrapper>
-        </BrowserRouter>
-    </AlertProvider>, document.getElementById('root'));
+    <BrowserRouter>
+       <AlertProvider template={AlertTemplate}>
+              <AuthWrapper>
+            <App/>
+          </AuthWrapper>
+        </AlertProvider>
+    </BrowserRouter>
+    , document.getElementById('root'));
 

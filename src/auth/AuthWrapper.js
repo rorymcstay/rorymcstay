@@ -138,7 +138,6 @@ class AuthWrapper extends Component {
         console.log(`Storing username=[${username}]`);
         localStorage.setItem('username', username);
     }
-
     onLoginSuccess = () =>
     {
         this.setState({loggedIn: true});
@@ -196,7 +195,6 @@ class AuthWrapper extends Component {
                         </Grid.Row>
                     </Grid>);
         }
-  }
+    }
 }
-
-export default withAlert()(AuthWrapper);
+export default AuthWrapper;
