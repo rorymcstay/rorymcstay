@@ -5,20 +5,20 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import {transitions, positions, Provider as AlertProvider} from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
-import AuthWrapper from './auth/AuthWrapper'
+import withAuthentication from './auth/AuthWrapper'
 
 import { BrowserRouter } from "react-router-dom";
 
 //const AuthWrappedApp = AuthWrapper(App);
 require('dotenv').config()
 
+const AuthenticatedApp = withAuthentication(App);
+
 ReactDOM.render(
-    <BrowserRouter>
-       <AlertProvider template={AlertTemplate}>
-              <AuthWrapper>
-            <App/>
-          </AuthWrapper>
-        </AlertProvider>
-    </BrowserRouter>
+    <AlertProvider template={AlertTemplate}>
+        <BrowserRouter>
+           <AuthenticatedApp/> 
+        </BrowserRouter>
+    </AlertProvider>
     , document.getElementById('root'));
 

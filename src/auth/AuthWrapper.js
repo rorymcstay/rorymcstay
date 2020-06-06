@@ -113,88 +113,79 @@ class LoginScreen extends Component
     }
 }
 
-class AuthWrapper extends Component {
-    constructor(props) {
-        super(props);
+const withAuthentication = (WrappedComponent) =>{
 
-        if (!AUTH_ENABLED) {
-            this.state = {loggedIn: true};
+    return class extends React.Component 
+    {
+        constructor(props) {
+            super(props);
+
+            if (!AUTH_ENABLED) {
+                this.state = {loggedIn: true};
+            }
+
+            this.state = {
+                loggedIn: false,
+            };
+
+            console.log("auth:", AUTH_URL);
+
+            KeratinAuthN.setHost(AUTH_URL);
+            KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "Strict"} );
+        }
+     
+        storeUserDetails = (username) =>
+        {
+            console.log(`Storing username=[${username}]`);
+            localStorage.setItem('username', username);
+        }
+        onLoginSuccess = () =>
+        {
+            this.setState({loggedIn: true});
+        }
+     
+        onSignUpSuccess = () =>
+        {
+            this.setState({loggedIn: true});
+        }
+        onLoginFailure = (reason) =>
+        {
+            this.setState({loggedIn: false});
+        }
+        onSignUpFailure = (reason) =>
+        {
+            this.setState({loggedIn: false});
         }
 
-        this.state = {
-            loggedIn: false,
-            oAuthURI: AUTH_URL + "/oauth/github?redirect_uri=" + HOME_URL,
-            oAuthEnabled: OAUTH_ENABLED,
-        };
-
-        console.log("auth:", AUTH_URL);
-
-        KeratinAuthN.setHost(AUTH_URL);
-        KeratinAuthN.setCookieStore("authn",{path: "/", SameSite: "Strict"} );
-    }
- 
-    storeUserDetails = (username) =>
-    {
-        console.log(`Storing username=[${username}]`);
-        localStorage.setItem('username', username);
-    }
-    onLoginSuccess = () =>
-    {
-        this.setState({loggedIn: true});
-    }
- 
-    onSignUpSuccess = () =>
-    {
-        this.setState({loggedIn: true});
-    }
-    onLoginFailure = (reason) =>
-    {
-        this.setState({loggedIn: false});
-    }
-    onSignUpFailure = (reason) =>
-    {
-        this.setState({loggedIn: false});
-    }
-
-    componentDidMount() {
-        const self = this;
-        KeratinAuthN.importSession().then(function(resp) {
-            console.log(`restoring session KeratinAuthN=[${KeratinAuthN.session()}]`);
-            // TODO here should be a callback function passed to auth wrapper to set the user name.
-            self.storeUserDetails(localStorage.getItem('username'));
-            self.setState({ loggedIn: true });
-        }).catch(error => {
-            console.log("error restoring session: ", error);
-        });
-    }
-
-    render() {
-        // TODO should have some logic for basic auth or not for local development
-        var eventElement = null;
-
-        if (!this.state.loggedIn)
-        {
-            console.log("show login screen");
-            return (<LoginScreen oAuthEnabled={this.state.oAuthEnabled} 
-                                 oAuthURI={this.state.oAuthURI}
-                                 onLoginFailure={this.onLoginFailure}
-                                 alert={this.props.alert}
-                                 storeUserDetails={this.storeUserDetails}
-                                 onLoginSuccess={this.onLoginSuccess}
-                                 onSignUpFailure={this.onSignUpFailure}
-                                 onSignUpSuccess={this.onSignUpSuccess}
-                            />);
+        componentDidMount() {
+            const self = this;
+            KeratinAuthN.importSession().then(function(resp) {
+                console.log(`restoring session KeratinAuthN=[${KeratinAuthN.session()}]`);
+                self.storeUserDetails(localStorage.getItem('username'));
+                self.setState({ loggedIn: true });
+            }).catch(error => {
+                console.log("error restoring session: ", error);
+            });
         }
-        else
-        {
-            console.log("logged in");
-            return (<Grid>
-                        <Grid.Row>
-                            {/* Render the Auth wrapped component */}
-                            <>{this.props.children}</>
-                        </Grid.Row>
-                    </Grid>);
+
+        render() {
+            if (!this.state.loggedIn)
+            {
+                console.log("show login screen");
+                return (<LoginScreen onLoginFailure={this.onLoginFailure}
+                                     alert={this.props.alert}
+                                     storeUserDetails={this.storeUserDetails}
+                                     onLoginSuccess={this.onLoginSuccess}
+                                     onSignUpFailure={this.onSignUpFailure}
+                                     onSignUpSuccess={this.onSignUpSuccess}
+                                />);
+            }
+            else
+            {
+                console.log("logged in");
+                return <WrappedComponent {...this.props}/>;
+            }
         }
     }
 }
-export default AuthWrapper;
+export default withAuthentication;

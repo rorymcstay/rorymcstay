@@ -22,6 +22,7 @@ class UserProfile extends Component {
     {
         console.log('Logging out, goodbye!');
         KeratinAuthN.logout();
+        localStorage.removeItem('username');
     }
 
     render() {
