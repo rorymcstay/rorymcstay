@@ -343,7 +343,7 @@ export default connect(props => ({
         reloadSample: {
             url: `/schedulemanager/scheduleActionChain/sample-route/${name}`,
             body: JSON.stringify({
-                trigger: 'in',
+                trigger: 'date',
                 increment_size: 2,
                 increment: 'seconds',
                 actionName: name

@@ -71,7 +71,6 @@ class SourceViewer extends Component {
                 <Grid>
                 <Grid.Row>
                     <Iframe
-
                         width="100%"
                         height="800px"
                         key={this.props.random}

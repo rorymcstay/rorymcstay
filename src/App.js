@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './App.css';
-import {withAlert} from 'react-alert';
 import 'semantic-ui-css/semantic.min.css'
 
 // layout

@@ -4,13 +4,10 @@ import React, { Component } from 'react';
 import {AUTH_URL, AUTH_ENABLED, OAUTH_ENABLED, HOME_URL} from '../auth-config';
 
 import * as KeratinAuthN from 'keratin-authn/dist/keratin-authn';
-import {useAlert} from 'react-alert';
 
 import {Grid} from 'semantic-ui-react';
 import {InputGroup, Button} from 'react-bootstrap';
 import {FormControl} from 'react-bootstrap';
-
-import {withAlert} from 'react-alert';
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
