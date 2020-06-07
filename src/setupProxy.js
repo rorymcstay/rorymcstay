@@ -29,23 +29,30 @@ module.exports = function(app) {
     })
   );
   app.use(
-    '/runningmanager',
+    '/actionsstaticdata',
     createProxyMiddleware({
-      target: 'http://localhost:5003',
+      target: 'http://localhost:5004',
       changeOrigin: true,
     })
   );
   app.use(
     '/samplepages',
     createProxyMiddleware({
-      target: 'http://localhost:5003',
+      target: 'http://localhost:5004',
       changeOrigin: true,
     })
   );
   app.use(
-    '/actionsmanager',
+    '/accounts',
     createProxyMiddleware({
-      target: 'http://localhost:5003',
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    '/session',
+    createProxyMiddleware({
+      target: 'http://localhost:8080',
       changeOrigin: true,
     })
   );

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import connect from '../../../api-connector'
+import connect from '../../api-connector'
 import "react-table/react-table.css";
 import ReactLoading from "react-loading";
 import { Label, Dropdown,  Button } from 'semantic-ui-react';
@@ -270,9 +270,9 @@ class ActionViewer extends Component
 
 export default connect(props =>({
     possibleValues: {
-        url: `/actionsmanager/getPossibleValues/`
+        url: `/actionsstaticdata/getPossibleValues/`
     },
     mandatoryParams: {
-        url: `/actionsmanager/getActionParameters/${props.actionParameters.actionType}`
+        url: `/actionsstaticdata/getActionParameters/${props.actionParameters.actionType}`
     }
 }))(ActionViewer)

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import connect from "../../api-connector";
+import connect from "../api-connector";
 import Button from "react-bootstrap/Button";
 import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 
-class ToolBar extends Component {
+class RunningManager extends Component {
 
     constructor(props) {
         super(props);
@@ -45,7 +45,6 @@ class ToolBar extends Component {
                 return (
                     <ButtonToolbar>
                         <ButtonGroup>
-                            <Button onClick={this.onFeedStart} disabled variant="success">Last Page: {feedStatus.value.status.lastPage}</Button>
                             <Button onClick={this.onFeedStop} active variant="warning">Stop</Button>
                             <Button onClick={this.onRefreshHistory} active variant="warning">Refresh History</Button>
                             <Button onClick={this.clearErrors} active variant="warning">Clear Errors</Button>
@@ -69,22 +68,17 @@ class ToolBar extends Component {
 
 export default connect(props => ({
 
-    startFeed: () => ({
-        startFeedResponse: {url: `/runningmanager/addFeed/${props.actionChainName}`}
-    }),
     refreshHistory: () => ({
-        refreshResponse: {url: `/runningmanager/refreshHistory/${props.actionChainName}`}
+        refreshResponse: {url: `/feedmanager/refreshHistory/${props.actionChainName}`}
     }),
     clearErrors: () => ({
-        clearErrorsResponse: {url: `/actionsmanager/clearActionErrorReports/${props.actionChainName}`, method: 'DELETE'}
-        
-
+        clearErrorsResponse: {url: `/feedmanager/clearActionErrorReports/${props.actionChainName}`, method: 'DELETE'}
     }),
     stopFeed: () => ({
-        stopFeedResponse: {url: `/runningmanager/disableFeed/${props.actionChainName}`}
+        stopFeedResponse: {url: `/feedmanager/disableFeed/${props.actionChainName}`}
     }),
     feedStatus: {
-        url: `/runningmanager/getStatus/${props.actionChainName}`
+        url: `/feedmanager/getStatus/${props.actionChainName}`
     }
 
-}))(ToolBar)
+}))(RunningManager)

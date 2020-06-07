@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import connect from '../../../api-connector';
+import connect from '../../api-connector';
 import ReactLoading from "react-loading";
 import { Card, InputGroup } from 'react-bootstrap';
 import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
@@ -87,6 +87,6 @@ class ActionRepresentation extends Component
 
 export default connect ((props) => ({
     actionReport: {
-        url: `/actionsmanager/findActionErrorReports/${props.actionChainName}/${props.index}`
+        url: `/feedmanager/findActionErrorReports/${props.actionChainName}/${props.index}`
     }
 }))(ActionRepresentation)

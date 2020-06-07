@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import connect from '../../../api-connector'
+import connect from '../../api-connector'
 import JobStatus from "./JobStatus";
 import {Dropdown, Input} from "semantic-ui-react";
 import {Grid} from "semantic-ui-react";
@@ -70,11 +70,11 @@ class Scheduler extends Component {
             {   
                 if (!addJobResponse.value.valid)
                 {
-                    this.props.alert.show(`Invalid schedule request: ${addJobResponse.value.reason}`);
+                    window.alert(`Invalid schedule request: ${addJobResponse.value.reason}`);
                     this.setState({notified: true});
                 }
                 {
-                    this.props.alert.show(`Succesfully scheduled ${this.state.actionChainName} for ${addJobResponse.value.message}`);
+                    window.alert(`Succesfully scheduled ${this.state.actionChainName} for ${addJobResponse.value.message}`);
                     this.setState({notified: true});
                 }
             }

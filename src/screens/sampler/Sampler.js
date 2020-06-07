@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import connect from '../../../api-connector';
+import connect from '../../api-connector';
 import "react-table/react-table.css";
 import ReactLoading from "react-loading";
 import { Grid } from 'semantic-ui-react';
@@ -142,7 +142,6 @@ class SampleViewer extends Component {
                     <Grid.Row width={17}>
                         <Grid.Column width={3}>
                             <ActionChain
-                                alert={this.props.alert}
                                 onUpdateName={this.onUpdateName}
                                 onUpdateStartUrl={this.onUpdateStartUrl}
                                 onToolbarValChange={this.onToolbarValChange}
@@ -175,7 +174,7 @@ class SampleViewer extends Component {
 
 export default connect(props => ({
     actionChainParams: {
-         url: `/actionsmanager/getActionChain/${props.actionChainName}`
+         url: `/feedmanager/getActionChain/${props.actionChainName}`
     }
 
 }))(withRouter(SampleViewer))

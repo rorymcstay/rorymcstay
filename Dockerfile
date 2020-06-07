@@ -22,10 +22,9 @@ COPY nginx.template.conf /etc/nginx/
 COPY run_nginx.sh /etc/nginx/run_nginx.sh
 
 ENV UISERVER=http://feed_ui-server:5000
-ENV COMMANDSERVER=http://feed_commands:5000
 ENV SERVERNAME=feed-admin
-ENV NANNYSERVER=http://feed_nanny:5000
-ENV MYVARS="$UISERVER:$SERVERNAME:$COMMANDSERVER:$NANNYSERVER"
+ENV AUTHSERVER=http://authn:3000
+ENV MYVARS="$UISERVER:$SERVERNAME:$AUTHSERVER"
 
 EXPOSE 80
 

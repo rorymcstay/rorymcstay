@@ -1,15 +1,15 @@
 import React, {Component} from "react";
-import connect from '../../../api-connector';
+import connect from '../../api-connector';
 import ReactLoading from "react-loading";
 import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
 import { Card, InputGroup } from 'react-bootstrap';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
-import { useAlert } from 'react-alert'; 
 // router integration
 import {withRouter} from 'react-router-dom';
 import queryString from 'query-string';
 import ActionRepresentation from './ActionRepresentation'
+//import Popup from 'reactjs-popup'; TODO find less fiddly popup package
 
 
 const EMPTY_ACTION = {
@@ -37,7 +37,7 @@ class ActionChainsToolBar extends Component
         super(props)
         this.state = {
             startUrl: props.startUrl,
-            actionChainName: props.actionChainName,
+            actionChainName: props.actionChainName === undefined ? '' : props.actionChainName,
             isRepeating: props.isRepeating
         }
     }
@@ -57,7 +57,18 @@ class ActionChainsToolBar extends Component
 
     onSubmit = () =>
     {
+        this.props.onToolbarValChange(this.state.actionChainName, 'actionChainName');
+        this.props.onToolbarValChange(this.state.startUrl, 'startUrl');
+        this.props.onToolbarValChange(this.state.isRepeating, 'isRepeating');
         this.props.onSubmitAction(this.state.actionChainName, this.state.startUrl, this.state.isRepeating);
+    }
+
+    onValChange =(val, key) =>
+    {
+        this.setState(prevState => {
+            prevState[key] = val;
+            return prevState;
+        });
     }
 
     render ()
@@ -71,9 +82,9 @@ class ActionChainsToolBar extends Component
                 <Button size='tiny' onClick={this.props.reloadSource}>Reload</Button>
             </ButtonGroup>
             <InputGroup >
-                <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'actionChainName')}} placeholder='Name' value={this.state.actionChainName}/>
-                <Input onChange={(e) => {this.props.onToolbarValChange(e.target.value, 'startUrl')}} placeholder='StartUrl' value={this.state.startUrl}/>
-                <Checkbox label='isRepeating' onChange={(e) => {this.props.onToolbarValChange(!this.state.isRepeating, 'isRepeating')}} placeholder='isRepeating' checked={this.state.isRepeating}/>
+                <Input onChange={(e) => {this.onValChange(e.target.value, 'actionChainName')}} placeholder='Name' value={this.state.actionChainName}/>
+                <Input onChange={(e) => {this.onValChange(e.target.value, 'startUrl')}} placeholder='StartUrl' value={this.state.startUrl}/>
+                <Checkbox label='isRepeating' onChange={(e) => {this.onValChange(!this.state.isRepeating, 'isRepeating')}} placeholder='isRepeating' checked={this.state.isRepeating}/>
             </InputGroup>
         </div>);
     }
@@ -93,7 +104,6 @@ class ActionChain extends Component
             currentPosition: 0
         }
     }
-
 
     componentWillReceiveProps(nextProps)
     {
@@ -223,6 +233,7 @@ class ActionChain extends Component
             startUrl: url
         })
     }
+
     onUpdateName = (actionChainName) =>
     {
         this.props.onUpdateName(actionChainName);
@@ -269,19 +280,19 @@ class ActionChain extends Component
             }
             else if (!this.state.notified && submitAction.rejected)
             {
-                this.props.alert.show(`Failed to communicate with Actions manager`);
+                window.alert(`Failed to communicate with Actions manager`);
                 this.setState({notified: true});
             } 
             else
             {
                 if (!this.state.notified && !submitAction.value.valid)
                 {
-                    this.props.alert.show(`Invalid Chain: ${submitAction.value.reason}`);
+                    window.alert(`Invalid Chain: ${submitAction.value.reason}`);
                     this.setState({notified: true});
                 }
                 else if (!this.state.notified)
                 {
-                    this.props.alert.show(`Success: ${submitAction.value.message}`);
+                    window.alert(`Success: ${submitAction.value.message}`);
                     this.setState({notified: true});
                 }
                 else
@@ -323,13 +334,21 @@ class ActionChain extends Component
 export default connect(props => ({
     submitActionChain: (payload) => ({
         submitAction: {
-            url: `/actionsmanager/setActionChain/`,
+            url: `/feedmanager/setActionChain/`,
             method: 'PUT',
             body: JSON.stringify(payload) 
         }
     }),
     reloadSampleUrl : (name) => ({
         reloadSample: {
-        url: `/samplepages/requestSamplePages/${name}`
+            url: `/schedulemanager/scheduleActionChain/sample-route/${name}`,
+            body: JSON.stringify({
+                trigger: 'in',
+                increment_size: 2,
+                increment: 'seconds',
+                actionName: name
+            }),
+            method: 'PUT'
+
     }})
 }))(withRouter(ActionChain))

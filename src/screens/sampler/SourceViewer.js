@@ -3,7 +3,7 @@ import { Grid } from 'semantic-ui-react';
 import Iframe from 'react-iframe';
 import ReactLoading from "react-loading";
 import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
-import connect from '../../../api-connector';
+import connect from '../../api-connector';
 
   
 class SourceViewer extends Component {

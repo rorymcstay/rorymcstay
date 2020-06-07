@@ -88,6 +88,6 @@ class Selector extends Component {
 
 export default connect(props => ({
     actionChains: {
-        url: `/actionsmanager/getActionChains/`
+        url: `/feedmanager/getActionChains/`
     }
 }))(withRouter(Selector))

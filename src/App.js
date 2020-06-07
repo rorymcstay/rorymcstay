@@ -15,16 +15,18 @@ import { RoutedTabs, NavTab } from "react-router-tabs";
 import "react-router-tabs/styles/react-router-tabs.css";
 import queryString from 'query-string';
 
-// Navigation
-import Selector from "./main/Selector";
-import ToolBar from "./main/toolbar/ToolBar";
+// Toolbar
+import Selector from "./toolbar/Selector";
+import ToolBar from "./toolbar/RunningManager";
+import UserProfile from "./toolbar/UserProfile";
 
-// Tabs
-import ParameterManager from "./main/screens/parameters/ParameterManager";
-import Scheduler from "./main/screens/scheduler/Scheduler"
-import Viewer from "./main/screens/viewer/Viewer";
+// Tabs/Screens
+import ParameterManager from "./screens/parameters/ParameterManager";
+import Scheduler from "./screens/scheduler/Scheduler"
+import Viewer from "./screens/viewer/Viewer";
 //import Mapping from "./main/screens/mapping/Mapping";
-import SamplerViewer from "./main/screens/sampler/Sampler"
+import SamplerViewer from "./screens/sampler/Sampler"
+import withAuthentication from './auth/AuthWrapper.js'
 
 
 
@@ -46,51 +48,15 @@ class App extends Component {
         this.setState({actionChainName: 'NewActionChain'});
     }
 
-    onParameterChange = (value) => {
-        this.setState({parameterType: value});
-    }
-
+    /*
+     * Seeing if we can remove all other methods apart from renderer
     onTableChange = (value) => {
         this.setState( { tableName: value});
     }
+    */
 
     onActionChainChange = (value) => {
         this.setState( { actionChainName: value} );
-    }
-
-    renderLinkedTabs = () => {
-
-        return (<div> 
-            <NavTab to={`/chain-viewer/?chain=${this.state.actionChainName}`}>Chain-Viewer</NavTab>
-            <NavTab to={`/capture-viewer/?chain=${this.state.actionChainName}`}>Capture-Viewer</NavTab>
-            <NavTab to={`/chain-scheduler/?chain=${this.state.actionChainName}`}>Chain-Scheduler</NavTab>
-            <Switch>
-                <Route
-                  exact
-                  path='/'
-                  render={() => <Redirect replace to={`/chain-viewer`} />}
-                />
-                    <Route path={`/chain-viewer`}>
-                        <SamplerViewer
-                            alert={this.props.alert}
-                            actionChainName={this.state.actionChainName}
-                        />
-                    </Route>
-                    <Route path={`/capture-viewer`}>
-                        <Viewer 
-                            alert={this.props.alert}
-                            actionChainName={this.state.actionChainName} 
-                            updateTableName={this.onTableChange}
-                        />
-                    </Route>
-                    <Route path={`/chain-scheduler`}>
-                        <Scheduler 
-                            alert={this.props.alert}
-                            actionChainName={this.state.actionChainName}
-                        />
-                    </Route>
-             </Switch>
-         </div>);
     }
 
     render() {
@@ -106,20 +72,40 @@ class App extends Component {
                             />
                         </Grid.Column>
                         <Grid.Column>
+                            <UserProfile userName={this.props.username} />
+                        </Grid.Column>
+                        <Grid.Column>
                             <ToolBar actionChainName={this.state.actionChainName}/>
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Column>
-                        {this.renderLinkedTabs()}
-                        {/*
-                            <Tabs
-                                id="controlled-tab-example"
-                                activeKey={this.state.key}
-                                onSelect={key => this.setState({selectedTab: key})}
-                            >
-                        */}
-
+                        <Grid.Column> 
+                            <NavTab to={`/chain-viewer/?chain=${this.state.actionChainName}`}>Chain-Viewer</NavTab>
+                            <NavTab to={`/capture-viewer/?chain=${this.state.actionChainName}`}>Capture-Viewer</NavTab>
+                            <NavTab to={`/chain-scheduler/?chain=${this.state.actionChainName}`}>Chain-Scheduler</NavTab>
+                            <Switch>
+                                <Route
+                                  exact
+                                  path='/'
+                                  render={() => <Redirect replace to={`/chain-viewer`} />}
+                                />
+                                    <Route path={`/chain-viewer`}>
+                                        <SamplerViewer
+                                            actionChainName={this.state.actionChainName}
+                                        />
+                                    </Route>
+                                    <Route path={`/capture-viewer`}>
+                                        <Viewer 
+                                            actionChainName={this.state.actionChainName} 
+                                            //updateTableName={this.onTableChange}
+                                        />
+                                    </Route>
+                                    <Route path={`/chain-scheduler`}>
+                                        <Scheduler 
+                                            actionChainName={this.state.actionChainName}
+                                        />
+                                    </Route>
+                             </Switch>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -128,4 +114,4 @@ class App extends Component {
     }
 }
 
-export default withAlert()(withRouter(App));
+export default withRouter(withAuthentication(App));
