@@ -341,10 +341,10 @@ export default connect(props => ({
     }),
     reloadSampleUrl : (name) => ({
         reloadSample: {
-            url: `/schedulemanager/scheduleActionChain/sample-route/${name}`,
+            url: `/schedulemanager/scheduleActionChain/sample-queue/${name}`,
             body: JSON.stringify({
                 trigger: 'date',
-                increment_size: 2,
+                increment_size: 5,
                 increment: 'seconds',
                 actionName: name
             }),
