@@ -22,7 +22,7 @@ if (hostname === 'feedmachine.rorymcstay.com')
 }
 if (hostname === `uatfeedmachine`)
 {
-    authurl = `https://${hostname}`;
+    authurl = `https://${hostname}:30000`;
 }
 
 export const AUTH_URL = authurl;
