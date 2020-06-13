@@ -45,6 +45,7 @@ class RunningManager extends Component {
                 return (
                     <ButtonToolbar>
                         <ButtonGroup>
+                            <Button href={feedStatus.value.status.lastPage}>{`Last Page: ${feedStatus.value.status.lastPage}`}</Button>
                             <Button onClick={this.onFeedStop} active variant="warning">Stop</Button>
                             <Button onClick={this.onRefreshHistory} active variant="warning">Refresh History</Button>
                             <Button onClick={this.clearErrors} active variant="warning">Clear Errors</Button>
