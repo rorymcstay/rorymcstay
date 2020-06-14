@@ -43,7 +43,8 @@ class Viewer extends Component {
     onTableChange = (e, {value}) => {
         this.setState({
             tableName: value
-        }, this.props.updateTableName(value));
+        });
+        console.debug(`selected tableName=${this.state.tableName}`);
     };
 
     onQueryChange = (value) => {

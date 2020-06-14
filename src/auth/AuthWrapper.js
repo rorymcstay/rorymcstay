@@ -43,8 +43,8 @@ class LoginScreen extends Component
         const self = this;
         KeratinAuthN.login({ username: this.state.username, password: this.state.password })
           .then(function (val) {
-            console.log(`login success ${val} for ${self.state.username}`);
-            self.props.storeUserDetails(this.state.username);
+            console.log(`login success for ${self.state.username}`);
+            self.props.storeUserDetails(self.state.username);
             self.props.onLoginSuccess();
           }).catch(reason =>  {
             console.log("failed login", reason);
@@ -58,7 +58,7 @@ class LoginScreen extends Component
         KeratinAuthN.signup({ username: this.state.username, password: this.state.password })
           .then(val => {
             console.log(`signup success ${val} for ${self.state.username}`);
-            self.props.storeUserDetails(this.state.username);
+            self.props.storeUserDetails(self.state.username);
             self.props.onSignUpSuccess();
           })
           .catch((reason) => {
