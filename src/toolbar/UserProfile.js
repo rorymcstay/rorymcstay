@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import connect from "../api-connector";
 import Button from "react-bootstrap/Button";
 import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 import * as KeratinAuthN from 'keratin-authn/dist/keratin-authn';

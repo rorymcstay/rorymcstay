@@ -3,14 +3,12 @@ import './App.css';
 import 'semantic-ui-css/semantic.min.css'
 
 // layout
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 import {Grid, Container} from "semantic-ui-react";
 
 // routing 
-import { Route, Switch, Redirect, Link, withRouter } from "react-router-dom";
+import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 // https://github.com/chacestew/react-router-tabs
-import { RoutedTabs, NavTab } from "react-router-tabs";
+import { NavTab } from "react-router-tabs";
 import "react-router-tabs/styles/react-router-tabs.css";
 import queryString from 'query-string';
 
@@ -20,12 +18,12 @@ import ToolBar from "./toolbar/RunningManager";
 import UserProfile from "./toolbar/UserProfile";
 
 // Tabs/Screens
-import ParameterManager from "./screens/parameters/ParameterManager";
 import Scheduler from "./screens/scheduler/Scheduler"
 import Viewer from "./screens/viewer/Viewer";
 //import Mapping from "./main/screens/mapping/Mapping";
 import SamplerViewer from "./screens/sampler/Sampler"
 import withAuthentication from './auth/AuthWrapper.js'
+import DocViewer from './components/Markdown.js'
 
 
 

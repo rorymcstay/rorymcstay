@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import connect from '../../api-connector';
-import ReactLoading from "react-loading";
-import { Card, InputGroup } from 'react-bootstrap';
-import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
+import { Card } from 'react-bootstrap';
+import { Button, ButtonGroup} from 'semantic-ui-react';
 
 
 class ActionRepresentation extends Component

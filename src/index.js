@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import withAuthentication from './auth/AuthWrapper'
 
 import { BrowserRouter } from "react-router-dom";
 

@@ -1,10 +1,5 @@
 // api-connector.js
 import { connect } from 'react-refetch'
-import urlJoin from 'url-join'
-import {AUTH_URL} from './auth-config'
-
-
-
 export default connect.defaults({
   buildRequest: (mapping) => {
     const options = {
@@ -15,8 +10,9 @@ export default connect.defaults({
       mode: mapping.mode,
       body: mapping.body
     }
+    const url = mapping.url[0] === '/' ? `/api${mapping.url}` : `/api/${mapping.url}`;
 
-    return new Request(mapping.url, options)
+    return new Request(url, options);
   }
 })
 

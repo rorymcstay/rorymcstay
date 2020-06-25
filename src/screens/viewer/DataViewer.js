@@ -4,7 +4,7 @@ import "react-table/react-table.css";
 import ReactLoading from "react-loading";
 import ReactTable from "react-table";
 import Axios from "axios";
-import {Grid, Row, ButtonGroup, Button } from "semantic-ui-react";
+import {Grid, ButtonGroup, Button } from "semantic-ui-react";
 
 
 class DataViewer extends Component {
@@ -63,6 +63,7 @@ class DataViewer extends Component {
                     window.alert(`Invalid mapping: ${uploadMappingResponse.value.reason}`);
                     this.setState({notified: true});
                 }
+                else
                 {
                     window.alert(`Succes: ${uploadMappingResponse.value.message}`);
                     this.setState({notified: true});

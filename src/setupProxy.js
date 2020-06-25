@@ -1,42 +1,42 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 module.exports = function(app) {
   app.use(
-    '/tablemanager',
+    '/api/tablemanager',
     createProxyMiddleware({
       target: 'http://localhost:5004',
       changeOrigin: true,
     })
   );
   app.use(
-    '/feedmanager',
+    '/api/feedmanager',
     createProxyMiddleware({
       target: 'http://localhost:5004',
       changeOrigin: true,
     })
   );
   app.use(
-    '/sampler',
+    '/api/sampler',
     createProxyMiddleware({
       target: 'http://localhost:5004',
       changeOrigin: true,
     })
   );
   app.use(
-    '/schedulemanager',
+    '/api/schedulemanager',
     createProxyMiddleware({
       target: 'http://localhost:5004',
       changeOrigin: true,
     })
   );
   app.use(
-    '/actionsstaticdata',
+    '/api/actionsstaticdata',
     createProxyMiddleware({
       target: 'http://localhost:5004',
       changeOrigin: true,
     })
   );
   app.use(
-    '/samplepages',
+    '/api/samplepages',
     createProxyMiddleware({
       target: 'http://localhost:5004',
       changeOrigin: true,
@@ -47,7 +47,7 @@ module.exports = function(app) {
     createProxyMiddleware({
       target: 'http://localhost:8080',
       changeOrigin: true,
-    })
+    }), 
   );
   app.use(
     '/session',

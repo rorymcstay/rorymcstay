@@ -4,7 +4,6 @@ import JobStatus from "./JobStatus";
 import {Dropdown, Input} from "semantic-ui-react";
 import {Grid} from "semantic-ui-react";
 import Button from "react-bootstrap/Button";
-import ReactLoading from "react-loading";
 
 
 class Scheduler extends Component {
@@ -73,6 +72,7 @@ class Scheduler extends Component {
                     window.alert(`Invalid schedule request: ${addJobResponse.value.reason}`);
                     this.setState({notified: true});
                 }
+                else 
                 {
                     window.alert(`Succesfully scheduled ${this.state.actionChainName} for ${addJobResponse.value.message}`);
                     this.setState({notified: true});

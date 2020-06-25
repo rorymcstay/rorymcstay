@@ -4,11 +4,11 @@ import connect from "../api-connector";
 
 
 // router integration
-import {Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import queryString from 'query-string';
 
 // ui-componets
-import {ButtonToolbar, Button, FormControl } from "react-bootstrap";
+import {ButtonToolbar, Button } from "react-bootstrap";
 import {Dropdown, Grid} from "semantic-ui-react";
 
 class Selector extends Component {

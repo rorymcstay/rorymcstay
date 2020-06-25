@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 
 import React, { Component } from 'react';
-import {AUTH_URL, AUTH_ENABLED, OAUTH_ENABLED, HOME_URL} from '../auth-config';
+import {AUTH_URL, AUTH_ENABLED } from '../auth-config';
 
 import * as KeratinAuthN from 'keratin-authn/dist/keratin-authn';
 
@@ -9,10 +9,6 @@ import {Grid} from 'semantic-ui-react';
 import {InputGroup, Button} from 'react-bootstrap';
 import {FormControl} from 'react-bootstrap';
 
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-
-import SignUp from './SignUp.js';
 import ErrorMessage from './ErrorMessage'
 
 

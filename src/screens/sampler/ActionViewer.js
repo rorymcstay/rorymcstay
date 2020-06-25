@@ -74,7 +74,7 @@ class ActionViewerParameter extends Component
     render()
     {
         console.log(`ActionViewerParameter::render(): name=[${this.state.name}], value=[${this.state.value}], freeForm=[${this.state.freeForm}]`)
-        if (this.state.name == 'isSingle')
+        if (this.state.name === 'isSingle')
         {
             return (
                 <div>
@@ -223,7 +223,7 @@ class ActionViewer extends Component
             for (var name in this.props.actionParameters)
             {
                 const value = this.props.actionParameters[name];
-                if (mandatoryParams.value.indexOf(name) == -1)
+                if (mandatoryParams.value.indexOf(name) === -1)
                 {
                     continue;
                 }

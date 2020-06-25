@@ -5,9 +5,6 @@ import {ButtonGroup, ButtonToolbar} from "react-bootstrap";
 
 class RunningManager extends Component {
 
-    constructor(props) {
-        super(props);
-    }
 
     onFeedStart = () => {
         this.setState({started: true}, this.props.startFeed())

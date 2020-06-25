@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import connect from '../../api-connector';
-import ReactLoading from "react-loading";
 import { Checkbox, Input, Button, ButtonGroup} from 'semantic-ui-react';
-import { Card, InputGroup } from 'react-bootstrap';
+import { InputGroup } from 'react-bootstrap';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 // router integration
@@ -21,12 +20,6 @@ const EMPTY_ACTION = {
     //TODO: attribute should be predetermined list of possible values, be it predictions or 
     //actuals. eg: href and class src are obvious ones but not necessarily there
     attribute: ''
-}
-
-const EMPTY_CHAIN_PARAMS = {
-    startUrl: undefined,
-    name: undefined,
-    isRepeating: true
 }
 
 
@@ -130,7 +123,7 @@ class ActionChain extends Component
 
     onSortEnd = ({oldIndex, newIndex}) => {
         this.setState( prevState => {
-            if (prevState.currentPosition == oldIndex)
+            if (prevState.currentPosition === oldIndex)
             {
                 prevState.currentPosition = newIndex;
                 this.props.onPositionChange(newIndex);
