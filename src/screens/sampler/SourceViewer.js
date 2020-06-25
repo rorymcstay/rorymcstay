@@ -47,7 +47,7 @@ class SourceViewer extends Component {
         {
             return <ReactLoading/>;
         } else if (sourcesReady.rejected) {
-            return <div>Error</div>;
+            return <div>Create or select a chain!</div>;
         } else if (sourcesReady.fulfilled)
         {
  
