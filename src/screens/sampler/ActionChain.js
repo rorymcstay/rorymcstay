@@ -211,7 +211,7 @@ class ActionChain extends Component
         const payload = {
             saved: true,
             startUrl: url,
-            isRepeating: isRepeating,
+            isRepeating: isRepeating === undefined ? false : isRepeating,
             actions: this.state.actions,
             name: actionChainName
         }
